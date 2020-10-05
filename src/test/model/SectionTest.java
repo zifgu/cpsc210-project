@@ -105,7 +105,7 @@ public class SectionTest {
         testSection.addTimeslot(testTime);
         Timeslot otherTime = new Timeslot(1, 1, LocalTime.of(13, 0), 2, testSection);
         assertFalse(testSection.deleteTimeslot(otherTime));
-        assertEquals(0, testSection.numTimeslots());
+        assertEquals(1, testSection.numTimeslots());
     }
 
 }

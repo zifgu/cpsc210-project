@@ -7,8 +7,8 @@ import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class ScheduleTest {
-    private Schedule testSchedule;
+public class ListScheduleTest {
+    private ListSchedule testSchedule;
     private Course testCourse;
     private Section testSection;
     private Timeslot testTime1;
@@ -32,7 +32,7 @@ public class ScheduleTest {
         testSection.addTimeslot(testTime2);
         testSection.addTimeslot(testTime3);
 
-        testSchedule = new Schedule();
+        testSchedule = new ListSchedule();
     }
 
     @Test

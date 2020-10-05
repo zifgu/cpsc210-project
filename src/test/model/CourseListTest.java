@@ -101,7 +101,7 @@ public class CourseListTest {
     public void testNumElectivesOne() {
         courses.addCourse(courseA);
         courses.addCourse(courseB);
-        assertEquals(0, courses.numElectives());
+        assertEquals(1, courses.numElectives());
     }
 
     @Test
