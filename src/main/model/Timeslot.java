@@ -1,5 +1,6 @@
 package model;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 public class Timeslot {
@@ -7,18 +8,18 @@ public class Timeslot {
 
     private Section section;
     private int term;
-    private int dayOfWeek;
+    private DayOfWeek dayOfWeek;
     private LocalTime startTime;
-    private int duration;
+    private LocalTime endTime;
 
-    // REQUIRES: startTime has the format XX:00 or XX:30 on a 24 hour clock, 1 <= dayOfWeek <= 7, and duration > 0
+    // REQUIRES: times have the format XX:00 or XX:30 (24 hour clock), and startTime is before endTime
     // EFFECTS: constructs a new timeslot in the section with the given term, day of week, start time, and duration
     //          in 30-minute intervals
-    public Timeslot(int term, int dayOfWeek, LocalTime startTime, int duration, Section section) {
+    public Timeslot(int term, DayOfWeek day, LocalTime startTime, LocalTime endTime, Section section) {
         this.term = term;
-        this.dayOfWeek = dayOfWeek;
+        this.dayOfWeek = day;
         this.startTime = startTime;
-        this.duration = duration;
+        this.endTime = endTime;
         this.section = section;
     }
 
@@ -26,24 +27,24 @@ public class Timeslot {
         return startTime;
     }
 
-    public int getDuration() {
-        return duration;
+    public LocalTime getEndTime() {
+        return endTime;
     }
 
     public void setStartTime(LocalTime startTime) {
         this.startTime = startTime;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setEndTime(LocalTime endTime) {
+        this.endTime = endTime;
     }
 
-    public int getDayOfWeek() {
+    public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
     }
 
-    public void setDayOfWeek(int dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    public void setDayOfWeek(DayOfWeek day) {
+        this.dayOfWeek = day;
     }
 
     public int getTerm() {
@@ -61,12 +62,6 @@ public class Timeslot {
     // EFFECTS: returns the course this timeslot is associated with
     public Course getCourse() {
         return section.getCourse();
-    }
-
-    // TODO: Test this method
-    // EFFECTS: returns the end time of this timeslot
-    public LocalTime getEndTime() {
-        return startTime.plusMinutes(duration * INTERVAL_LENGTH);
     }
 
     // EFFECTS: returns true if this timeslot overlaps with timeslot other
@@ -90,31 +85,25 @@ public class Timeslot {
 
     // EFFECTS: returns true if this timeslot has the same term, day of week, start time, and duration as timeslot other
     public boolean timeEquals(Timeslot other) {
-        boolean result = term == other.getTerm() && dayOfWeek == other.getDayOfWeek() && duration == other.getDuration()
-                && startTime == other.getStartTime();
+        boolean result = term == other.getTerm() && dayOfWeek.equals(other.getDayOfWeek())
+                && endTime.equals(other.getEndTime()) && startTime.equals(other.getStartTime());
         return result;
+    }
+
+    // EFFECTS: returns the difference between start and end times as a number of 30-minute intervals
+    public int getDuration() {
+        int duration = 0;
+        LocalTime current = endTime;
+        while (!current.equals(startTime)) {
+            current = current.minusMinutes(30);
+            duration++;
+        }
+        return duration;
     }
 
     // EFFECTS: returns a string displaying timeslot info in printable form
     public String toString() {
         LocalTime end = getEndTime();
-
-        String day;
-        if (dayOfWeek == 1) {
-            day = "Monday";
-        } else if (dayOfWeek == 2) {
-            day = "Tuesday";
-        } else if (dayOfWeek == 3) {
-            day = "Wednesday";
-        } else if (dayOfWeek == 4) {
-            day = "Thursday";
-        } else if (dayOfWeek == 5) {
-            day = "Friday";
-        } else if (dayOfWeek == 6) {
-            day = "Saturday";
-        } else {
-            day = "Sunday";
-        }
-        return day + " " + startTime.toString() + "-" + end.toString();
+        return dayOfWeek.toString() + " " + startTime.toString() + "-" + end.toString();
     }
 }

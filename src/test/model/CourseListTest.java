@@ -3,6 +3,7 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -122,7 +123,7 @@ public class CourseListTest {
     @Test
     public void testAllValidSchedulesOneSection() {
         Section sectionB1 = new Section("B1", courseB);
-        Timeslot timeB1 = new Timeslot(1, 1, LocalTime.of(13,0), 2, sectionB1);
+        Timeslot timeB1 = new Timeslot(1, DayOfWeek.MONDAY, LocalTime.of(13,0), LocalTime.of(14, 0), sectionB1);
 
         sectionB1.addTimeslot(timeB1);
         courseB.addSection(sectionB1);
@@ -136,9 +137,9 @@ public class CourseListTest {
 
     @Test
     public void testAllValidSchedulesTwoElectives() {
-        Course courseR = makeCourseWithSection("R", true, 1, 1, LocalTime.of(13, 0), 2);
-        courseA = makeCourseWithSection("A", false, 1, 1, LocalTime.of(14, 0), 2);
-        courseB = makeCourseWithSection("B", false, 1, 1, LocalTime.of(9, 0), 2);
+        Course courseR = makeCourseWithSection("R", true, 1, DayOfWeek.MONDAY, LocalTime.of(13, 0), 2);
+        courseA = makeCourseWithSection("A", false, 1, DayOfWeek.MONDAY, LocalTime.of(14, 0), 2);
+        courseB = makeCourseWithSection("B", false, 1, DayOfWeek.MONDAY, LocalTime.of(9, 0), 2);
 
         courses.addCourse(courseR);
         courses.addCourse(courseA);
@@ -158,11 +159,11 @@ public class CourseListTest {
 
     @Test
     public void testAllValidSchedulesTwoRequired() {
-        courseA = makeCourseWithSection("A", true, 1, 1, LocalTime.of(14,0), 2);
-        Section sectionA2 = addSection(courseA, "A2", 1, 1, LocalTime.of(9, 0), 2);
+        courseA = makeCourseWithSection("A", true, 1, DayOfWeek.MONDAY, LocalTime.of(14,0), 2);
+        Section sectionA2 = addSection(courseA, "A2", 1, DayOfWeek.MONDAY, LocalTime.of(9, 0), 2);
 
-        courseB = makeCourseWithSection("B", true, 1, 1, LocalTime.of(9, 0), 2);
-        Section sectionB2 = addSection(courseB, "B2", 1, 1, LocalTime.of(14, 0), 2);
+        courseB = makeCourseWithSection("B", true, 1, DayOfWeek.MONDAY, LocalTime.of(9, 0), 2);
+        Section sectionB2 = addSection(courseB, "B2", 1, DayOfWeek.MONDAY, LocalTime.of(14, 0), 2);
 
         courses.addCourse(courseA);
         courses.addCourse(courseB);
@@ -176,8 +177,8 @@ public class CourseListTest {
 
     @Test
     public void testAllValidSchedulesRequiredOverlap() {
-        courseA = makeCourseWithSection("A", true, 1, 1, LocalTime.of(14,0), 2);
-        courseB = makeCourseWithSection("B", true, 1, 1, LocalTime.of(14, 30), 3);
+        courseA = makeCourseWithSection("A", true, 1, DayOfWeek.MONDAY, LocalTime.of(14,0), 2);
+        courseB = makeCourseWithSection("B", true, 1, DayOfWeek.MONDAY, LocalTime.of(14, 30), 3);
 
         courses.addCourse(courseA);
         courses.addCourse(courseB);
@@ -189,10 +190,10 @@ public class CourseListTest {
 
     @Test
     public void testAllValidSchedulesTwoTerms() {
-        courseA = makeCourseWithSection("A", true, 1, 1, LocalTime.of(14,0), 2);
+        courseA = makeCourseWithSection("A", true, 1, DayOfWeek.MONDAY, LocalTime.of(14,0), 2);
         Section sectionA2 = addSectionMWF(courseA, "A2", 2, LocalTime.of(14, 0), 2);
 
-        courseB = makeCourseWithSection("B", true, 1, 1, LocalTime.of(14, 0), 2);
+        courseB = makeCourseWithSection("B", true, 1, DayOfWeek.MONDAY, LocalTime.of(14, 0), 2);
         Section sectionB2 = addSectionMWF(courseB, "B2", 2, LocalTime.of(14, 0), 2);
 
         courses.addCourse(courseA);
@@ -253,20 +254,20 @@ public class CourseListTest {
     }
 
 
-    private Course makeCourseWithSection(String name, boolean required, int term, int dayOfWeek, LocalTime start, int
+    private Course makeCourseWithSection(String name, boolean required, int term, DayOfWeek day, LocalTime start, int
             duration) {
         Course course = new Course(name, required);
         Section section = new Section(name + "1", course);
-        Timeslot timeslot = new Timeslot(term, dayOfWeek, start, duration, section);
+        Timeslot timeslot = new Timeslot(term, day, start, start.plusMinutes(duration * 30), section);
         section.addTimeslot(timeslot);
         course.addSection(section);
 
         return course;
     }
 
-    private Section addSection(Course course, String name, int term, int dayOfWeek, LocalTime start, int duration) {
+    private Section addSection(Course course, String name, int term, DayOfWeek day, LocalTime start, int duration) {
         Section section = new Section(name, course);
-        Timeslot timeslot = new Timeslot(term, dayOfWeek, start, duration, section);
+        Timeslot timeslot = new Timeslot(term, day, start, start.plusMinutes(duration * 30), section);
         section.addTimeslot(timeslot);
         course.addSection(section);
         return section;
@@ -275,7 +276,7 @@ public class CourseListTest {
     private Section addSectionMWF(Course course, String name, int term, LocalTime start, int duration) {
         Section section = new Section(name, course);
         for (int i = 1; i <= 5; i+=2) {
-            Timeslot timeslot = new Timeslot(term, i, start, duration, section);
+            Timeslot timeslot = new Timeslot(term, DayOfWeek.of(i), start, start.plusMinutes(duration * 30), section);
             section.addTimeslot(timeslot);
         }
         course.addSection(section);

@@ -3,6 +3,7 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,7 +20,8 @@ public class TimeslotTest {
         testCourse = new Course("A", false);
         testSection = new Section("001", testCourse);
         start = LocalTime.of(13,0);
-        testTime = new Timeslot(1, 1, start, 2, testSection);
+        end = LocalTime.of(14, 0);
+        testTime = new Timeslot(1, DayOfWeek.MONDAY, start, end, testSection);
         testCourse.addSection(testSection);
         testSection.addTimeslot(testTime);
     }
@@ -32,7 +34,7 @@ public class TimeslotTest {
 
     @Test
     public void testOverlapsExact() {
-        Timeslot otherTime = new Timeslot(1, 1, start, 2, testSection);
+        Timeslot otherTime = new Timeslot(1, DayOfWeek.MONDAY, start, end, testSection);
         boolean overlaps = testTime.overlaps(otherTime);
 
         assertTrue(overlaps);
@@ -40,7 +42,7 @@ public class TimeslotTest {
 
     @Test
     public void testOverlapsSameStart() {
-        Timeslot otherTime = new Timeslot(1, 1, start, 3, testSection);
+        Timeslot otherTime = new Timeslot(1, DayOfWeek.MONDAY, start, end.plusMinutes(30), testSection);
         boolean overlaps = testTime.overlaps(otherTime);
 
         assertTrue(overlaps);
@@ -48,7 +50,7 @@ public class TimeslotTest {
 
     @Test
     public void testOverlapsSameEnd() {
-        Timeslot otherTime = new Timeslot(1,1, LocalTime.of(12, 0), 4, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, LocalTime.of(12, 0), end, testSection);
         boolean overlaps = otherTime.overlaps(testTime);
 
         assertTrue(overlaps);
@@ -56,7 +58,7 @@ public class TimeslotTest {
 
     @Test
     public void testOverlapsContains() {
-        Timeslot otherTime = new Timeslot(1,1, LocalTime.of(12, 0), 6, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, LocalTime.of(12, 0), end.plusHours(1), testSection);
         boolean overlaps = testTime.overlaps(otherTime);
 
         assertTrue(overlaps);
@@ -64,7 +66,7 @@ public class TimeslotTest {
 
     @Test
     public void testOverlapsOverlap() {
-        Timeslot otherTime = new Timeslot(1,1, LocalTime.of(12, 0), 3, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, LocalTime.of(12, 0), end.minusMinutes(30), testSection);
         boolean overlaps = testTime.overlaps(otherTime);
 
         assertTrue(overlaps);
@@ -72,7 +74,7 @@ public class TimeslotTest {
 
     @Test
     public void testOverlapsDifferentTerm() {
-        Timeslot otherTime = new Timeslot(2,1, start, 2, testSection);
+        Timeslot otherTime = new Timeslot(2,DayOfWeek.MONDAY, start, end, testSection);
         boolean overlaps = testTime.overlaps(otherTime);
 
         assertFalse(overlaps);
@@ -80,7 +82,7 @@ public class TimeslotTest {
 
     @Test
     public void testOverlapsDifferentDay() {
-        Timeslot otherTime = new Timeslot(1,4, start, 2, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.THURSDAY, start, end, testSection);
         boolean overlaps = testTime.overlaps(otherTime);
 
         assertFalse(overlaps);
@@ -88,7 +90,7 @@ public class TimeslotTest {
 
     @Test
     public void testOverlapsBoundaryOverlap() {
-        Timeslot otherTime = new Timeslot(1,1, LocalTime.of(12, 0), 2, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, LocalTime.of(12, 0), start, testSection);
         boolean overlaps = testTime.overlaps(otherTime);
 
         assertFalse(overlaps);
@@ -96,7 +98,7 @@ public class TimeslotTest {
 
     @Test
     public void testOverlapsNoOverlap() {
-        Timeslot otherTime = new Timeslot(1,1, LocalTime.of(9, 0), 2, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, LocalTime.of(9, 0), LocalTime.of(10,0), testSection);
         boolean overlaps = testTime.overlaps(otherTime);
 
         assertFalse(overlaps);
@@ -109,38 +111,49 @@ public class TimeslotTest {
 
     @Test
     public void testTimeEqualsEqual() {
-        Timeslot otherTime = new Timeslot(1,1, start, 2, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, start, end, testSection);
         assertTrue(testTime.timeEquals(otherTime));
     }
 
     @Test
     public void testTimeEqualsDifferentTerm() {
-        Timeslot otherTime = new Timeslot(2,1, start, 2, testSection);
+        Timeslot otherTime = new Timeslot(2,DayOfWeek.MONDAY, start, end, testSection);
         assertFalse(testTime.timeEquals(otherTime));
     }
 
     @Test
     public void testTimeEqualsDifferentDay() {
-        Timeslot otherTime = new Timeslot(1,3, start, 2, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.WEDNESDAY, start, end, testSection);
         assertFalse(testTime.timeEquals(otherTime));
     }
 
     @Test
     public void testTimeEqualsDifferentStart() {
-        Timeslot otherTime = new Timeslot(1,3, LocalTime.of(12,30), 2, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.WEDNESDAY, LocalTime.of(12,30), end.minusMinutes(30), testSection);
         assertFalse(testTime.timeEquals(otherTime));
     }
 
     @Test
     public void testTimeEqualsDifferentEnd() {
-        Timeslot otherTime = new Timeslot(1,3, start, 3, testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.WEDNESDAY, start, end.plusMinutes(30), testSection);
         assertFalse(testTime.timeEquals(otherTime));
     }
 
     @Test
     public void testTimeEqualsDifferentSection() {
         Section otherSection = new Section("002", testCourse);
-        Timeslot otherTime = new Timeslot(1,1, start, 2, otherSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, start, end, otherSection);
         assertTrue(testTime.timeEquals(otherTime));
+    }
+
+    @Test
+    public void testGetDurationOneHour() {
+        assertEquals(2, testTime.getDuration());
+    }
+
+    @Test
+    public void testGetDurationManyHours() {
+        Timeslot otherTime = new Timeslot(1, DayOfWeek.MONDAY, start.minusMinutes(90), end, testSection);
+        assertEquals(5, otherTime.getDuration());
     }
 }

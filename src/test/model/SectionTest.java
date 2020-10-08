@@ -3,6 +3,7 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -11,12 +12,17 @@ public class SectionTest {
     private Section testSection;
     private Course testCourse;
     private Timeslot testTime;
+    private LocalTime twelve;
+    private LocalTime one;
 
     @BeforeEach
     public void setup() {
+        twelve = LocalTime.of(12, 0);
+        one = LocalTime.of(13, 0);
+
         testCourse = new Course("A", false);
         testSection = new Section("001", testCourse);
-        testTime = new Timeslot(1, 1, LocalTime.of(12, 0), 2, testSection);
+        testTime = new Timeslot(1, DayOfWeek.MONDAY, twelve, one, testSection);
     }
 
     @Test
@@ -33,7 +39,7 @@ public class SectionTest {
     @Test
     public void testNumTimeslotsMany() {
         for (int i = 1; i < 5; i++) {
-            Timeslot timeslot = new Timeslot(2, i, LocalTime.of(12, 0), 2, testSection);
+            Timeslot timeslot = new Timeslot(2, DayOfWeek.of(i), twelve, one, testSection);
             testSection.addTimeslot(timeslot);
         }
         assertEquals(4, testSection.numTimeslots());
@@ -46,7 +52,7 @@ public class SectionTest {
 
     @Test
     public void testContainsTimeslotDifferent() {
-        Timeslot otherTime = new Timeslot(2, 1, LocalTime.of(12,0), 3, testSection);
+        Timeslot otherTime = new Timeslot(2, DayOfWeek.MONDAY, twelve, one.plusMinutes(30), testSection);
         testSection.addTimeslot(testTime);
 
         assertFalse(testSection.containsTimeslot(otherTime));
@@ -72,11 +78,32 @@ public class SectionTest {
     @Test
     public void testAddTimeslotIdentical() {
         assertTrue(testSection.addTimeslot(testTime));
-        Timeslot sameTime = new Timeslot(1, 1, LocalTime.of(12, 0), 2, testSection);
+        Timeslot sameTime = new Timeslot(1, DayOfWeek.MONDAY, twelve, one, testSection);
         assertFalse(testSection.addTimeslot(sameTime));
 
         assertTrue(testSection.containsTimeslot(testTime));
         assertEquals(1, testSection.numTimeslots());
+    }
+
+    @Test
+    public void testAddTimeslotOverlap() {
+        assertTrue(testSection.addTimeslot(testTime));
+        Timeslot overlappingTime = new Timeslot(1, DayOfWeek.MONDAY, twelve, one.plusMinutes(30), testSection);
+        assertFalse(testSection.addTimeslot(overlappingTime));
+
+        assertTrue(testSection.containsTimeslot(testTime));
+        assertEquals(1, testSection.numTimeslots());
+    }
+
+    @Test
+    public void testAddTimeslotNoOverlap() {
+        assertTrue(testSection.addTimeslot(testTime));
+        Timeslot otherTime = new Timeslot(1, DayOfWeek.MONDAY, twelve.minusHours(1), twelve, testSection);
+        assertTrue(testSection.addTimeslot(otherTime));
+
+        assertTrue(testSection.containsTimeslot(testTime));
+        assertTrue(testSection.containsTimeslot(otherTime));
+        assertEquals(2, testSection.numTimeslots());
     }
 
     @Test
@@ -95,7 +122,7 @@ public class SectionTest {
     @Test
     public void testDeleteTimeslotIdentical() {
         testSection.addTimeslot(testTime);
-        Timeslot sameTime = new Timeslot(1, 1, LocalTime.of(12, 0), 2, testSection);
+        Timeslot sameTime = new Timeslot(1, DayOfWeek.MONDAY, twelve, one, testSection);
         assertTrue(testSection.deleteTimeslot(sameTime));
         assertEquals(0, testSection.numTimeslots());
     }
@@ -103,9 +130,8 @@ public class SectionTest {
     @Test
     public void testDeleteTimeslotDifferent() {
         testSection.addTimeslot(testTime);
-        Timeslot otherTime = new Timeslot(1, 1, LocalTime.of(13, 0), 2, testSection);
+        Timeslot otherTime = new Timeslot(1, DayOfWeek.MONDAY, one, LocalTime.of(14, 0), testSection);
         assertFalse(testSection.deleteTimeslot(otherTime));
         assertEquals(1, testSection.numTimeslots());
     }
-
 }

@@ -32,15 +32,16 @@ public class Section {
     }
 
     // MODIFIES: this
-    // EFFECTS: if there is not already a timeslot with identical time, adds given timeslot to this section
+    // EFFECTS: if there is not already a timeslot with conflicting time, adds given timeslot to this section
     //          and returns true; otherwise returns false
     public boolean addTimeslot(Timeslot timeslot) {
-        if (findDuplicate(timeslot) == null) {
-            times.add(timeslot);
-            return true;
-        } else {
-            return false;
+        for (Timeslot t : times) {
+            if (t.overlaps(timeslot)) {
+                return false;
+            }
         }
+        times.add(timeslot);
+        return true;
     }
 
     // MODIFIES: this
@@ -73,6 +74,19 @@ public class Section {
     // EFFECTS: returns true if this section contains the given timeslot or a timeslot with identical time
     public boolean containsTimeslot(Timeslot timeslot) {
         return findDuplicate(timeslot) != null;
+    }
+
+    // EFFECTS: returns true if the timeslots of this section conflict with the other section
+    // TODO: TEST???
+    protected boolean overlaps(Section other) {
+        for (Timeslot t1 : times) {
+            for (Timeslot t2 : other.getTimeslots()) {
+                if (t1.overlaps(t2)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     // EFFECTS: returns timeslot sharing the same term, day, start time, and duration as the given timeslot if it exists
