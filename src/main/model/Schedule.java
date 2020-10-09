@@ -26,6 +26,17 @@ public class Schedule {
         return true;
     }
 
+    // MODIFIES: this
+    // EFFECTS: removes this section from the schedule
+    // TODO: TEST
+    public void removeSection(Section section) {
+        sections.remove(section);
+    }
+
+    public List<Section> getSections() {
+        return sections;
+    }
+
     // EFFECTS: returns a string displaying this schedule in a printable form
     public String toString() {
         return "";

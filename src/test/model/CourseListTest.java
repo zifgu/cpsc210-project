@@ -162,8 +162,8 @@ public class CourseListTest {
         courseA = makeCourseWithSection("A", true, 1, DayOfWeek.MONDAY, LocalTime.of(14,0), 2);
         Section sectionA2 = addSection(courseA, "A2", 1, DayOfWeek.MONDAY, LocalTime.of(9, 0), 2);
 
-        courseB = makeCourseWithSection("B", true, 1, DayOfWeek.MONDAY, LocalTime.of(9, 0), 2);
-        Section sectionB2 = addSection(courseB, "B2", 1, DayOfWeek.MONDAY, LocalTime.of(14, 0), 2);
+        courseB = makeCourseWithSection("B", true, 1, DayOfWeek.MONDAY, LocalTime.of(14, 0), 2);
+        Section sectionB2 = addSection(courseB, "B2", 1, DayOfWeek.MONDAY, LocalTime.of(9, 0), 2);
 
         courses.addCourse(courseA);
         courses.addCourse(courseB);
@@ -186,6 +186,36 @@ public class CourseListTest {
         assertFalse(courses.allValidSchedules(2));
         List<Schedule> schedules = courses.getAllValidSchedules();
         assertEquals(0, schedules.size());
+    }
+
+    @Test
+    public void testAllValidSchedulesMultipleSections() {
+        courseA = makeCourseWithSection("A", true, 1, DayOfWeek.MONDAY, LocalTime.of(14,0), 2);
+        courseB = makeCourseWithSection("B", true, 1, DayOfWeek.MONDAY, LocalTime.of(14, 30), 3);
+        Section sectionA2 = addSection(courseA, "A2", 1, DayOfWeek.WEDNESDAY, LocalTime.of(14, 0), 2);
+
+        courses.addCourse(courseA);
+        courses.addCourse(courseB);
+
+        assertTrue(courses.allValidSchedules(2));
+        List<Schedule> schedules = courses.getAllValidSchedules();
+        assertEquals(1, schedules.size());
+        assertTrue(schedules.get(0).containsSection(sectionA2));
+    }
+
+    @Test
+    public void testAllValidSchedulesMultipleElectiveSections() {
+        courseA = makeCourseWithSection("A", false, 1, DayOfWeek.MONDAY, LocalTime.of(14,0), 2);
+        courseB = makeCourseWithSection("B", true, 1, DayOfWeek.MONDAY, LocalTime.of(9, 0), 2);
+        Section sectionA2 = addSection(courseA, "A2", 1, DayOfWeek.WEDNESDAY, LocalTime.of(14, 0), 2);
+
+        courses.addCourse(courseA);
+        courses.addCourse(courseB);
+
+        assertTrue(courses.allValidSchedules(2));
+        List<Schedule> schedules = courses.getAllValidSchedules();
+        assertEquals(2, schedules.size());
+        assertTrue(schedules.get(1).containsSection(sectionA2));
     }
 
     @Test
@@ -216,13 +246,13 @@ public class CourseListTest {
 
         Section sectionA1 = addSectionMWF(courseA, "A1", 1, LocalTime.of(9, 0), 2);
         Section sectionA2 = addSectionMWF(courseA, "A2", 1, LocalTime.of(12, 0), 2);
-        Section sectionB1 = addSectionMWF(courseA, "B1", 1, LocalTime.of(12, 1), 2);
-        Section sectionB2 = addSectionMWF(courseA, "B2", 1, LocalTime.of(1, 2), 2);
-        Section sectionC1 = addSectionMWF(courseA, "C1", 1, LocalTime.of(10, 0), 2);
-        Section sectionC2 = addSectionMWF(courseA, "C2", 1, LocalTime.of(1, 0), 2);
-        Section sectionD1 = addSectionMWF(courseA, "D1", 1, LocalTime.of(9, 0), 2);
-        Section sectionE1 = addSectionMWF(courseA, "E1", 1, LocalTime.of(12, 0), 2);
-        Section sectionE2 = addSectionMWF(courseA, "E2", 1, LocalTime.of(1, 0), 2);
+        Section sectionB1 = addSectionMWF(courseB, "B1", 1, LocalTime.of(12, 0), 2);
+        Section sectionB2 = addSectionMWF(courseB, "B2", 1, LocalTime.of(13, 0), 2);
+        Section sectionC1 = addSectionMWF(courseC, "C1", 1, LocalTime.of(10, 0), 2);
+        Section sectionC2 = addSectionMWF(courseC, "C2", 1, LocalTime.of(13, 0), 2);
+        Section sectionD1 = addSectionMWF(courseD, "D1", 1, LocalTime.of(9, 0), 2);
+        Section sectionE1 = addSectionMWF(courseE, "E1", 1, LocalTime.of(12, 0), 2);
+        Section sectionE2 = addSectionMWF(courseE, "E2", 1, LocalTime.of(13, 0), 2);
 
         courses.addCourse(courseA);
         courses.addCourse(courseB);
@@ -240,19 +270,59 @@ public class CourseListTest {
         assertTrue(schedules.get(0).containsSection(sectionC1));
         assertTrue(schedules.get(0).containsSection(sectionE2));
 
-        assertEquals(4, schedules.get(0).numCourses());
+        assertEquals(4, schedules.get(1).numCourses());
         assertTrue(schedules.get(1).containsSection(sectionA1));
-        assertTrue(schedules.get(1).containsSection(sectionB1));
-        assertTrue(schedules.get(1).containsSection(sectionC2));
-        assertTrue(schedules.get(1).containsSection(sectionD1));
+        assertTrue(schedules.get(1).containsSection(sectionB2));
+        assertTrue(schedules.get(1).containsSection(sectionC1));
+        assertTrue(schedules.get(1).containsSection(sectionE1));
 
-        assertEquals(4, schedules.get(0).numCourses());
+        assertEquals(4, schedules.get(2).numCourses());
         assertTrue(schedules.get(2).containsSection(sectionA2));
         assertTrue(schedules.get(2).containsSection(sectionB2));
         assertTrue(schedules.get(2).containsSection(sectionC1));
         assertTrue(schedules.get(2).containsSection(sectionD1));
     }
 
+    @Test
+    public void testAllValidSchedulesFreeElectives() {
+        courseA = new Course("A", true);
+        courseB = new Course("B", false);
+        Course courseC = new Course("C", true);
+        Course courseD = new Course("D", true);
+        Course courseE = new Course("E", false);
+
+        Section sectionA1 = addSectionMWF(courseA, "A1", 1, LocalTime.of(9, 0), 2);
+        Section sectionA2 = addSectionMWF(courseA, "A2", 1, LocalTime.of(12, 0), 2);
+        Section sectionB1 = addSectionMWF(courseB, "B1", 1, LocalTime.of(12, 0), 2);
+        Section sectionB2 = addSectionMWF(courseB, "B2", 1, LocalTime.of(13, 0), 2);
+        Section sectionC1 = addSectionMWF(courseC, "C1", 1, LocalTime.of(10, 0), 2);
+        Section sectionC2 = addSectionMWF(courseC, "C2", 1, LocalTime.of(13, 0), 2);
+        Section sectionD1 = addSectionMWF(courseD, "D1", 1, LocalTime.of(9, 0), 2);
+        Section sectionE1 = addSectionMWF(courseE, "E1", 1, LocalTime.of(12, 0), 2);
+        Section sectionE2 = addSectionMWF(courseE, "E2", 1, LocalTime.of(13, 0), 2);
+
+        courses.addCourse(courseA);
+        courses.addCourse(courseB);
+        courses.addCourse(courseC);
+        courses.addCourse(courseD);
+        courses.addCourse(courseE);
+
+        assertTrue(courses.allValidSchedules(4));
+        List<Schedule> schedules = courses.getAllValidSchedules();
+        assertEquals(2, schedules.size());
+
+        assertEquals(4, schedules.get(0).numCourses());
+        assertTrue(schedules.get(0).containsSection(sectionA2));
+        assertTrue(schedules.get(0).containsSection(sectionB2));
+        assertTrue(schedules.get(0).containsSection(sectionC1));
+        assertTrue(schedules.get(0).containsSection(sectionD1));
+
+        assertEquals(4, schedules.get(1).numCourses());
+        assertTrue(schedules.get(1).containsSection(sectionA2));
+        assertTrue(schedules.get(1).containsSection(sectionC1));
+        assertTrue(schedules.get(1).containsSection(sectionD1));
+        assertTrue(schedules.get(1).containsSection(sectionE2));
+    }
 
     private Course makeCourseWithSection(String name, boolean required, int term, DayOfWeek day, LocalTime start, int
             duration) {

@@ -61,7 +61,7 @@ public class Section {
     public String toString() {
         String result = name + ": ";
         for (Timeslot t : times) {
-            result = result.concat(t.toString() + ", ");
+            result = result.concat(t.toString() + "  ");
         }
         return result;
     }

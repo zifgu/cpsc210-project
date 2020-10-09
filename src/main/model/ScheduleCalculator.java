@@ -6,56 +6,136 @@ import java.util.List;
 public class ScheduleCalculator {
     private List<Course> required;
     private List<Course> electives;
+    private List<Schedule> schedules;
     private int numCourses;
+    private int numRequired;
+    private int numElectives;
 
-    public ScheduleCalculator(int n) {
+    public ScheduleCalculator(int n, List<Course> courses) {
         numCourses = n;
+        required = new ArrayList<>();
+        electives = new ArrayList<>();
+        schedules = new ArrayList<>();
+        sortRequiredAndElectives(courses);
     }
 
     // EFFECT: returns list of all required courses
-    public List<Course> getRequired() {
-        return null;
-    }
-
-    public void setRequired(List<Course> courses) {
-        required = courses;
-    }
-
-    // EFFECT: returns list of all elective courses
-    public List<Course> getElectives() {
-        return null;
-    }
-
-    public void setElectives(List<Course> courses) {
-        electives = courses;
+    public void sortRequiredAndElectives(List<Course> courses) {
+        numRequired = 0;
+        numElectives = 0;
+        for (Course c : courses) {
+            if (c.getRequired()) {
+                required.add(c);
+                numRequired++;
+            } else {
+                electives.add(c);
+                numElectives++;
+            }
+        }
     }
 
     // EFFECT: returns list of all valid schedules
     public List<Schedule> allValidSchedules() {
-        return null;
-    }
-
-    public boolean allValidSchedulesTool() {
-        Schedule s = new Schedule();
-        fillCourses(s);
-        // TODO: figure this out
-        return false;
-    }
-
-    public boolean fillCourses(Schedule currentSchedule) {
         if (required.size() + electives.size() < numCourses) {
-            return false;
+            return schedules;
+        } else {
+            Schedule s = new Schedule();
+            fillCourses(s, 0);
+            return schedules;
         }
-        // TODO: finish
-        return false;
     }
 
-    public boolean fillRequired(Schedule currentSchedule, int indexLeft) {
-        return false;
+    @SuppressWarnings("checkstyle:MethodLength")
+    // MODIFIES: this
+    // EFFECTS:
+    public boolean fillCourses(Schedule currentSchedule, int courseIndex) {
+        boolean possible = false;
+        if (currentSchedule.numCourses() == numCourses) {
+            addToListOfSchedules(currentSchedule);
+            possible = true;
+        } else if (courseIndex < required.size()) {
+            Course c = required.get(courseIndex);
+            for (Section s : c.getSections()) {
+                if (!currentSchedule.fillSection(s)) {
+                    possible = false;
+                    continue;
+                }
+                possible = fillCourses(currentSchedule, courseIndex + 1) || possible;
+                currentSchedule.removeSection(s);
+            }
+        } else if (courseIndex < required.size() + electives.size()) {
+            Course c = electives.get(courseIndex - required.size());
+            for (Section s : c.getSections()) {
+                if (!currentSchedule.fillSection(s)) {
+                    possible = false;
+                    continue;
+                }
+                possible = fillCourses(currentSchedule, courseIndex + 1) || possible;
+                currentSchedule.removeSection(s);
+            }
+            if (enoughElectives(currentSchedule, courseIndex)) {
+                possible = fillCourses(currentSchedule, courseIndex + 1) || possible;
+            }
+        }
+        return possible;
     }
 
-    public boolean fillElectives() {
-        return false;
+    /*
+    private boolean fillElectives(Schedule currentSchedule, int electivesRemaining, int electiveIndex) {
+        if (electivesRemaining <= 0) {
+            return true;
+        }
+        boolean possible = false;
+        Course c = electives.get(electiveIndex);
+        for (Section s : c.getSections()) {
+            if (!currentSchedule.fillSection(s)) {
+                possible = false;
+                continue;
+            }
+            possible = fillElectives(currentSchedule, electivesRemaining - 1, electiveIndex + 1);
+            currentSchedule.removeSection(s);
+        }
+        return possible;
+    }
+     */
+
+    /*
+    private boolean fillElectives(Schedule currentSchedule, int electiveIndex) {
+        boolean possible = false;
+        if (currentSchedule.numElectives() == numCourses - numRequired) {
+            addToListOfSchedules(currentSchedule);
+            possible = true;
+            // do something else
+        } else if (!enoughElectives(currentSchedule, electiveIndex)) {
+            possible = false;
+        } else {
+            Course c = electives.get(electiveIndex);
+            for (Section s : c.getSections()) {
+                if (!currentSchedule.fillSection(s)) {
+                    possible = false;
+                    continue;
+                }
+                possible = fillElectives(currentSchedule, electiveIndex + 1) || possible;
+                currentSchedule.removeSection(s);
+            }
+        }
+        return possible;
+    }
+     */
+
+    // EFFECTS: returns true if number of remaining electives is enough to produce a schedule with numCourses courses
+    private boolean enoughElectives(Schedule currentSchedule, int index) {
+        return currentSchedule.numCourses() + (numElectives + numRequired - 1 - index) >= numCourses;
+    }
+
+    // REQUIRES: current schedule is a valid schedule
+    // EFFECTS: copies the current schedule into a new schedule and adds it to the list of all possible schedules
+    private void addToListOfSchedules(Schedule filledSchedule) {
+        Schedule newSchedule = new Schedule();
+        for (Section sec : filledSchedule.getSections()) {
+            newSchedule.fillSection(sec);
+        }
+        schedules.add(newSchedule);
     }
 
     /*

@@ -9,8 +9,8 @@ public class CourseList {
     public static final int TERMS = 2;
     public static final int INTERVALS_PER_HOUR = 2;
 
-    private ArrayList<Course> courses;
-    private ArrayList<Schedule> schedules;
+    private List<Course> courses;
+    private List<Schedule> schedules;
 
     // EFFECTS: constructs a new course list with no courses and no possible schedules
     public CourseList() {
@@ -83,7 +83,10 @@ public class CourseList {
     //          a schedule is valid if there are no time conflicts and it has numCourses courses total, including
     //          all required courses
     public boolean allValidSchedules(int numCourses) {
-        return false;
+        ScheduleCalculator sc = new ScheduleCalculator(numCourses, courses);
+        List<Schedule> allValidSchedules = sc.allValidSchedules();
+        schedules = allValidSchedules;
+        return !schedules.isEmpty();
     }
 
     // EFFECTS: returns a string displaying CourseList info in printable form
