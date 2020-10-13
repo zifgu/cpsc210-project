@@ -70,7 +70,7 @@ public class Timeslot {
     // EFFECTS: returns true if this timeslot has the same term, day of week, start time, and duration as timeslot other
     public boolean timeEquals(Timeslot other) {
         return term == other.getTerm() && dayOfWeek.equals(other.getDayOfWeek())
-                && endTime.equals(other.getEndTime()) && startTime.equals(other.getStartTime());
+                && startTime.equals(other.getStartTime()) && endTime.equals(other.getEndTime());
     }
 
     // EFFECTS: returns the difference between start and end times as a number of 30-minute intervals
