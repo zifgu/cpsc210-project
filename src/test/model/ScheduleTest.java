@@ -12,9 +12,6 @@ public class ScheduleTest {
     private Schedule testSchedule;
     private Course testCourse;
     private Section testSection;
-    private Timeslot testTime1;
-    private Timeslot testTime2;
-    private Timeslot testTime3;
     private LocalTime start;
     private LocalTime end;
 
@@ -27,9 +24,9 @@ public class ScheduleTest {
         testSection = new Section("001", testCourse);
         testCourse.addSection(testSection);
 
-        testTime1 = new Timeslot(1, DayOfWeek.MONDAY, start, end, testSection);
-        testTime2 = new Timeslot(1, DayOfWeek.WEDNESDAY, start, end, testSection);
-        testTime3 = new Timeslot(1, DayOfWeek.FRIDAY, start, end, testSection);
+        Timeslot testTime1 = new Timeslot(1, DayOfWeek.MONDAY, start, end, testSection);
+        Timeslot testTime2 = new Timeslot(1, DayOfWeek.WEDNESDAY, start, end, testSection);
+        Timeslot testTime3 = new Timeslot(1, DayOfWeek.FRIDAY, start, end, testSection);
 
         testSection.addTimeslot(testTime1);
         testSection.addTimeslot(testTime2);
@@ -230,5 +227,13 @@ public class ScheduleTest {
         testSchedule.fillSection(otherSection);
 
         assertFalse(testSchedule.containsCourse(testCourse));
+    }
+
+    @Test
+    public void testRemoveSection() {
+        testSchedule.fillSection(testSection);
+        assertTrue(testSchedule.containsSection(testSection));
+        testSchedule.removeSection(testSection);
+        assertEquals(0, testSchedule.numSections());
     }
 }

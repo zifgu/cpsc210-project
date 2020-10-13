@@ -3,9 +3,10 @@ package model;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
+/*
+    Represents one block of a section with a specific term, day of week, start time, and end time
+*/
 public class Timeslot {
-    public static final int INTERVAL_LENGTH = 30;
-
     private Section section;
     private int term;
     private DayOfWeek dayOfWeek;
@@ -23,6 +24,7 @@ public class Timeslot {
         this.section = section;
     }
 
+    // getters
     public LocalTime getStartTime() {
         return startTime;
     }
@@ -31,28 +33,12 @@ public class Timeslot {
         return endTime;
     }
 
-    public void setStartTime(LocalTime startTime) {
-        this.startTime = startTime;
-    }
-
-    public void setEndTime(LocalTime endTime) {
-        this.endTime = endTime;
-    }
-
     public DayOfWeek getDayOfWeek() {
         return dayOfWeek;
     }
 
-    public void setDayOfWeek(DayOfWeek day) {
-        this.dayOfWeek = day;
-    }
-
     public int getTerm() {
         return term;
-    }
-
-    public void setTerm(int term) {
-        this.term = term;
     }
 
     public Section getSection() {
@@ -71,13 +57,11 @@ public class Timeslot {
             LocalTime otherStart = other.getStartTime();
             LocalTime otherEnd = other.getEndTime();
             if (startTime.isAfter(otherStart)) {
-                if (startTime.isBefore(otherEnd)) {
-                    return true;
-                }
+                return startTime.isBefore(otherEnd);
             } else if (startTime.equals(otherStart)) {
                 return true;
-            } else if (endTime.isAfter(otherStart)) {
-                return true;
+            } else {
+                return endTime.isAfter(otherStart);
             }
         }
         return false;
@@ -85,9 +69,8 @@ public class Timeslot {
 
     // EFFECTS: returns true if this timeslot has the same term, day of week, start time, and duration as timeslot other
     public boolean timeEquals(Timeslot other) {
-        boolean result = term == other.getTerm() && dayOfWeek.equals(other.getDayOfWeek())
+        return term == other.getTerm() && dayOfWeek.equals(other.getDayOfWeek())
                 && endTime.equals(other.getEndTime()) && startTime.equals(other.getStartTime());
-        return result;
     }
 
     // EFFECTS: returns the difference between start and end times as a number of 30-minute intervals
@@ -103,7 +86,6 @@ public class Timeslot {
 
     // EFFECTS: returns a string displaying timeslot info in printable form
     public String toString() {
-        LocalTime end = getEndTime();
-        return dayOfWeek.toString() + " " + startTime.toString() + "-" + end.toString();
+        return "Term " + term + " " + dayOfWeek.toString() + " " + startTime.toString() + "-" + endTime.toString();
     }
 }

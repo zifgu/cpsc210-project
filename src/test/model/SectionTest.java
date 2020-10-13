@@ -134,4 +134,81 @@ public class SectionTest {
         assertFalse(testSection.deleteTimeslot(otherTime));
         assertEquals(1, testSection.numTimeslots());
     }
+
+    @Test
+    public void testOverlapSame() {
+        testSection.addTimeslot(testTime);
+        assertTrue(testSection.overlaps(testSection));
+    }
+
+    @Test
+    public void testOverlapDifferentTime() {
+        testSection.addTimeslot(testTime);
+        Section s = new Section("002", testCourse);
+        Timeslot t = new Timeslot(1, DayOfWeek.MONDAY, one, LocalTime.of(14, 0), s);
+        s.addTimeslot(t);
+        assertFalse(testSection.overlaps(s));
+    }
+
+    @Test
+    public void testOverlapOverlappingTime() {
+        testSection.addTimeslot(testTime);
+        Section s = new Section("002", testCourse);
+        Timeslot t = new Timeslot(1, DayOfWeek.MONDAY, twelve, LocalTime.of(14, 0), s);
+        s.addTimeslot(t);
+        assertTrue(testSection.overlaps(s));
+    }
+
+    @Test
+    public void testOverlapDifferentDay() {
+        testSection.addTimeslot(testTime);
+        Section s = new Section("002", testCourse);
+        Timeslot t = new Timeslot(1, DayOfWeek.TUESDAY, twelve, one, s);
+        s.addTimeslot(t);
+        assertFalse(testSection.overlaps(s));
+    }
+
+    @Test
+    public void testOverlapDifferentTerm() {
+        testSection.addTimeslot(testTime);
+        Section s = new Section("002", testCourse);
+        Timeslot t = new Timeslot(2, DayOfWeek.MONDAY, twelve, one, s);
+        s.addTimeslot(t);
+        assertFalse(testSection.overlaps(s));
+    }
+
+    @Test
+    public void testOverlapManyTimeslotsNoOverlap() {
+        testSection.addTimeslot(testTime);
+        Section s = new Section("002", testCourse);
+        Timeslot t1 = new Timeslot(1, DayOfWeek.TUESDAY, twelve, one, s);
+        Timeslot t2 = new Timeslot(1, DayOfWeek.THURSDAY, twelve, one, s);
+        s.addTimeslot(t1);
+        s.addTimeslot(t2);
+        assertFalse(testSection.overlaps(s));
+    }
+
+    @Test
+    public void testOverlapManyTimeslotsOneOverlap() {
+        testSection.addTimeslot(testTime);
+        Section s = new Section("002", testCourse);
+        Timeslot t1 = new Timeslot(1, DayOfWeek.MONDAY, LocalTime.of(11, 0), one, s);
+        Timeslot t2 = new Timeslot(1, DayOfWeek.WEDNESDAY, LocalTime.of(11, 0), one, s);
+        s.addTimeslot(t1);
+        s.addTimeslot(t2);
+        assertTrue(testSection.overlaps(s));
+    }
+
+    @Test
+    public void testOverlapManyTimeslotsManyOverlaps() {
+        testSection.addTimeslot(testTime);
+        Section s = new Section("002", testCourse);
+        Timeslot t1 = new Timeslot(1, DayOfWeek.WEDNESDAY, twelve, one, testSection);
+        Timeslot t2 = new Timeslot(1, DayOfWeek.MONDAY, twelve, LocalTime.of(14, 0), s);
+        Timeslot t3 = new Timeslot(1, DayOfWeek.WEDNESDAY, twelve, LocalTime.of(14, 0), s);
+        testSection.addTimeslot(t1);
+        s.addTimeslot(t2);
+        s.addTimeslot(t3);
+        assertTrue(testSection.overlaps(s));
+    }
 }

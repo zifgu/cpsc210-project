@@ -1,9 +1,11 @@
 package model;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    Represents a course with name, status (required vs elective), and sections
+*/
 public class Course {
     private String name;
     private boolean required;
@@ -16,12 +18,9 @@ public class Course {
         sections = new ArrayList<>();
     }
 
+    // getters and setters
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public boolean getRequired() {
@@ -83,6 +82,16 @@ public class Course {
         } else {
             return name + " (elective)";
         }
+    }
+
+    // EFFECTS: returns the section with the given name in this course, if it exists; otherwise returns null
+    public Section getSectionByName(String name) {
+        for (Section s : sections) {
+            if (s.getName().equals(name)) {
+                return s;
+            }
+        }
+        return null;
     }
 
     // EFFECTS: returns index of the section with the given name if it exists, otherwise returns -1

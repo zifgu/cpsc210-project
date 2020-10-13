@@ -3,11 +3,10 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    Represents a list of courses inputted by the user
+*/
 public class CourseList {
-    public static final int EARLIEST_HOURS = 7;
-    public static final int NUM_DAILY_HOURS = 15;
-    public static final int TERMS = 2;
-    public static final int INTERVALS_PER_HOUR = 2;
 
     private List<Course> courses;
     private List<Schedule> schedules;
@@ -19,12 +18,8 @@ public class CourseList {
     }
 
     // EFFECTS: returns list of names of all courses in this course list
-    public List<String> getAllCourseNames() {
-        ArrayList<String> names = new ArrayList<>();
-        for (Course c : courses) {
-            names.add(c.getName());
-        }
-        return names;
+    public List<Course> getCourses() {
+        return courses;
     }
 
     // EFFECTS: returns the number of courses in this CourseList
@@ -84,19 +79,28 @@ public class CourseList {
     //          all required courses
     public boolean allValidSchedules(int numCourses) {
         ScheduleCalculator sc = new ScheduleCalculator(numCourses, courses);
-        List<Schedule> allValidSchedules = sc.allValidSchedules();
-        schedules = allValidSchedules;
+        schedules = sc.allValidSchedules();
         return !schedules.isEmpty();
     }
 
     // EFFECTS: returns a string displaying CourseList info in printable form
     public String toString() {
-        return Integer.toString(numCourses()) + " courses";
+        return numCourses() + " courses";
     }
 
     // EFFECTS: returns the list of all valid Schedules that can be generated from the current courses
     public List<Schedule> getAllValidSchedules() {
         return schedules;
+    }
+
+    // EFFECTS: returns a course with the given name in this course list if it exists, otherwise returns null
+    public Course getCourseByName(String name) {
+        for (Course c : courses) {
+            if (c.getName().equals(name)) {
+                return c;
+            }
+        }
+        return null;
     }
 
     // EFFECTS: returns index of the course with the given name if it exists, otherwise returns -1

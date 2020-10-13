@@ -27,6 +27,16 @@ public class TimeslotTest {
     }
 
     @Test
+    public void testConstructor() {
+        Timeslot t = new Timeslot(1, DayOfWeek.TUESDAY, LocalTime.of(12, 30), LocalTime.of(14, 0), testSection);
+        assertEquals(1, t.getTerm());
+        assertEquals(DayOfWeek.TUESDAY, t.getDayOfWeek());
+        assertEquals(LocalTime.of(12, 30), t.getStartTime());
+        assertEquals(LocalTime.of(14, 0), t.getEndTime());
+        assertEquals(testSection, t.getSection());
+    }
+
+    @Test
     public void testGetCourse() {
         Course result = testTime.getCourse();
         assertEquals(testCourse, result);

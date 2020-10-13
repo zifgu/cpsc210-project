@@ -35,7 +35,7 @@ class CourseTest {
     @Test
     public void testNumSectionsMany() {
         for (int i = 0; i < 4; i++) {
-            Section testSection = new Section("10" + Integer.toString(i), testCourse);
+            Section testSection = new Section("10" + i, testCourse);
             testCourse.addSection(testSection);
         }
         assertEquals(4, testCourse.numSections());
@@ -88,5 +88,29 @@ class CourseTest {
 
         testCourse.addSection(testSection);
         assertTrue(testCourse.deleteSection("101"));
+    }
+
+    @Test
+    public void testGetSectionByNameNoSections() {
+        assertNull(testCourse.getSectionByName("101"));
+    }
+
+    @Test
+    public void testGetSectionByName() {
+        Section testSection = new Section("101", testCourse);
+        Section testSection2 = new Section("102", testCourse);
+        testCourse.addSection(testSection);
+        testCourse.addSection(testSection2);
+
+        assertEquals(testSection, testCourse.getSectionByName("101"));
+        assertEquals(testSection2, testCourse.getSectionByName("102"));
+    }
+
+    @Test
+    public void testGetSectionByNameDifferentName() {
+        Section testSection = new Section("101", testCourse);
+        testCourse.addSection(testSection);
+
+        assertNull(testCourse.getSectionByName("102"));
     }
 }

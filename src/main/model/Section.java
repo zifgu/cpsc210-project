@@ -3,6 +3,9 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+    Represents a section of a course with associated times
+*/
 public class Section {
     private String name;
     private Course course;
@@ -15,12 +18,9 @@ public class Section {
         this.times = new ArrayList<>();
     }
 
+    // getters
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Course getCourse() {
@@ -59,9 +59,9 @@ public class Section {
 
     // EFFECTS: returns a string displaying section info in a printable form
     public String toString() {
-        String result = name + ": ";
+        String result = course.getName() + " " + name + ": ";
         for (Timeslot t : times) {
-            result = result.concat(t.toString() + "  ");
+            result = result.concat("\n\t" + t);
         }
         return result;
     }
@@ -77,7 +77,6 @@ public class Section {
     }
 
     // EFFECTS: returns true if the timeslots of this section conflict with the other section
-    // TODO: TEST???
     protected boolean overlaps(Section other) {
         for (Timeslot t1 : times) {
             for (Timeslot t2 : other.getTimeslots()) {

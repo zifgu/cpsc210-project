@@ -1,10 +1,12 @@
 package model;
 
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
+/*
+    Represents a schedule, i.e. a collection of sections from courses
+*/
 public class Schedule {
     private List<Section> sections;
 
@@ -13,6 +15,7 @@ public class Schedule {
         sections = new ArrayList<>();
     }
 
+    // REQUIRES: the schedule does not already contain a section with the same course
     // MODIFIES: this
     // EFFECTS: returns false if one of the timeslots in the section is already occupied, else fills this
     //          schedule with all timeslots in the section and returns true
@@ -26,9 +29,9 @@ public class Schedule {
         return true;
     }
 
+    // REQUIRES: section is in this schedule already
     // MODIFIES: this
-    // EFFECTS: removes this section from the schedule
-    // TODO: TEST
+    // EFFECTS: removes section from this schedule
     public void removeSection(Section section) {
         sections.remove(section);
     }
@@ -37,9 +40,14 @@ public class Schedule {
         return sections;
     }
 
+    // REQUIRES: schedule is valid, i.e. no time conflicts
     // EFFECTS: returns a string displaying this schedule in a printable form
     public String toString() {
-        return "";
+        String result = "";
+        for (Section s : sections) {
+            result = result.concat(s + "\n");
+        }
+        return result;
     }
 
     // EFFECTS: returns the total time of sections in this schedule, as a number of 30-minute intervals
@@ -109,10 +117,5 @@ public class Schedule {
             }
         }
         return false;
-    }
-
-    // EFFECTS: returns true if this schedule contains a section with the given timeslot
-    private boolean timeslotFilled(Timeslot t) {
-        return false; // stub
     }
 }

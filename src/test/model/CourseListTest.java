@@ -22,23 +22,6 @@ public class CourseListTest {
     }
 
     @Test
-    public void testGetAllCourseNamesEmpty() {
-        List<String> names = courses.getAllCourseNames();
-        assertEquals(0, names.size());
-    }
-
-    @Test
-    public void testGetAllCourseNames() {
-        courses.addCourse(courseA);
-        courses.addCourse(courseB);
-
-        List<String> names = courses.getAllCourseNames();
-        assertEquals(2, names.size());
-        assertEquals("A", names.get(0));
-        assertEquals("B", names.get(1));
-    }
-
-    @Test
     public void testAddCourseEmpty() {
         assertTrue(courses.addCourse(courseA));
         assertEquals(1, courses.numCourses());
@@ -112,6 +95,23 @@ public class CourseListTest {
             courses.addCourse(testCourse);
         }
         assertEquals(2, courses.numElectives());
+    }
+
+    @Test
+    public void testGetCourseByNameListEmpty() {
+        assertNull(courses.getCourseByName("A"));
+    }
+
+    @Test
+    public void testGetCourseByNameCourseExists() {
+        courses.addCourse(courseA);
+        assertEquals(courseA, courses.getCourseByName("A"));
+    }
+
+    @Test
+    public void testGetCourseByNameCourseDifferent() {
+        courses.addCourse(courseB);
+        assertNull(courses.getCourseByName("A"));
     }
 
     @Test
