@@ -155,6 +155,19 @@ public class ScheduleTest {
     }
 
     @Test
+    public void testNumElectivesOne() {
+        Course otherCourse = new Course("B", false);
+        Section otherSection = new Section("102", otherCourse);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, LocalTime.of(12, 0), start, otherSection);
+        otherSection.addTimeslot(otherTime);
+
+        testSchedule.fillSection(otherSection);
+        testSchedule.fillSection(testSection);
+
+        assertEquals(1, testSchedule.numElectives());
+    }
+
+    @Test
     public void testNumElectivesMany() {
         testCourse.setRequired(false);
         Course otherCourse = new Course("B", false);
@@ -171,6 +184,19 @@ public class ScheduleTest {
     @Test
     public void testNumRequiredNone() {
         assertEquals(0, testSchedule.numRequired());
+    }
+
+    @Test
+    public void testNumRequiredOne() {
+        Course otherCourse = new Course("B", false);
+        Section otherSection = new Section("102", otherCourse);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, LocalTime.of(12, 0), start, otherSection);
+        otherSection.addTimeslot(otherTime);
+
+        testSchedule.fillSection(testSection);
+        testSchedule.fillSection(otherSection);
+
+        assertEquals(1, testSchedule.numRequired());
     }
 
     @Test

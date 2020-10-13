@@ -139,13 +139,13 @@ public class TimeslotTest {
 
     @Test
     public void testTimeEqualsDifferentStart() {
-        Timeslot otherTime = new Timeslot(1,DayOfWeek.WEDNESDAY, LocalTime.of(12,30), end.minusMinutes(30), testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, LocalTime.of(12,30), end.minusMinutes(30), testSection);
         assertFalse(testTime.timeEquals(otherTime));
     }
 
     @Test
     public void testTimeEqualsDifferentEnd() {
-        Timeslot otherTime = new Timeslot(1,DayOfWeek.WEDNESDAY, start, end.plusMinutes(30), testSection);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, start, end.plusMinutes(30), testSection);
         assertFalse(testTime.timeEquals(otherTime));
     }
 

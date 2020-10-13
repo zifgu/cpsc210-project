@@ -57,7 +57,7 @@ class ScheduleCalculator {
         boolean possible = false;
         if (currentSchedule.numCourses() == numRequired) {
             possible = fillElectives(currentSchedule, courseIndex);
-        } else if (courseIndex < required.size()) {
+        } else {
             Course c = required.get(courseIndex);
             for (Section s : c.getSections()) {
                 if (!currentSchedule.fillSection(s)) {
@@ -80,7 +80,7 @@ class ScheduleCalculator {
         if (currentSchedule.numCourses() == numCourses) {
             addToListOfSchedules(currentSchedule);
             possible = true;
-        } else if (courseIndex < required.size() + electives.size()) {
+        } else {
             Course c = electives.get(courseIndex - required.size());
             // try adding a section from this course to the schedule
             for (Section s : c.getSections()) {
@@ -90,7 +90,7 @@ class ScheduleCalculator {
                 possible = fillElectives(currentSchedule, courseIndex + 1) || possible;
                 currentSchedule.removeSection(s);
             }
-            // if there are enough electives remaining, also try to make a schedule not containing the current course
+            // if there are enough electives remaining, try to make a schedule not containing the current course
             if (enoughElectives(currentSchedule, courseIndex)) {
                 possible = fillElectives(currentSchedule, courseIndex + 1) || possible;
             }

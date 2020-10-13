@@ -245,7 +245,7 @@ public class CourseListTest {
     public void testAllValidSchedules() {
         courseA = new Course("A", true);
         courseB = new Course("B", true);
-        Course courseC = new Course("C", true);
+        Course courseC = new Course("C", false);
         Course courseD = new Course("D", false);
         Course courseE = new Course("E", false);
 
