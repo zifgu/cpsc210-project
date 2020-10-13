@@ -36,6 +36,11 @@ public class ScheduleTest {
     }
 
     @Test
+    public void testConstructor() {
+        assertEquals(0, testSchedule.numSections());
+    }
+
+    @Test
     public void testFillSectionEmpty() {
         assertTrue(testSchedule.fillSection(testSection));
         assertEquals(6, testSchedule.totalTime());
@@ -235,5 +240,20 @@ public class ScheduleTest {
         assertTrue(testSchedule.containsSection(testSection));
         testSchedule.removeSection(testSection);
         assertEquals(0, testSchedule.numSections());
+    }
+
+    @Test
+    public void testToString() {
+        Course otherCourse = new Course("B", true);
+        Section otherSection = new Section("102", otherCourse);
+        Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, LocalTime.of(12, 0), start, otherSection);
+        otherSection.addTimeslot(otherTime);
+        testSchedule.fillSection(otherSection);
+        testSchedule.fillSection(testSection);
+
+        String s1 = "B 102: \n\tTerm 1 MONDAY 12:00-13:00";
+        String s2 = "A 001: \n\tTerm 1 MONDAY 13:00-14:00\n\tTerm 1 WEDNESDAY 13:00-14:00\n\tTerm 1 FRIDAY 13:00-14:00";
+
+        assertEquals(s1.concat("\n").concat(s2).concat("\n"), testSchedule.toString());
     }
 }

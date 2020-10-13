@@ -86,6 +86,6 @@ public class Timeslot {
 
     // EFFECTS: returns a string displaying timeslot info in printable form
     public String toString() {
-        return "Term " + term + " " + dayOfWeek.toString() + " " + startTime.toString() + "-" + endTime.toString();
+        return "Term " + term + " " + dayOfWeek + " " + startTime + "-" + endTime;
     }
 }

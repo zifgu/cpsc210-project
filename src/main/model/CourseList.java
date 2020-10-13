@@ -17,7 +17,7 @@ public class CourseList {
         schedules = new ArrayList<>();
     }
 
-    // EFFECTS: returns list of names of all courses in this course list
+    // getters
     public List<Course> getCourses() {
         return courses;
     }
@@ -81,11 +81,6 @@ public class CourseList {
         ScheduleCalculator sc = new ScheduleCalculator(numCourses, courses);
         schedules = sc.allValidSchedules();
         return !schedules.isEmpty();
-    }
-
-    // EFFECTS: returns a string displaying CourseList info in printable form
-    public String toString() {
-        return numCourses() + " courses";
     }
 
     // EFFECTS: returns the list of all valid Schedules that can be generated from the current courses

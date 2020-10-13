@@ -11,8 +11,6 @@ import java.util.*;
 public class ScheduleApp {
     private CourseList courseList;
     private Scanner input;
-    // TODO: Get rid of magic numbers
-    // TODO: Edit the specifications; they're outdated
 
     // EFFECTS: runs the schedule calculation application
     public ScheduleApp() {
@@ -76,7 +74,6 @@ public class ScheduleApp {
 
     // EFFECTS: prints instructions for the app to console
     private void showHowToUse() {
-        System.out.println("Examples of commands");
         System.out.println("Add a course:                     add course cpsc110 true");
         System.out.println("Add a section to a course:        course cpsc110 add section 101");
         System.out.println("Add a time to a section:          course cpsc110 section 101 add time 1 24 14:00 15:30");
@@ -98,7 +95,7 @@ public class ScheduleApp {
     }
 
     // MODIFIES: this, command
-    // EFFECTS: adds a course to courseList, and optionally section/timeslot info
+    // EFFECTS: adds a new course, and optionally sections/timeslots, to courseList
     private void addCourse(ArrayList<String> command) throws InvalidSyntaxException {
         if (!command.get(0).equals("add") || !command.get(1).equals("course")) {
             throw new InvalidSyntaxException();
@@ -121,7 +118,7 @@ public class ScheduleApp {
     }
 
     // MODIFIES: this, command
-    // EFFECTS: performs operations on selected course
+    // EFFECTS: performs add or delete operations on sections within the selected course
     private void selectCourse(ArrayList<String> command) throws InvalidSyntaxException {
         if (!command.get(0).equals("course")) {
             throw new InvalidSyntaxException();
@@ -175,7 +172,7 @@ public class ScheduleApp {
     }
 
     // MODIFIES: this, command
-    // EFFECTS: adds a section, and optionally its timeslots, to a course
+    // EFFECTS: adds a new section, and optionally its timeslots, to c
     private void addSection(ArrayList<String> command, Course c) throws InvalidSyntaxException {
         if (!command.get(0).equals("section")) {
             throw new InvalidSyntaxException();
@@ -194,7 +191,7 @@ public class ScheduleApp {
     }
 
     // MODIFIES: this, command
-    // EFFECTS: performs operations on selected section
+    // EFFECTS: performs add/delete operations on timeslots within the selected section
     private void selectSection(ArrayList<String> command, Course c) throws InvalidSyntaxException {
         if (!command.get(0).equals("section")) {
             throw new InvalidSyntaxException();
@@ -216,7 +213,7 @@ public class ScheduleApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: deletes a section from a course in courseList
+    // EFFECTS: deletes a section from c
     private void deleteSection(ArrayList<String> command, Course c) throws InvalidSyntaxException {
         if (!command.get(0).equals("delete") || !command.get(1).equals("section")) {
             throw new InvalidSyntaxException();
@@ -230,7 +227,7 @@ public class ScheduleApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds one or multiple timeslots to a section of a course
+    // EFFECTS: adds one or multiple timeslots to s
     private void addTimeslots(ArrayList<String> command, Section s) throws InvalidSyntaxException {
         if (!command.get(0).equals("time")) {
             throw new InvalidSyntaxException();
@@ -252,7 +249,7 @@ public class ScheduleApp {
     }
 
     // MODIFIES: this
-    // EFFECTS: deletes one timeslot from a section of a course
+    // EFFECTS: deletes one timeslot from s
     private void deleteTimeslot(ArrayList<String> command, Section s) throws InvalidSyntaxException {
         if (!command.get(0).equals("delete") || !command.get(1).equals("time")) {
             throw new InvalidSyntaxException();
@@ -281,7 +278,7 @@ public class ScheduleApp {
         }
     }
 
-    // REQUIRES: command begins with "show"
+    // REQUIRES: command begins with "display"
     // EFFECTS: prints out either the current course list or a batch of schedules in the course list
     private void display(ArrayList<String> command) throws InvalidSyntaxException {
         String commandKey = command.get(1);

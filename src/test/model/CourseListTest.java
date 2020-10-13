@@ -22,6 +22,11 @@ public class CourseListTest {
     }
 
     @Test
+    public void testConstructor() {
+        assertTrue(courses.getCourses().isEmpty());
+    }
+
+    @Test
     public void testAddCourseEmpty() {
         assertTrue(courses.addCourse(courseA));
         assertEquals(1, courses.numCourses());

@@ -14,6 +14,12 @@ class CourseTest {
     }
 
     @Test
+    public void testConstructor() {
+        assertEquals("A", testCourse.getName());
+        assertFalse(testCourse.getRequired());
+    }
+
+    @Test
     public void testContainsSectionWithNameTrue() {
         Section testSection = new Section("101", testCourse);
         testCourse.addSection(testSection);
@@ -112,5 +118,13 @@ class CourseTest {
         testCourse.addSection(testSection);
 
         assertNull(testCourse.getSectionByName("102"));
+    }
+
+    @Test
+    public void testToString() {
+        Course courseB = new Course("B", true);
+
+        assertEquals("A (elective)", testCourse.toString());
+        assertEquals("B (required)", courseB.toString());
     }
 }

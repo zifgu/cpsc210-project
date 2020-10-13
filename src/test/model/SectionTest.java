@@ -26,6 +26,12 @@ public class SectionTest {
     }
 
     @Test
+    public void testConstructor() {
+        assertEquals("001", testSection.getName());
+        assertEquals(testCourse, testSection.getCourse());
+    }
+
+    @Test
     public void testNumTimeslotsEmpty() {
         assertEquals(0, testSection.numTimeslots());
     }
@@ -210,5 +216,11 @@ public class SectionTest {
         s.addTimeslot(t2);
         s.addTimeslot(t3);
         assertTrue(testSection.overlaps(s));
+    }
+
+    @Test
+    public void testToString() {
+        testSection.addTimeslot(testTime);
+        assertEquals("A 001: \n\tTerm 1 MONDAY 12:00-13:00", testSection.toString());
     }
 }

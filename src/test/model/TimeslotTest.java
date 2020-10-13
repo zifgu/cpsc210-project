@@ -166,4 +166,9 @@ public class TimeslotTest {
         Timeslot otherTime = new Timeslot(1, DayOfWeek.MONDAY, start.minusMinutes(90), end, testSection);
         assertEquals(5, otherTime.getDuration());
     }
+
+    @Test
+    public void testToString() {
+        assertEquals("Term 1 MONDAY 13:00-14:00", testTime.toString());
+    }
 }

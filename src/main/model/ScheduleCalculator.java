@@ -23,7 +23,7 @@ class ScheduleCalculator {
     }
 
     // EFFECT: returns list of all required courses
-    void sortRequiredAndElectives(List<Course> courses) {
+    private void sortRequiredAndElectives(List<Course> courses) {
         numRequired = 0;
         numElectives = 0;
         for (Course c : courses) {
@@ -43,17 +43,67 @@ class ScheduleCalculator {
             return new ArrayList<>();
         } else {
             Schedule s = new Schedule();
-            fillCourses(s, 0);
+            fillRequired(s, 0);
             return schedules;
         }
     }
 
-    @SuppressWarnings("checkstyle:MethodLength")
+    // REQUIRES: number of required courses < desired size of schedule
+    // MODIFIES: this
+    // EFFECTS: fills schedule with a section from each required course
+    // I based this approach on a backtracking solution to the n queens problem created by 29AjayKumar
+    // Link https://www.geeksforgeeks.org/printing-solutions-n-queen-problem/
+    private boolean fillRequired(Schedule currentSchedule, int courseIndex) {
+        boolean possible = false;
+        if (currentSchedule.numCourses() == numRequired) {
+            possible = fillElectives(currentSchedule, courseIndex);
+        } else if (courseIndex < required.size()) {
+            Course c = required.get(courseIndex);
+            for (Section s : c.getSections()) {
+                if (!currentSchedule.fillSection(s)) {
+                    continue;
+                }
+                possible = fillRequired(currentSchedule, courseIndex + 1) || possible;
+                currentSchedule.removeSection(s); //backtrack
+            }
+        }
+        return possible;
+    }
+
+    // REQUIRES: total number of courses > desired size of schedule
+    // MODIFIES: this
+    // EFFECTS: fills schedule with enough electives to have numCourse courses, and adds successes to list of schedules
+    // I based this approach on a backtracking solution to the n queens problem created by 29AjayKumar
+    // Link https://www.geeksforgeeks.org/printing-solutions-n-queen-problem/
+    private boolean fillElectives(Schedule currentSchedule, int courseIndex) {
+        boolean possible = false;
+        if (currentSchedule.numCourses() == numCourses) {
+            addToListOfSchedules(currentSchedule);
+            possible = true;
+        } else if (courseIndex < required.size() + electives.size()) {
+            Course c = electives.get(courseIndex - required.size());
+            // try adding a section from this course to the schedule
+            for (Section s : c.getSections()) {
+                if (!currentSchedule.fillSection(s)) {
+                    continue;
+                }
+                possible = fillElectives(currentSchedule, courseIndex + 1) || possible;
+                currentSchedule.removeSection(s);
+            }
+            // if there are enough electives remaining, also try to make a schedule not containing the current course
+            if (enoughElectives(currentSchedule, courseIndex)) {
+                possible = fillElectives(currentSchedule, courseIndex + 1) || possible;
+            }
+        }
+        return possible;
+    }
+
+    /*
+    // ORIGINAL METHOD - method length was more than 31 lines
     // REQUIRES: there are enough courses to fill the schedule
     // MODIFIES: this
     // EFFECTS: recursively fills schedule with a section from each required course and sections from enough elective
     //          courses to have numCourses in total; adds successful schedules to list of schedules
-    // Based off the solution from https://www.geeksforgeeks.org/printing-solutions-n-queen-problem/
     private boolean fillCourses(Schedule currentSchedule, int courseIndex) {
         boolean possible = false;
         if (currentSchedule.numCourses() == numCourses) {
@@ -63,7 +113,6 @@ class ScheduleCalculator {
             Course c = required.get(courseIndex);
             for (Section s : c.getSections()) {
                 if (!currentSchedule.fillSection(s)) {
-                    possible = false;
                     continue;
                 }
                 possible = fillCourses(currentSchedule, courseIndex + 1) || possible;
@@ -73,7 +122,6 @@ class ScheduleCalculator {
             Course c = electives.get(courseIndex - required.size());
             for (Section s : c.getSections()) {
                 if (!currentSchedule.fillSection(s)) {
-                    possible = false;
                     continue;
                 }
                 possible = fillCourses(currentSchedule, courseIndex + 1) || possible;
@@ -85,6 +133,7 @@ class ScheduleCalculator {
         }
         return possible;
     }
+     */
 
     // EFFECTS: returns true if number of remaining electives is enough to produce a schedule with numCourses courses
     private boolean enoughElectives(Schedule currentSchedule, int index) {
