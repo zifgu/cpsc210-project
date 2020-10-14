@@ -61,8 +61,8 @@ public class CourseList {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes the course with the given name from this CourseList
-    //          returns true if successfully removed, false if this CourseList does not contain a course with given name
+    // EFFECTS: if this course list contains a course with given name, removes it and returns true
+    //          otherwise returns false
     public boolean deleteCourse(String name) {
         int index = getCourseIndexByName(name);
         if (index >= 0) {
@@ -73,9 +73,11 @@ public class CourseList {
         }
     }
 
+    // REQUIRES: numCourses > 0
     // MODIFIES: this
     // EFFECTS: adds to this CourseList all valid Schedules that can be generated from the current courses
-    //          a schedule is valid if there are no time conflicts and it has numCourses courses total, including
+    //          returns true if at least 1 schedule is possible, otherwise returns false
+    //          A schedule is valid if there are no time conflicts and it has numCourses courses total, including
     //          all required courses
     public boolean allValidSchedules(int numCourses) {
         ScheduleCalculator sc = new ScheduleCalculator(numCourses, courses);
@@ -83,6 +85,7 @@ public class CourseList {
         return !schedules.isEmpty();
     }
 
+    // REQUIRES: allValidSchedules is called before calling this method
     // EFFECTS: returns the list of all valid Schedules that can be generated from the current courses
     public List<Schedule> getAllValidSchedules() {
         return schedules;

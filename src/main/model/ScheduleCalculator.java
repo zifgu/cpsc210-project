@@ -7,13 +7,15 @@ import java.util.List;
     A utility class for calculating all possible schedules from a course list
 */
 class ScheduleCalculator {
-    private final List<Course> required;
-    private final List<Course> electives;
+    private List<Course> required;
+    private List<Course> electives;
     private List<Schedule> schedules;
-    private final int numCourses;
+    private int numCourses;
     private int numRequired;
     private int numElectives;
 
+    // EFFECTS: constructs ScheduleCalculator with courses sorted into required/electives, no schedules
+    //          and given value of numCourses
     ScheduleCalculator(int n, List<Course> courses) {
         numCourses = n;
         required = new ArrayList<>();
@@ -22,21 +24,21 @@ class ScheduleCalculator {
         sortRequiredAndElectives(courses);
     }
 
-    // EFFECT: returns list of all required courses
+    // MODIFIES: this
+    // EFFECTS: sorts courses into a list of required courses and a list of elective courses and updates size of each
     private void sortRequiredAndElectives(List<Course> courses) {
-        numRequired = 0;
-        numElectives = 0;
         for (Course c : courses) {
             if (c.getRequired()) {
                 required.add(c);
-                numRequired++;
             } else {
                 electives.add(c);
-                numElectives++;
             }
         }
+        numRequired = required.size();
+        numElectives = electives.size();
     }
 
+    // MODIFIES: this
     // EFFECT: returns list of all valid schedules with numCourses courses
     List<Schedule> allValidSchedules() {
         if (required.size() + electives.size() < numCourses) {
@@ -135,12 +137,14 @@ class ScheduleCalculator {
     }
      */
 
+    // REQUIRES: index > 0
     // EFFECTS: returns true if number of remaining electives is enough to produce a schedule with numCourses courses
     private boolean enoughElectives(Schedule currentSchedule, int index) {
         return currentSchedule.numCourses() + (numElectives + numRequired - 1 - index) >= numCourses;
     }
 
     // REQUIRES: current schedule is a valid schedule
+    // MODIFIES: this
     // EFFECTS: copies the current schedule into a new schedule and adds it to the list of all possible schedules
     private void addToListOfSchedules(Schedule filledSchedule) {
         Schedule newSchedule = new Schedule();

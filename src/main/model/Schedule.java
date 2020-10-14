@@ -5,19 +5,24 @@ import java.util.HashSet;
 import java.util.List;
 
 /*
-    Represents a schedule, i.e. a collection of sections from courses
+    Represents a course schedule, i.e. a collection of sections from courses
 */
 public class Schedule {
     private List<Section> sections;
 
-    // EFFECTS: constructs an empty schedule
+    // EFFECTS: constructs a schedule with no sections
     public Schedule() {
         sections = new ArrayList<>();
     }
 
-    // REQUIRES: the schedule does not already contain a section with the same course
+    // getter
+    public List<Section> getSections() {
+        return sections;
+    }
+
+    // REQUIRES: the schedule does not already contain a section from the same course
     // MODIFIES: this
-    // EFFECTS: returns false if one of the timeslots in the section is already occupied, else fills this
+    // EFFECTS: returns false if >1 of the timeslots in the section conflicts with existing schedule, else fills this
     //          schedule with all timeslots in the section and returns true
     public boolean fillSection(Section section) {
         for (Section s : sections) {
@@ -36,10 +41,6 @@ public class Schedule {
         sections.remove(section);
     }
 
-    public List<Section> getSections() {
-        return sections;
-    }
-
     // REQUIRES: schedule is valid, i.e. no time conflicts
     // EFFECTS: returns a string displaying this schedule in a printable form
     public String toString() {
@@ -50,7 +51,7 @@ public class Schedule {
         return result;
     }
 
-    // EFFECTS: returns the total time of sections in this schedule, as a number of 30-minute intervals
+    // EFFECTS: returns the total duration of all sections in this schedule, as a number of 30-minute intervals
     public int totalTime() {
         int time = 0;
         for (Section sec : sections) {

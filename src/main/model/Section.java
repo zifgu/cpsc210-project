@@ -11,7 +11,8 @@ public class Section {
     private Course course;
     private ArrayList<Timeslot> times;
 
-    // EFFECTS: constructs a new section with no timeslots
+    // REQUIRES: the new section has a different name from any other section in the same course
+    // EFFECTS: constructs a new section of given course with given name and no timeslots
     public Section(String name, Course course) {
         this.name = name;
         this.course = course;
@@ -76,8 +77,8 @@ public class Section {
         return findDuplicate(timeslot) != null;
     }
 
-    // EFFECTS: returns true if the timeslots of this section conflict with the other section
-    protected boolean overlaps(Section other) {
+    // EFFECTS: returns true if the timeslots of this section conflict with the timeslots of other
+    public boolean overlaps(Section other) {
         for (Timeslot t1 : times) {
             for (Timeslot t2 : other.getTimeslots()) {
                 if (t1.overlaps(t2)) {
@@ -88,7 +89,7 @@ public class Section {
         return false;
     }
 
-    // EFFECTS: returns timeslot sharing the same term, day, start time, and duration as the given timeslot if it exists
+    // EFFECTS: returns timeslot sharing the same term, day, start time, and end time as the given timeslot if it exists
     //          otherwise returns null
     private Timeslot findDuplicate(Timeslot timeslot) {
         for (Timeslot t : times) {

@@ -14,7 +14,7 @@ public class Timeslot {
     private LocalTime endTime;
 
     // REQUIRES: times have the format XX:00 or XX:30 (24 hour clock), and startTime is before endTime
-    // EFFECTS: constructs a new timeslot in the section with the given term, day of week, start time, and duration
+    // EFFECTS: constructs a new timeslot in the section with the given term, day of week, start time, and end time
     //          in 30-minute intervals
     public Timeslot(int term, DayOfWeek day, LocalTime startTime, LocalTime endTime, Section section) {
         this.term = term;
@@ -67,7 +67,7 @@ public class Timeslot {
         return false;
     }
 
-    // EFFECTS: returns true if this timeslot has the same term, day of week, start time, and duration as timeslot other
+    // EFFECTS: returns true if this timeslot has the same term, day of week, start time, and end time as timeslot other
     public boolean timeEquals(Timeslot other) {
         return term == other.getTerm() && dayOfWeek.equals(other.getDayOfWeek())
                 && startTime.equals(other.getStartTime()) && endTime.equals(other.getEndTime());

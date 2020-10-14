@@ -51,8 +51,8 @@ public class Course {
     }
 
     // MODIFIES: this
-    // EFFECTS: adds existing section to this course
-    //          returns true if successfully added, false if a section with same name already exists
+    // EFFECTS: returns false if a section with the same name already exists, otherwise adds section to this course
+    //          and returns true
     public boolean addSection(Section section) {
         if (containsSectionWithName(section.getName())) {
             return false;
@@ -63,8 +63,7 @@ public class Course {
     }
 
     // MODIFIES: this
-    // EFFECTS: removes the section with the given name from this course
-    //          returns true if successfully removed, false if no section with name sectionName exists
+    // EFFECTS: returns false if no section with given name exists, otherwise removes the section and returns true
     public boolean deleteSection(String sectionName) {
         int index = getSectionIndexByName(sectionName);
         if (index >= 0) {
