@@ -19,6 +19,12 @@ public class ScheduleApp {
         runApp();
     }
 
+    // EFFECTS: makes a schedule app for testing and attempts to process rawInput
+    public ScheduleApp(String rawInput) throws InvalidSyntaxException {
+        ArrayList<String> command = new ArrayList<>(Arrays.asList(rawInput.split(" ")));
+        setCourseRequired(command);
+    }
+
     // EFFECTS: processes user input
     // Based off the Teller project's runTeller method
     public void runApp() {
@@ -165,7 +171,11 @@ public class ScheduleApp {
             throw new InvalidSyntaxException();
         }
         String name = command.get(2);
-        boolean required = Boolean.parseBoolean(command.get(3));
+        String booleanExpected = command.get(3);
+        if (!booleanExpected.equals("true") && !booleanExpected.equals("false")) {
+            throw new InvalidSyntaxException();
+        }
+        boolean required = Boolean.parseBoolean(booleanExpected);
         Course c = courseList.getCourseByName(name);
         c.setRequired(required);
         System.out.println("Successfully changed status to " + c + ".");

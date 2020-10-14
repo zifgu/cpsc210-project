@@ -1,10 +1,14 @@
 package model;
 
+import exceptions.InvalidSyntaxException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ui.ScheduleApp;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -327,6 +331,19 @@ public class CourseListTest {
         assertTrue(schedules.get(1).containsSection(sectionC1));
         assertTrue(schedules.get(1).containsSection(sectionD1));
         assertTrue(schedules.get(1).containsSection(sectionE2));
+    }
+
+    @Test
+    // A temporary test to make sure the InvalidSyntaxException is thrown for code coverage
+    // Note that not all test cases for the exception are covered because UI tests are not required
+    public void testInvalidSyntaxException() {
+        String input = "set course cpsc210 section 102"; // "section" is not one of "true"/"false"
+        try {
+            ScheduleApp app = new ScheduleApp(input);
+            fail("Exception was not thrown when it should have been");
+        } catch (InvalidSyntaxException e) {
+            System.out.println("Exception was thrown");
+        }
     }
 
     private Course makeCourseWithSection(String name, boolean required, int term, DayOfWeek day, LocalTime start, int
