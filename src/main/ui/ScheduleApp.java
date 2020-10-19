@@ -209,7 +209,7 @@ public class ScheduleApp {
         Section s = c.getSectionByName(command.get(1));
         if (s != null) {
             String commandKey = command.get(2);
-            command.subList(0, 2).clear();
+            command.subList(0, 3).clear();
             if (commandKey.equals("add")) {
                 addTimeslots(command, s);
             } else if (commandKey.equals("delete")) {
@@ -225,10 +225,10 @@ public class ScheduleApp {
     // MODIFIES: this
     // EFFECTS: deletes a section from c
     private void deleteSection(ArrayList<String> command, Course c) throws InvalidSyntaxException {
-        if (!command.get(0).equals("delete") || !command.get(1).equals("section")) {
+        if (!command.get(0).equals("section")) {
             throw new InvalidSyntaxException();
         }
-        String name = command.get(2);
+        String name = command.get(1);
         if (c.deleteSection(name)) {
             System.out.println("Successfully deleted section " + name + " from course " + c + ".");
         } else {
@@ -261,7 +261,7 @@ public class ScheduleApp {
     // MODIFIES: this
     // EFFECTS: deletes one timeslot from s
     private void deleteTimeslot(ArrayList<String> command, Section s) throws InvalidSyntaxException {
-        if (!command.get(0).equals("delete") || !command.get(1).equals("time")) {
+        if (!command.get(0).equals("time")) {
             throw new InvalidSyntaxException();
         }
         int term = Integer.parseInt(command.get(1));

@@ -21,3 +21,5 @@ browse the returned options and select the ones they prefer.
 + As a user, I want to be able to add sections and times that I would be OK with to a course in my list of courses.
 + As a user, I want to be able to delete sections and times from a course in my list of courses.
 + As a user, I want to be able to receive a selection of valid schedules given the information I put in.
++ As a user, I want to be able to save courses, sections, and times to a file (I will not be able to save schedules)
++ As a user, I want to be able to load my previous course list from file when I open the application
