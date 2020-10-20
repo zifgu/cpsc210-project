@@ -1,0 +1,42 @@
+{
+    "courses": [
+        {
+            "name": "cpsc121",
+            "required": true,
+            "sections": [
+                {
+                    "name": "101",
+                    "times": [
+                        {
+                            "term": 1,
+                            "day": "TUESDAY",
+                            "start": "12:30",
+                            "end": "14:00"
+                        }
+                    ]
+                },
+                {
+                    "name": "104",
+                    "times": []
+                }
+            ]
+        },
+        {
+            "name": "ling100",
+            "required": "false",
+            "sections": [
+                {
+                    "name": "001",
+                    "times": [
+                        {
+                            "term": 2,
+                            "day": "FRIDAY",
+                            "start": "10:00",
+                            "end": "11:00"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,6 +1,8 @@
 package model;
 
 import exceptions.InvalidSyntaxException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ui.ScheduleApp;
@@ -345,6 +347,31 @@ public class CourseListTest {
             System.out.println("Exception was thrown");
         }
     }
+
+    @Test
+    public void testToJsonEmptyCourses() {
+        JSONObject json = courses.toJson();
+        JSONArray courseList = (JSONArray) json.get("courses");
+        assertEquals(0, courseList.length());
+    }
+
+    @Test
+    public void testToJson() {
+        courses.addCourse(courseA);
+
+        JSONObject json = courses.toJson();
+        JSONArray courseList = (JSONArray) json.get("courses");
+        assertEquals(1, courseList.length());
+
+        JSONObject course = (JSONObject) courseList.get(0);
+        assertEquals("A", course.get("name"));
+        assertEquals(false, course.get("required"));
+
+        JSONArray sections = (JSONArray) course.get("sections");
+        assertEquals(0, sections.length());
+    }
+
+    // TODO: tests with actual sections?
 
     private Course makeCourseWithSection(String name, boolean required, int term, DayOfWeek day, LocalTime start, int
             duration) {

@@ -1,12 +1,15 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 /*
     Represents one block of a section with a specific term, day of week, start time, and end time
 */
-public class Timeslot {
+public class Timeslot implements Writable {
     private Section section;
     private int term;
     private DayOfWeek dayOfWeek;
@@ -87,5 +90,16 @@ public class Timeslot {
     // EFFECTS: returns a string displaying timeslot info in printable form
     public String toString() {
         return "Term " + term + " " + dayOfWeek + " " + startTime + "-" + endTime;
+    }
+
+    @Override
+    // TODO: give credit
+    public JSONObject toJson() {
+//        JSONObject json = new JSONObject();
+//        json.put("term", term);
+//        json.put("day", dayOfWeek);
+//        json.put("start", startTime);
+//        json.put("end", endTime);
+        return null;
     }
 }

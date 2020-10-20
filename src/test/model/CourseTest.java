@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -127,4 +129,34 @@ class CourseTest {
         assertEquals("A (elective)", testCourse.toString());
         assertEquals("B (required)", courseB.toString());
     }
+
+    @Test
+    public void testToJsonEmptySections() {
+        JSONObject json = testCourse.toJson();
+        assertEquals("A", json.get("name"));
+        assertEquals(false, json.get("required"));
+
+        JSONArray sections = (JSONArray) json.get("sections");
+        assertEquals(0, sections.length());
+    }
+
+    @Test
+    public void testToJson() {
+        Section testSection = new Section("101", testCourse);
+        testCourse.addSection(testSection);
+
+        JSONObject json = testCourse.toJson();
+        assertEquals("A", json.get("name"));
+        assertEquals(false, json.get("required"));
+
+        JSONArray sections = (JSONArray) json.get("sections");
+        assertEquals(1, sections.length());
+
+        JSONObject section = (JSONObject) sections.get(0);
+        assertEquals("101", section.get("name"));
+        JSONArray times = (JSONArray) section.get("times");
+        assertEquals(0, times.length());
+    }
+
+    // TODO: tests with actual times?
 }

@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -170,5 +171,14 @@ public class TimeslotTest {
     @Test
     public void testToString() {
         assertEquals("Term 1 MONDAY 13:00-14:00", testTime.toString());
+    }
+
+    @Test
+    public void testToJson() {
+        JSONObject json = testTime.toJson();
+        assertEquals(1, json.get("term"));
+        assertEquals("MONDAY", json.get("day"));
+        assertEquals("13:00", json.get("start"));
+        assertEquals("14:00", json.get("end"));
     }
 }

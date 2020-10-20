@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -222,5 +224,28 @@ public class SectionTest {
     public void testToString() {
         testSection.addTimeslot(testTime);
         assertEquals("A 001: \n\tTerm 1 MONDAY 12:00-13:00", testSection.toString());
+    }
+
+    @Test
+    public void testToJsonEmptyTimes() {
+        JSONObject json = testSection.toJson();
+        assertEquals("001", json.get("name"));
+        JSONArray times = (JSONArray) json.get("times");
+        assertEquals(0, times.length());
+    }
+
+    @Test
+    public void testToJson() {
+        testSection.addTimeslot(testTime);
+        JSONObject json = testSection.toJson();
+        assertEquals("001", json.get("name"));
+        JSONArray times = (JSONArray) json.get("times");
+        assertEquals(1, times.length());
+
+        JSONObject time = (JSONObject) times.get(0);
+        assertEquals(1, time.get("term"));
+        assertEquals("MONDAY", time.get("day"));
+        assertEquals("12:00", time.get("start"));
+        assertEquals("13:00", time.get("end"));
     }
 }

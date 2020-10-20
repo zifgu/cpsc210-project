@@ -1,12 +1,15 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /*
     Represents a list of courses inputted by the user
 */
-public class CourseList {
+public class CourseList implements Writable {
 
     private List<Course> courses;
     private List<Schedule> schedules;
@@ -101,6 +104,11 @@ public class CourseList {
         return null;
     }
 
+    @Override
+    public JSONObject toJson() {
+        return null;
+    }
+
     // EFFECTS: returns index of the course with the given name if it exists, otherwise returns -1
     private int getCourseIndexByName(String name) {
         for (int i = 0; i < courses.size(); i++) {
@@ -110,4 +118,5 @@ public class CourseList {
         }
         return -1;
     }
+
 }

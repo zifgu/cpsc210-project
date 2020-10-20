@@ -1,12 +1,15 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /*
     Represents a course with name, status (required vs elective), and sections
 */
-public class Course {
+public class Course implements Writable {
     private String name;
     private boolean required;
     private ArrayList<Section> sections;
@@ -90,6 +93,11 @@ public class Course {
                 return s;
             }
         }
+        return null;
+    }
+
+    @Override
+    public JSONObject toJson() {
         return null;
     }
 

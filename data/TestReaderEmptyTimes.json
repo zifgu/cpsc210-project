@@ -1,0 +1,14 @@
+{
+    "courses": [
+        {
+            "name": "cpsc121",
+            "required": true,
+            "sections": [
+                {
+                    "name": "101",
+                    "times": []
+                }
+            ]
+        }
+    ]
+}

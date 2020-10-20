@@ -1,0 +1,9 @@
+{
+    "courses": [
+        {
+            "name": "cpsc210",
+            "required": true,
+            "sections": []
+        }
+    ]
+}

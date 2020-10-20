@@ -1,12 +1,15 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 /*
     Represents a section of a course with associated times
 */
-public class Section {
+public class Section implements Writable {
     private String name;
     private Course course;
     private ArrayList<Timeslot> times;
@@ -89,6 +92,11 @@ public class Section {
         return false;
     }
 
+    @Override
+    public JSONObject toJson() {
+        return null;
+    }
+
     // EFFECTS: returns timeslot sharing the same term, day, start time, and end time as the given timeslot if it exists
     //          otherwise returns null
     private Timeslot findDuplicate(Timeslot timeslot) {
@@ -99,5 +107,4 @@ public class Section {
         }
         return null;
     }
-
 }
