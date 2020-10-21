@@ -360,14 +360,14 @@ public class CourseListTest {
         courses.addCourse(courseA);
 
         JSONObject json = courses.toJson();
-        JSONArray courseList = (JSONArray) json.get("courses");
+        JSONArray courseList = json.getJSONArray("courses");
         assertEquals(1, courseList.length());
 
-        JSONObject course = (JSONObject) courseList.get(0);
+        JSONObject course = courseList.getJSONObject(0);
         assertEquals("A", course.get("name"));
         assertEquals(false, course.get("required"));
 
-        JSONArray sections = (JSONArray) course.get("sections");
+        JSONArray sections = course.getJSONArray("sections");
         assertEquals(0, sections.length());
     }
 

@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -94,7 +95,16 @@ public class Section implements Writable {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        JSONObject json = new JSONObject();
+        JSONArray timesList = new JSONArray();
+
+        for (Timeslot t : times) {
+            timesList.put(t.toJson());
+        }
+
+        json.put("name", name);
+        json.put("times", timesList);
+        return json;
     }
 
     // EFFECTS: returns timeslot sharing the same term, day, start time, and end time as the given timeslot if it exists

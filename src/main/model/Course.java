@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
@@ -98,7 +99,17 @@ public class Course implements Writable {
 
     @Override
     public JSONObject toJson() {
-        return null;
+        JSONObject json = new JSONObject();
+        JSONArray sectionsList = new JSONArray();
+
+        for (Section s : sections) {
+            sectionsList.put(s.toJson());
+        }
+
+        json.put("name", name);
+        json.put("required", required);
+        json.put("sections", sectionsList);
+        return json;
     }
 
     // EFFECTS: returns index of the section with the given name if it exists, otherwise returns -1

@@ -136,7 +136,7 @@ class CourseTest {
         assertEquals("A", json.get("name"));
         assertEquals(false, json.get("required"));
 
-        JSONArray sections = (JSONArray) json.get("sections");
+        JSONArray sections = json.getJSONArray("sections");
         assertEquals(0, sections.length());
     }
 
@@ -149,12 +149,12 @@ class CourseTest {
         assertEquals("A", json.get("name"));
         assertEquals(false, json.get("required"));
 
-        JSONArray sections = (JSONArray) json.get("sections");
+        JSONArray sections = json.getJSONArray("sections");
         assertEquals(1, sections.length());
 
-        JSONObject section = (JSONObject) sections.get(0);
+        JSONObject section = sections.getJSONObject(0);
         assertEquals("101", section.get("name"));
-        JSONArray times = (JSONArray) section.get("times");
+        JSONArray times = section.getJSONArray("times");
         assertEquals(0, times.length());
     }
 

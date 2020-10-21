@@ -1,3 +1,13 @@
-{
-    "courses": []
-}
+{"courses": [{
+    "name": "cpsc210",
+    "required": true,
+    "sections": [{
+        "times": [{
+            "start": "11:00",
+            "term": 1,
+            "end": "12:00",
+            "day": "FRIDAY"
+        }],
+        "name": "101"
+    }]
+}]}

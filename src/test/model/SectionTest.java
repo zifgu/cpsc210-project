@@ -230,7 +230,7 @@ public class SectionTest {
     public void testToJsonEmptyTimes() {
         JSONObject json = testSection.toJson();
         assertEquals("001", json.get("name"));
-        JSONArray times = (JSONArray) json.get("times");
+        JSONArray times = json.getJSONArray("times");
         assertEquals(0, times.length());
     }
 
@@ -239,10 +239,10 @@ public class SectionTest {
         testSection.addTimeslot(testTime);
         JSONObject json = testSection.toJson();
         assertEquals("001", json.get("name"));
-        JSONArray times = (JSONArray) json.get("times");
+        JSONArray times = json.getJSONArray("times");
         assertEquals(1, times.length());
 
-        JSONObject time = (JSONObject) times.get(0);
+        JSONObject time = times.getJSONObject(0);
         assertEquals(1, time.get("term"));
         assertEquals("MONDAY", time.get("day"));
         assertEquals("12:00", time.get("start"));

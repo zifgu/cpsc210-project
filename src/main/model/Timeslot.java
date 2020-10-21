@@ -95,11 +95,11 @@ public class Timeslot implements Writable {
     @Override
     // TODO: give credit
     public JSONObject toJson() {
-//        JSONObject json = new JSONObject();
-//        json.put("term", term);
-//        json.put("day", dayOfWeek);
-//        json.put("start", startTime);
-//        json.put("end", endTime);
-        return null;
+        JSONObject json = new JSONObject();
+        json.put("term", term);
+        json.put("day", dayOfWeek);
+        json.put("start", startTime);
+        json.put("end", endTime);
+        return json;
     }
 }

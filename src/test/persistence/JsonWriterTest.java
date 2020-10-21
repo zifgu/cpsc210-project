@@ -16,6 +16,7 @@ public class JsonWriterTest {
     // TODO: give credit
 
     @Test
+    // TODO: look into this exception
     public void testInvalidFile() {
         try {
             JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
@@ -30,11 +31,13 @@ public class JsonWriterTest {
     public void testWriteEmptyCourseList() {
         CourseList list = new CourseList();
         try {
-            JsonWriter writer = new JsonWriter(".data/TestWriterEmptyCourseList.json");
+            JsonWriter writer = new JsonWriter("./data/TestWriterEmptyCourseList.json");
+            writer.open();
             writer.writeCourseList(list);
+            writer.close();
 
-            JsonReader reader = new JsonReader(".data/TestWriterEmptyCourseList.json");
-            list = reader.readCourseList();
+            JsonReader reader = new JsonReader("./data/TestWriterEmptyCourseList.json");
+            list = reader.read();
             assertEquals(0, list.numCourses());
         } catch (IOException e) {
             fail("Not expecting IOException");
@@ -53,11 +56,13 @@ public class JsonWriterTest {
         list.addCourse(course1);
 
         try {
-            JsonWriter writer = new JsonWriter(".data/TestWriterGeneralCourseList.json");
+            JsonWriter writer = new JsonWriter("./data/TestWriterGeneralCourseList.json");
+            writer.open();
             writer.writeCourseList(list);
+            writer.close();
 
-            JsonReader reader = new JsonReader(".data/TestWriterGeneralCourseList.json");
-            list = reader.readCourseList();
+            JsonReader reader = new JsonReader("./data/TestWriterGeneralCourseList.json");
+            list = reader.read();
             assertEquals(1, list.numCourses());
 
             Course readCourse = list.getCourses().get(0);

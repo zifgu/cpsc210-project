@@ -2,20 +2,31 @@ package ui;
 
 import exceptions.InvalidSyntaxException;
 import model.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class ScheduleApp {
+    // TODO: give credit
+    // TODO: what's the invalid command after getting input?
     private CourseList courseList;
     private Scanner input;
+    private JsonReader reader;
+    private JsonWriter writer;
+    private static final String FILE_NAME = "./data/courselist.json";
 
     // EFFECTS: runs the schedule calculation application
     public ScheduleApp() {
         courseList = new CourseList();
         input = new Scanner(System.in);
+        reader = new JsonReader(FILE_NAME);
+        writer = new JsonWriter(FILE_NAME);
         runApp();
     }
 
@@ -35,46 +46,49 @@ public class ScheduleApp {
 
         while (keepGoing) {
             System.out.print("Enter a command: ");
-            command = input.nextLine();
-            command = command.toLowerCase();
+            command = input.nextLine().toLowerCase();
             String[] splitCommand = command.split(" ");
-
             ArrayList<String> splitList = new ArrayList<>(Arrays.asList(splitCommand));
 
             if (splitList.get(0).equals("quit")) {
                 keepGoing = false;
             } else {
-                processCommand(splitList);
+                try {
+                    processCommand(splitList);
+                } catch (IndexOutOfBoundsException | InvalidSyntaxException e) {
+                    invalidCommand();
+                } catch (DateTimeParseException e) {
+                    System.out.println("Invalid time format (use 09:00 not 9:00): try again.");
+                }
             }
         }
+        saveBeforeQuitting();
         input.close();
     }
 
     // MODIFIES: this, command
     // EFFECTS: processes user's commands from console
-    private void processCommand(ArrayList<String> command) {
-        try {
-            switch (command.get(0)) {
-                case "add": addCourse(command);
-                    break;
-                case "delete": deleteCourse(command);
-                    break;
-                case "set": setCourseRequired(command);
-                    break;
-                case "course": selectCourse(command);
-                    break;
-                case "calculate": calculateSchedules(command);
-                    break;
-                case "display": display(command);
-                    break;
-                case "help": showHowToUse();
-                    break;
-                default: invalidCommand();
-            }
-        } catch (IndexOutOfBoundsException | InvalidSyntaxException e) {
-            invalidCommand();
-        } catch (DateTimeParseException e) {
-            System.out.println("Invalid time format (use 09:00, not 9:00): try again.");
+    private void processCommand(ArrayList<String> command) throws InvalidSyntaxException {
+        switch (command.get(0)) {
+            case "add": addCourse(command);
+                break;
+            case "delete": deleteCourse(command);
+                break;
+            case "set": setCourseRequired(command);
+                break;
+            case "course": selectCourse(command);
+                break;
+            case "calculate": calculateSchedules(command);
+                break;
+            case "display": display(command);
+                break;
+            case "help": showHowToUse();
+                break;
+            case "save": saveCourses();
+                break;
+            case "load": loadCourses();
+                break;
+            default: invalidCommand();
         }
     }
 
@@ -87,17 +101,31 @@ public class ScheduleApp {
         System.out.println("Delete a course:                  delete course cpsc110");
         System.out.println("Delete a section:                 course cpsc110 delete section 101");
         System.out.println("Delete a time:                    course cpsc110 section 101 delete time 1 24 14:00 15:30");
-        System.out.println("Calculate all 5-course schedules: calculate 5");
+        System.out.println("Calculate all n-course schedules: calculate n");
         System.out.println("Show course list:                 display courses");
         System.out.println("Show calculated schedules:        display schedules");
 
-        System.out.println("\nTo get help:                   help");
+        System.out.println("\nTo get help:                      help");
         System.out.println("To exit app:                      quit");
+        System.out.println("Save course list:                 save");
+        System.out.println("Load course list:                 load");
     }
 
     // EFFECTS: prints message that the command is invalid
     private void invalidCommand() {
         System.out.println("Invalid command: try again.");
+    }
+
+    // EFFECTS: prompts user to save data before quitting
+    private void saveBeforeQuitting() {
+        System.out.println("Would you like to save your data before quitting?");
+        System.out.println("\ty -> yes");
+        System.out.println("\tn -> no");
+
+        String proceed = input.next().toLowerCase();
+        if (proceed.equals("y")) {
+            saveCourses();
+        }
     }
 
     // MODIFIES: this, command
@@ -202,6 +230,7 @@ public class ScheduleApp {
 
     // MODIFIES: this, command
     // EFFECTS: performs add/delete operations on timeslots within the selected section
+    // TODO: FIX BUG
     private void selectSection(ArrayList<String> command, Course c) throws InvalidSyntaxException {
         if (!command.get(0).equals("section")) {
             throw new InvalidSyntaxException();
@@ -210,12 +239,15 @@ public class ScheduleApp {
         if (s != null) {
             String commandKey = command.get(2);
             command.subList(0, 3).clear();
-            if (commandKey.equals("add")) {
-                addTimeslots(command, s);
-            } else if (commandKey.equals("delete")) {
-                deleteTimeslot(command, s);
-            } else {
-                throw new InvalidSyntaxException();
+            switch (commandKey) {
+                case "add":
+                    addTimeslots(command, s);
+                    break;
+                case "delete":
+                    deleteTimeslot(command, s);
+                    break;
+                default:
+                    throw new InvalidSyntaxException();
             }
         } else {
             System.out.println("Unsuccessful select: section not found.");
@@ -350,4 +382,44 @@ public class ScheduleApp {
             }
         }
     }
+
+    // EFFECTS: prompts user to save current course list to file, replacing any previous contents
+    // TODO: handle exceptions??
+    private void saveCourses() {
+        System.out.println("Saving will replace any previously saved course list. Do you wish to continue?");
+        System.out.println("\ty -> yes");
+        System.out.println("\tn -> no");
+
+        String proceed = input.next().toLowerCase();
+        if (proceed.equals("y")) {
+            try {
+                writer.open();
+                writer.writeCourseList(courseList);
+                writer.close();
+                System.out.println("Successfully saved course list.");
+            } catch (FileNotFoundException e) {
+                System.out.println("There was a problem saving: try again.");
+            }
+        }
+    }
+
+    // MODIFIES: this
+    // EFFECTS: prompts user to load course list from file, replacing the current course list
+    // TODO: handle exceptions??
+    private void loadCourses() {
+        System.out.println("Loading will replace any courses added during this session. Do you wish to continue?");
+        System.out.println("\ty -> yes");
+        System.out.println("\tn -> no");
+
+        String proceed = input.next().toLowerCase();
+        if (proceed.equals("y")) {
+            try {
+                courseList = reader.read();
+                System.out.println("Successfully loaded course list.");
+            } catch (IOException e) {
+                System.out.println("There was a problem loading: try again.");
+            }
+        }
+    }
+
 }

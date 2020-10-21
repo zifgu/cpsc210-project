@@ -16,10 +16,11 @@ public class JsonReaderTest {
     // TODO: give credit
 
     @Test
+    // TODO: what to do about this???
     public void testOpenInvalidFile() {
         try {
             JsonReader reader = new JsonReader("./data/my\0illegal:fileName.json");
-            CourseList list = reader.readCourseList();
+            CourseList list = reader.read();
             fail("IOException was expected but not thrown");
         } catch (IOException e) {
             // expected
@@ -30,7 +31,7 @@ public class JsonReaderTest {
     public void testReadEmptyCourseList() {
         try {
             JsonReader reader = new JsonReader("./data/TestReaderEmptyCourseList.json");
-            CourseList list = reader.readCourseList();
+            CourseList list = reader.read();
             assertEquals(0, list.numCourses());
         } catch (IOException e) {
             fail("Not expecting IOException");
@@ -41,7 +42,7 @@ public class JsonReaderTest {
     public void testReadCourseListEmptySection() {
         try {
             JsonReader reader = new JsonReader("./data/TestReaderEmptySections.json");
-            CourseList list = reader.readCourseList();
+            CourseList list = reader.read();
             assertEquals(1, list.numCourses());
 
             Course c = list.getCourses().get(0);
@@ -57,7 +58,7 @@ public class JsonReaderTest {
     public void testReadCourseListEmptyTimes() {
         try {
             JsonReader reader = new JsonReader("./data/TestReaderEmptyTimes.json");
-            CourseList list = reader.readCourseList();
+            CourseList list = reader.read();
             assertEquals(1, list.numCourses());
 
             Course c = list.getCourses().get(0);
@@ -74,14 +75,14 @@ public class JsonReaderTest {
     public void testReadCourseListGeneral() {
         try {
             JsonReader reader = new JsonReader("./data/TestReaderGeneralCourseList.json");
-            CourseList list = reader.readCourseList();
+            CourseList list = reader.read();
 
             assertEquals(2, list.numCourses());
 
             Course course1 = list.getCourses().get(0);
             assertEquals("cpsc121", course1.getName());
             assertTrue(course1.getRequired());
-            assertEquals(3, course1.numSections());
+            assertEquals(2, course1.numSections());
 
             Section course1s1 = course1.getSections().get(0);
             assertEquals("101", course1s1.getName());
@@ -99,9 +100,9 @@ public class JsonReaderTest {
             assertFalse(course2.getRequired());
             assertEquals(1, course2.numSections());
 
-            Section course2s1 = course1.getSections().get(0);
+            Section course2s1 = course2.getSections().get(0);
             assertEquals("001", course2s1.getName());
-            assertEquals(0, course2s1.numTimeslots());
+            assertEquals(1, course2s1.numTimeslots());
             checkFirstTimeslot(course2s1, 2, DayOfWeek.FRIDAY, LocalTime.parse("10:00"), LocalTime.parse("11:00"));
 
         } catch (IOException e) {
