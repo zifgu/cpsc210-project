@@ -1,21 +1,82 @@
-{"courses": [{
-    "name": "cpsc121",
-    "required": true,
-    "sections": [{
-        "times": [
+{"courses": [
+    {
+        "name": "cpsc110",
+        "required": true,
+        "sections": [
             {
-                "start": "12:30",
-                "term": 1,
-                "end": "14:00",
-                "day": "TUESDAY"
+                "times": [
+                    {
+                        "start": "14:00",
+                        "term": 1,
+                        "end": "15:30",
+                        "day": "TUESDAY"
+                    },
+                    {
+                        "start": "14:00",
+                        "term": 1,
+                        "end": "15:30",
+                        "day": "THURSDAY"
+                    }
+                ],
+                "name": "101"
             },
             {
-                "start": "12:30",
-                "term": 1,
-                "end": "14:00",
-                "day": "THURSDAY"
+                "times": [
+                    {
+                        "start": "14:00",
+                        "term": 2,
+                        "end": "15:30",
+                        "day": "TUESDAY"
+                    },
+                    {
+                        "start": "14:00",
+                        "term": 2,
+                        "end": "15:30",
+                        "day": "THURSDAY"
+                    }
+                ],
+                "name": "103"
             }
-        ],
-        "name": "101"
-    }]
-}]}
+        ]
+    },
+    {
+        "name": "engl110",
+        "required": false,
+        "sections": [
+            {
+                "times": [
+                    {
+                        "start": "14:00",
+                        "term": 2,
+                        "end": "15:30",
+                        "day": "TUESDAY"
+                    },
+                    {
+                        "start": "14:00",
+                        "term": 2,
+                        "end": "15:30",
+                        "day": "THURSDAY"
+                    }
+                ],
+                "name": "101"
+            },
+            {
+                "times": [
+                    {
+                        "start": "14:00",
+                        "term": 1,
+                        "end": "15:30",
+                        "day": "TUESDAY"
+                    },
+                    {
+                        "start": "14:00",
+                        "term": 1,
+                        "end": "15:30",
+                        "day": "THURSDAY"
+                    }
+                ],
+                "name": "102"
+            }
+        ]
+    }
+]}

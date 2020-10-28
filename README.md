@@ -24,3 +24,4 @@ browse the returned options and select the ones they prefer.
 
 + As a user, I want to be able to save courses, sections, and times to a file (I will not be able to save schedules)
 + As a user, I want to be able to load my previous course list from a file when I open the application
++ As a user, I want to be prompted to save my data before quitting

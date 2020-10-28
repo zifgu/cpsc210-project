@@ -7,26 +7,30 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 
+/*
+Represents a writer that writes course list information to a file
+ */
+
 public class JsonWriter {
     private String destination;
     private PrintWriter writer;
     private static final int TAB = 4;
 
     // EFFECTS: constructs writer to write to destination file
-    // TODO: give credit
+    // based on the method of the same name from JsonSerializationDemo
     public JsonWriter(String destination) {
         this.destination = destination;
     }
 
     // MODIFIES: this
     // EFFECTS: opens writer
-    // TODO: give credit, add exceptions
+    // based on the method of the same name from JsonSerializationDemo
     public void open() throws FileNotFoundException {
         writer = new PrintWriter(new File(destination));
     }
 
     // EFFECTS: writes JSON representation of course list to file
-    // TODO: give credit, add exceptions
+    // based on the method of the same name from JsonSerializationDemo
     // TODO: modifies clause?
     public void writeCourseList(CourseList list) {
         JSONObject listAsJson = list.toJson();
@@ -35,7 +39,7 @@ public class JsonWriter {
 
     // MODIFIES: this
     // EFFECTS: closes writer
-    // TODO: give credit, add exceptions
+    // based on the method of the same name from JsonSerializationDemo
     public void close() {
         writer.close();
     }

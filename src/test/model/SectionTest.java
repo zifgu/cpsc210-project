@@ -244,8 +244,8 @@ public class SectionTest {
 
         JSONObject time = times.getJSONObject(0);
         assertEquals(1, time.get("term"));
-        assertEquals("MONDAY", time.get("day"));
-        assertEquals("12:00", time.get("start"));
-        assertEquals("13:00", time.get("end"));
+        assertEquals(DayOfWeek.MONDAY, time.get("day"));
+        assertEquals(LocalTime.parse("12:00"), time.get("start"));
+        assertEquals(LocalTime.parse("13:00"), time.get("end"));
     }
 }

@@ -371,8 +371,6 @@ public class CourseListTest {
         assertEquals(0, sections.length());
     }
 
-    // TODO: tests with actual sections?
-
     private Course makeCourseWithSection(String name, boolean required, int term, DayOfWeek day, LocalTime start, int
             duration) {
         Course course = new Course(name, required);

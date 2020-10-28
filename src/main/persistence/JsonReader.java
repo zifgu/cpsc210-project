@@ -9,29 +9,44 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.Scanner;
+import java.util.stream.Stream;
+
+/*
+Represents a reader that reads course list information from a file
+ */
 
 public class JsonReader {
     private String source;
 
     // EFFECTS: constructs reader to read from source file
-    // TODO: give credit
+    // based on the method of the same name from JsonSerializationDemo
     public JsonReader(String source) {
         this.source = source;
     }
 
     // EFFECTS: reads course list from file and returns it
-    // TODO: give credit, add exceptions
+    // based on the method of the same name from JsonSerializationDemo
     // source: https://www.journaldev.com/875/java-read-file-to-string
     public CourseList read() throws IOException {
-        Scanner scanner = new Scanner(Paths.get(source), StandardCharsets.UTF_8.name());
-        String content = scanner.useDelimiter("\\A").next();
-        scanner.close();
+        String content = readFile(source);
         JSONObject jsonObject = new JSONObject(content);
         return readCourseList(jsonObject);
+    }
+
+    // EFFECTS: reads source file as string and returns it
+    // external code from the method of the same name from JsonSerializationDemo
+    private String readFile(String source) throws IOException {
+        StringBuilder contentBuilder = new StringBuilder();
+
+        try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
+            stream.forEach(s -> contentBuilder.append(s));
+        }
+
+        return contentBuilder.toString();
     }
 
     // EFFECTS: converts contents of JSON object to a CourseList
@@ -47,7 +62,6 @@ public class JsonReader {
     }
 
     // EFFECTS: converts contents of JSON object for a course to a Course
-    // TODO: specification
     private Course readCourse(JSONObject courseObj) {
         String name = courseObj.getString("name");
         boolean required = courseObj.getBoolean("required");
@@ -64,7 +78,6 @@ public class JsonReader {
     }
 
     // EFFECTS: converts contents of JSON object for a section to a Section of the given Course
-    // TODO: specification
     private Section readSection(JSONObject sectionObj, Course c) {
         String name = sectionObj.getString("name");
 
@@ -80,7 +93,6 @@ public class JsonReader {
     }
 
     // EFFECTS: converts contents of JSON object for a time to a Timeslot of the given Section
-    // TODO: specification
     private Timeslot readTimeslot(JSONObject timeslotObj, Section s) {
         int term = timeslotObj.getInt("term");
         DayOfWeek day = DayOfWeek.valueOf(timeslotObj.getString("day"));

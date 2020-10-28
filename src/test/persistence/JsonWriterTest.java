@@ -13,10 +13,9 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JsonWriterTest {
-    // TODO: give credit
+    // based on the JsonWriter test class from JsonSerializationDemo
 
     @Test
-    // TODO: look into this exception
     public void testInvalidFile() {
         try {
             JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");

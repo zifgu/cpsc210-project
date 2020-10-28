@@ -13,7 +13,6 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class ScheduleApp {
-    // TODO: give credit
     // TODO: what's the invalid command after getting input?
     private CourseList courseList;
     private Scanner input;
@@ -384,7 +383,7 @@ public class ScheduleApp {
     }
 
     // EFFECTS: prompts user to save current course list to file, replacing any previous contents
-    // TODO: handle exceptions??
+    // based on the saving method from JsonSerializationDemo
     private void saveCourses() {
         System.out.println("Saving will replace any previously saved course list. Do you wish to continue?");
         System.out.println("\ty -> yes");
@@ -405,7 +404,7 @@ public class ScheduleApp {
 
     // MODIFIES: this
     // EFFECTS: prompts user to load course list from file, replacing the current course list
-    // TODO: handle exceptions??
+    // based on the loading method from JsonSerializationDemo
     private void loadCourses() {
         System.out.println("Loading will replace any courses added during this session. Do you wish to continue?");
         System.out.println("\ty -> yes");

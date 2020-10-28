@@ -13,13 +13,12 @@ import java.time.LocalTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class JsonReaderTest {
-    // TODO: give credit
+    // based on the JsonReader test class from JsonSerializationDemo
 
     @Test
-    // TODO: what to do about this???
     public void testOpenInvalidFile() {
         try {
-            JsonReader reader = new JsonReader("./data/my\0illegal:fileName.json");
+            JsonReader reader = new JsonReader("./data/someFile.json");
             CourseList list = reader.read();
             fail("IOException was expected but not thrown");
         } catch (IOException e) {

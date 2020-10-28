@@ -93,7 +93,6 @@ public class Timeslot implements Writable {
     }
 
     @Override
-    // TODO: give credit
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("term", term);

@@ -5,6 +5,9 @@ import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class CourseTest {
@@ -141,7 +144,7 @@ class CourseTest {
     }
 
     @Test
-    public void testToJson() {
+    public void testToJsonEmptyTimes() {
         Section testSection = new Section("101", testCourse);
         testCourse.addSection(testSection);
 
@@ -158,5 +161,29 @@ class CourseTest {
         assertEquals(0, times.length());
     }
 
-    // TODO: tests with actual times?
+    @Test
+    public void testToJson() {
+        Section testSection = new Section("101", testCourse);
+        Timeslot testTime = new Timeslot(1, DayOfWeek.FRIDAY, LocalTime.parse("12:00"), LocalTime.parse("13:00"), testSection);
+        testSection.addTimeslot(testTime);
+        testCourse.addSection(testSection);
+
+        JSONObject json = testCourse.toJson();
+        assertEquals("A", json.get("name"));
+        assertEquals(false, json.get("required"));
+
+        JSONArray sections = json.getJSONArray("sections");
+        assertEquals(1, sections.length());
+
+        JSONObject section = sections.getJSONObject(0);
+        assertEquals("101", section.get("name"));
+        JSONArray times = section.getJSONArray("times");
+
+        assertEquals(1, times.length());
+        JSONObject time = times.getJSONObject(0);
+        assertEquals(1, time.get("term"));
+        assertEquals(DayOfWeek.FRIDAY, time.get("day"));
+        assertEquals(LocalTime.parse("12:00"), time.get("start"));
+        assertEquals(LocalTime.parse("13:00"), time.get("end"));
+    }
 }
