@@ -20,17 +20,16 @@ Represents a reader that reads course list information from a file
  */
 
 public class JsonReader {
+    // based on the JsonReader class from JsonSerializationDemo
+
     private String source;
 
     // EFFECTS: constructs reader to read from source file
-    // based on the method of the same name from JsonSerializationDemo
     public JsonReader(String source) {
         this.source = source;
     }
 
     // EFFECTS: reads course list from file and returns it
-    // based on the method of the same name from JsonSerializationDemo
-    // source: https://www.journaldev.com/875/java-read-file-to-string
     public CourseList read() throws IOException {
         String content = readFile(source);
         JSONObject jsonObject = new JSONObject(content);
@@ -77,6 +76,7 @@ public class JsonReader {
         return course;
     }
 
+    // MODIFIES: c
     // EFFECTS: converts contents of JSON object for a section to a Section of the given Course
     private Section readSection(JSONObject sectionObj, Course c) {
         String name = sectionObj.getString("name");
@@ -92,6 +92,7 @@ public class JsonReader {
         return section;
     }
 
+    // MODIFIES: s
     // EFFECTS: converts contents of JSON object for a time to a Timeslot of the given Section
     private Timeslot readTimeslot(JSONObject timeslotObj, Section s) {
         int term = timeslotObj.getInt("term");
