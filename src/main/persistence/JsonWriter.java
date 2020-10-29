@@ -30,6 +30,7 @@ public class JsonWriter {
     }
 
     // EFFECTS: writes JSON representation of course list to file
+    // TEST COMMIT
     // TODO: modifies clause?
     public void writeCourseList(CourseList list) {
         JSONObject listAsJson = list.toJson();
