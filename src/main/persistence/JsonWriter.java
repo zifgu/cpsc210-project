@@ -29,9 +29,8 @@ public class JsonWriter {
         writer = new PrintWriter(new File(destination));
     }
 
+    // MODIFIES: this
     // EFFECTS: writes JSON representation of course list to file
-    // TEST COMMIT
-    // TODO: modifies clause?
     public void writeCourseList(CourseList list) {
         JSONObject listAsJson = list.toJson();
         writer.print(listAsJson.toString(TAB));

@@ -37,7 +37,7 @@ public class JsonReader {
     }
 
     // EFFECTS: reads source file as string and returns it
-    // external code from the method of the same name from JsonSerializationDemo
+    // code copied from the method of the same name from JsonSerializationDemo
     private String readFile(String source) throws IOException {
         StringBuilder contentBuilder = new StringBuilder();
 
