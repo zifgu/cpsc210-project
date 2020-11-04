@@ -24,6 +24,7 @@ public class ScheduleApp {
     public ScheduleApp() {
         courseList = new CourseList();
         input = new Scanner(System.in);
+        input.useDelimiter("\n");
         reader = new JsonReader(FILE_NAME);
         writer = new JsonWriter(FILE_NAME);
         runApp();
@@ -45,7 +46,7 @@ public class ScheduleApp {
 
         while (keepGoing) {
             System.out.print("Enter a command: ");
-            command = input.nextLine().toLowerCase();
+            command = input.next().toLowerCase();
             String[] splitCommand = command.split(" ");
             ArrayList<String> splitList = new ArrayList<>(Arrays.asList(splitCommand));
 
