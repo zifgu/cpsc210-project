@@ -116,45 +116,45 @@ public class TimeslotTest {
     }
 
     @Test
-    public void testTimeEqualsSelf() {
-        assertTrue(testTime.timeEquals(testTime));
+    public void testEqualsSelf() {
+        assertTrue(testTime.equals(testTime));
     }
 
     @Test
-    public void testTimeEqualsEqual() {
+    public void testEqualsEqual() {
         Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, start, end, testSection);
-        assertTrue(testTime.timeEquals(otherTime));
+        assertTrue(testTime.equals(otherTime));
     }
 
     @Test
-    public void testTimeEqualsDifferentTerm() {
+    public void testEqualsDifferentTerm() {
         Timeslot otherTime = new Timeslot(2,DayOfWeek.MONDAY, start, end, testSection);
-        assertFalse(testTime.timeEquals(otherTime));
+        assertFalse(testTime.equals(otherTime));
     }
 
     @Test
-    public void testTimeEqualsDifferentDay() {
+    public void testEqualsDifferentDay() {
         Timeslot otherTime = new Timeslot(1,DayOfWeek.WEDNESDAY, start, end, testSection);
-        assertFalse(testTime.timeEquals(otherTime));
+        assertFalse(testTime.equals(otherTime));
     }
 
     @Test
-    public void testTimeEqualsDifferentStart() {
+    public void testEqualsDifferentStart() {
         Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, start.minusMinutes(30), end, testSection);
-        assertFalse(testTime.timeEquals(otherTime));
+        assertFalse(testTime.equals(otherTime));
     }
 
     @Test
-    public void testTimeEqualsDifferentEnd() {
+    public void testEqualsDifferentEnd() {
         Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, start, end.plusMinutes(30), testSection);
-        assertFalse(testTime.timeEquals(otherTime));
+        assertFalse(testTime.equals(otherTime));
     }
 
     @Test
-    public void testTimeEqualsDifferentSection() {
+    public void testEqualsDifferentSection() {
         Section otherSection = new Section("002", testCourse);
         Timeslot otherTime = new Timeslot(1,DayOfWeek.MONDAY, start, end, otherSection);
-        assertTrue(testTime.timeEquals(otherTime));
+        assertTrue(testTime.equals(otherTime));
     }
 
     @Test

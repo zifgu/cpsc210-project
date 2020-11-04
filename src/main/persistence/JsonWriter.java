@@ -13,6 +13,7 @@ Represents a writer that writes course list information to a file
 
 public class JsonWriter {
     // based on the JsonWriter class of the same name from JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
     private String destination;
     private PrintWriter writer;

@@ -5,6 +5,7 @@ import persistence.Writable;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Objects;
 
 /*
     Represents one block of a section with a specific term, day of week, start time, and end time
@@ -70,12 +71,6 @@ public class Timeslot implements Writable {
         return false;
     }
 
-    // EFFECTS: returns true if this timeslot has the same term, day of week, start time, and end time as timeslot other
-    public boolean timeEquals(Timeslot other) {
-        return term == other.getTerm() && dayOfWeek.equals(other.getDayOfWeek())
-                && startTime.equals(other.getStartTime()) && endTime.equals(other.getEndTime());
-    }
-
     // EFFECTS: returns the difference between start and end times as a number of 30-minute intervals
     public int getDuration() {
         int duration = 0;
@@ -90,6 +85,26 @@ public class Timeslot implements Writable {
     // EFFECTS: returns a string displaying timeslot info in printable form
     public String toString() {
         return "Term " + term + " " + dayOfWeek + " " + startTime + "-" + endTime;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Timeslot timeslot = (Timeslot) o;
+        return term == timeslot.term
+                && dayOfWeek == timeslot.dayOfWeek
+                && Objects.equals(startTime, timeslot.startTime)
+                && Objects.equals(endTime, timeslot.endTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(term, dayOfWeek, startTime, endTime);
     }
 
     @Override

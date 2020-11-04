@@ -5,24 +5,25 @@ import org.json.JSONObject;
 import persistence.Writable;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /*
     Represents a list of courses inputted by the user
 */
 public class CourseList implements Writable {
-
-    private List<Course> courses;
+    private Set<Course> courses;
     private List<Schedule> schedules;
 
     // EFFECTS: constructs a new course list with no courses and no possible schedules
     public CourseList() {
-        courses = new ArrayList<>();
+        courses = new HashSet<>();
         schedules = new ArrayList<>();
     }
 
     // getters
-    public List<Course> getCourses() {
+    public Set<Course> getCourses() {
         return courses;
     }
 
@@ -44,37 +45,21 @@ public class CourseList implements Writable {
 
     // EFFECTS: returns true if this CourseList contains a course with the given name
     public boolean containsCourse(String name) {
-        for (Course c : courses) {
-            if (c.getName().equals(name)) {
-                return true;
-            }
-        }
-        return false;
+        return courses.contains(new Course(name, false));
     }
 
     // MODIFIES: this
     // EFFECTS: if this CourseList already contains a course with the same name, returns false
     //          otherwise adds the course to this CourseList and returns true
     public boolean addCourse(Course course) {
-        if (containsCourse(course.getName())) {
-            return false;
-        } else {
-            courses.add(course);
-            return true;
-        }
+        return courses.add(course);
     }
 
     // MODIFIES: this
     // EFFECTS: if this course list contains a course with given name, removes it and returns true
     //          otherwise returns false
     public boolean deleteCourse(String name) {
-        int index = getCourseIndexByName(name);
-        if (index >= 0) {
-            courses.remove(index);
-            return true;
-        } else {
-            return false;
-        }
+        return courses.remove(new Course(name, false));
     }
 
     // REQUIRES: numCourses > 0
@@ -117,16 +102,6 @@ public class CourseList implements Writable {
         json.put("courses", courseList);
 
         return json;
-    }
-
-    // EFFECTS: returns index of the course with the given name if it exists, otherwise returns -1
-    private int getCourseIndexByName(String name) {
-        for (int i = 0; i < courses.size(); i++) {
-            if (courses.get(i).getName().equals(name)) {
-                return i;
-            }
-        }
-        return -1;
     }
 
 }

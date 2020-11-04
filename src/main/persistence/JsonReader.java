@@ -21,6 +21,7 @@ Represents a reader that reads course list information from a file
 
 public class JsonReader {
     // based on the JsonReader class from JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
     private String source;
 

@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 /*
     A utility class for calculating all possible schedules from a course list
@@ -16,7 +17,7 @@ class ScheduleCalculator {
 
     // EFFECTS: constructs ScheduleCalculator with courses sorted into required/electives, no schedules
     //          and given value of numCourses
-    ScheduleCalculator(int n, List<Course> courses) {
+    ScheduleCalculator(int n, Set<Course> courses) {
         numCourses = n;
         required = new ArrayList<>();
         electives = new ArrayList<>();
@@ -26,7 +27,7 @@ class ScheduleCalculator {
 
     // MODIFIES: this
     // EFFECTS: sorts courses into a list of required courses and a list of elective courses and updates size of each
-    private void sortRequiredAndElectives(List<Course> courses) {
+    private void sortRequiredAndElectives(Set<Course> courses) {
         for (Course c : courses) {
             if (c.getRequired()) {
                 required.add(c);

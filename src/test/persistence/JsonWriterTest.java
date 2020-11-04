@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class JsonWriterTest {
     // based on the JsonWriter test class from JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
     @Test
     public void testInvalidFile() {
@@ -64,17 +65,16 @@ public class JsonWriterTest {
             list = reader.read();
             assertEquals(1, list.numCourses());
 
-            Course readCourse = list.getCourses().get(0);
-            assertEquals(course1.getName(), readCourse.getName());
+            Course readCourse = list.getCourseByName("cpsc210");
+            assertNotNull(readCourse);
             assertEquals(course1.getRequired(), readCourse.getRequired());
             assertEquals(course1.numSections(), readCourse.numSections());
 
-            Section readSection = readCourse.getSections().get(0);
-            assertEquals(course1s1.getName(), readSection.getName());
+            Section readSection = readCourse.getSectionByName("101");
+            assertNotNull(readSection);
             assertEquals(course1s1.numTimeslots(), readSection.numTimeslots());
 
-            Timeslot readTime = readSection.getTimeslots().get(0);
-            assertTrue(readTime.timeEquals(course1s1t1));
+            assertTrue(readSection.getTimeslots().contains(course1s1t1));
         } catch (IOException e) {
             fail("Not expecting IOException");
         }

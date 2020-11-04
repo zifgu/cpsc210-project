@@ -277,9 +277,9 @@ public class ScheduleTest {
         testSchedule.fillSection(otherSection);
         testSchedule.fillSection(testSection);
 
-        String s1 = "B 102: \n\tTerm 1 MONDAY 12:00-13:00";
-        String s2 = "A 001: \n\tTerm 1 MONDAY 13:00-14:00\n\tTerm 1 WEDNESDAY 13:00-14:00\n\tTerm 1 FRIDAY 13:00-14:00";
+        String s1 = "B 102: Term 1 12:00-13:00 M\t";
+        String s2 = "A 001: Term 1 13:00-14:00 MWF\t";
 
-        assertEquals(s1.concat("\n").concat(s2).concat("\n"), testSchedule.toString());
+        assertEquals(s1 + "\n" + s2 + "\n", testSchedule.toString());
     }
 }

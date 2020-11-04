@@ -1,5 +1,6 @@
 package model;
 
+import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -39,16 +40,6 @@ public class Schedule {
     // EFFECTS: removes section from this schedule
     public void removeSection(Section section) {
         sections.remove(section);
-    }
-
-    // REQUIRES: schedule is valid, i.e. no time conflicts
-    // EFFECTS: returns a string displaying this schedule in a printable form
-    public String toString() {
-        String result = "";
-        for (Section s : sections) {
-            result = result.concat(s + "\n");
-        }
-        return result;
     }
 
     // EFFECTS: returns the total duration of all sections in this schedule, as a number of 30-minute intervals
@@ -118,5 +109,15 @@ public class Schedule {
             }
         }
         return false;
+    }
+
+    // REQUIRES: schedule is valid, i.e. no time conflicts
+    // EFFECTS: returns a string displaying this schedule in a printable form
+    public String toString() {
+        String result = "";
+        for (Section s : sections) {
+            result = result.concat(s + "\n");
+        }
+        return result;
     }
 }

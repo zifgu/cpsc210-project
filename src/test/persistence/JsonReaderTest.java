@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class JsonReaderTest {
     // based on the JsonReader test class from JsonSerializationDemo
+    // https://github.students.cs.ubc.ca/CPSC210/JsonSerializationDemo
 
     @Test
     public void testOpenInvalidFile() {
@@ -44,8 +45,8 @@ public class JsonReaderTest {
             CourseList list = reader.read();
             assertEquals(1, list.numCourses());
 
-            Course c = list.getCourses().get(0);
-            assertEquals("cpsc210", c.getName());
+            Course c = list.getCourseByName("cpsc210");
+            assertNotNull(c);
             assertTrue(c.getRequired());
             assertEquals(0, c.numSections());
         } catch (IOException e) {
@@ -60,9 +61,9 @@ public class JsonReaderTest {
             CourseList list = reader.read();
             assertEquals(1, list.numCourses());
 
-            Course c = list.getCourses().get(0);
-            Section s = c.getSections().get(0);
-            assertEquals("101", s.getName());
+            Course c = list.getCourseByName("cpsc121");
+            Section s = c.getSectionByName("101");
+            assertNotNull(s);
             assertEquals(0, s.numTimeslots());
             assertEquals(c, s.getCourse());
         } catch (IOException e) {
@@ -78,29 +79,29 @@ public class JsonReaderTest {
 
             assertEquals(2, list.numCourses());
 
-            Course course1 = list.getCourses().get(0);
-            assertEquals("cpsc121", course1.getName());
+            Course course1 = list.getCourseByName("cpsc121");
+            assertNotNull(course1);
             assertTrue(course1.getRequired());
             assertEquals(2, course1.numSections());
 
-            Section course1s1 = course1.getSections().get(0);
-            assertEquals("101", course1s1.getName());
+            Section course1s1 = course1.getSectionByName("101");
+            assertNotNull(course1s1);
             assertEquals(course1, course1s1.getCourse());
             assertEquals(1, course1s1.numTimeslots());
             checkFirstTimeslot(course1s1, 1, DayOfWeek.TUESDAY, LocalTime.parse("12:30"), LocalTime.parse("14:00"));
 
-            Section course1s2 = course1.getSections().get(1);
-            assertEquals("104", course1s2.getName());
+            Section course1s2 = course1.getSectionByName("104");
+            assertNotNull(course1s2);
             assertEquals(course1, course1s2.getCourse());
             assertEquals(0, course1s2.numTimeslots());
 
-            Course course2 = list.getCourses().get(1);
-            assertEquals("ling100", course2.getName());
+            Course course2 = list.getCourseByName("ling100");
+            assertNotNull(course2);
             assertFalse(course2.getRequired());
             assertEquals(1, course2.numSections());
 
-            Section course2s1 = course2.getSections().get(0);
-            assertEquals("001", course2s1.getName());
+            Section course2s1 = course2.getSectionByName("001");
+            assertNotNull(course2s1);
             assertEquals(1, course2s1.numTimeslots());
             checkFirstTimeslot(course2s1, 2, DayOfWeek.FRIDAY, LocalTime.parse("10:00"), LocalTime.parse("11:00"));
 
@@ -110,8 +111,6 @@ public class JsonReaderTest {
     }
 
     private void checkFirstTimeslot(Section section, int term, DayOfWeek day, LocalTime start, LocalTime end) {
-        Timeslot time = section.getTimeslots().get(0);
-        Timeslot comparisonTime = new Timeslot(term, day, start, end, section);
-        assertTrue(time.timeEquals(comparisonTime));
+        assertTrue(section.getTimeslots().contains(new Timeslot(term, day, start, end, section)));
     }
 }

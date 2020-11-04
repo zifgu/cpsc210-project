@@ -4,8 +4,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.DayOfWeek;
+import java.util.*;
 
 /*
     Represents a section of a course with associated times
@@ -13,14 +13,14 @@ import java.util.List;
 public class Section implements Writable {
     private String name;
     private Course course;
-    private ArrayList<Timeslot> times;
+    private Set<Timeslot> times;
 
     // REQUIRES: the new section has a different name from any other section in the same course
     // EFFECTS: constructs a new section of given course with given name and no timeslots
     public Section(String name, Course course) {
         this.name = name;
         this.course = course;
-        this.times = new ArrayList<>();
+        this.times = new HashSet<>();
     }
 
     // getters
@@ -32,7 +32,7 @@ public class Section implements Writable {
         return course;
     }
 
-    public List<Timeslot> getTimeslots() {
+    public Set<Timeslot> getTimeslots() {
         return times;
     }
 
@@ -53,22 +53,7 @@ public class Section implements Writable {
     // EFFECTS: if the given timeslot or a timeslot with identical time is in this section, removes it and returns true
     //          otherwise returns false
     public boolean deleteTimeslot(Timeslot timeslot) {
-        Timeslot duplicate = findDuplicate(timeslot);
-        if (duplicate == null) {
-            return false;
-        } else {
-            times.remove(duplicate);
-            return true;
-        }
-    }
-
-    // EFFECTS: returns a string displaying section info in a printable form
-    public String toString() {
-        String result = course.getName() + " " + name + ": ";
-        for (Timeslot t : times) {
-            result = result.concat("\n\t" + t);
-        }
-        return result;
+        return times.remove(timeslot);
     }
 
     // EFFECTS: returns the number of timeslots in this section
@@ -78,7 +63,7 @@ public class Section implements Writable {
 
     // EFFECTS: returns true if this section contains the given timeslot or a timeslot with identical time
     public boolean containsTimeslot(Timeslot timeslot) {
-        return findDuplicate(timeslot) != null;
+        return times.contains(timeslot);
     }
 
     // EFFECTS: returns true if the timeslots of this section conflict with the timeslots of other
@@ -91,6 +76,33 @@ public class Section implements Writable {
             }
         }
         return false;
+    }
+
+    @Override
+    // EFFECTS: returns a string displaying section info in a printable form
+    public String toString() {
+        String result = course.getName() + " " + name + ": ";
+        HashMap<String, List<DayOfWeek>> sectionGroups = new HashMap<>();
+        for (Timeslot t : times) {
+            String termAndTime = "Term " + t.getTerm() + " " + t.getStartTime() + "-" + t.getEndTime();
+            if (sectionGroups.containsKey(termAndTime)) {
+                sectionGroups.get(termAndTime).add(t.getDayOfWeek());
+            } else {
+                List<DayOfWeek> days = new ArrayList<>();
+                days.add(t.getDayOfWeek());
+                sectionGroups.put(termAndTime, days);
+            }
+        }
+        for (String s : sectionGroups.keySet()) {
+            result += s + " ";
+            List<DayOfWeek> days = sectionGroups.get(s);
+            Collections.sort(days);
+            for (DayOfWeek day : days) {
+                result += getAbbreviation(day);
+            }
+            result += "\t";
+        }
+        return result;
     }
 
     @Override
@@ -107,14 +119,39 @@ public class Section implements Writable {
         return json;
     }
 
-    // EFFECTS: returns timeslot sharing the same term, day, start time, and end time as the given timeslot if it exists
-    //          otherwise returns null
-    private Timeslot findDuplicate(Timeslot timeslot) {
-        for (Timeslot t : times) {
-            if (t.timeEquals(timeslot)) {
-                return t;
-            }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        return null;
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Section section = (Section) o;
+        return Objects.equals(name, section.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name);
+    }
+
+    private String getAbbreviation(DayOfWeek day) {
+        switch (day) {
+            case MONDAY:
+                return "M";
+            case TUESDAY:
+                return "T";
+            case WEDNESDAY:
+                return "W";
+            case THURSDAY:
+                return "Th";
+            case FRIDAY:
+                return "F";
+            case SATURDAY:
+                return "S";
+            default:
+                return "Su";
+        }
     }
 }

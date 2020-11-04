@@ -9,8 +9,6 @@ import ui.ScheduleApp;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -160,12 +158,10 @@ public class CourseListTest {
         List<Schedule> schedules = courses.getAllValidSchedules();
         assertEquals(2, schedules.size());
         assertEquals(2, schedules.get(0).numCourses());
-        assertTrue(schedules.get(0).containsCourse(courseR));
-        assertTrue(schedules.get(0).containsCourse(courseA));
-
         assertEquals(2, schedules.get(1).numCourses());
-        assertTrue(schedules.get(1).containsCourse(courseR));
-        assertTrue(schedules.get(1).containsCourse(courseB));
+
+        assertTrue(containsScheduleWithCourses(schedules, new Course[]{courseR, courseA}));
+        assertTrue(containsScheduleWithCourses(schedules, new Course[]{courseR, courseB}));
     }
 
     @Test
@@ -182,8 +178,8 @@ public class CourseListTest {
         assertTrue(courses.allValidSchedules(2));
         List<Schedule> schedules = courses.getAllValidSchedules();
         assertEquals(2, schedules.size());
-        assertTrue(schedules.get(0).containsSection(sectionB2));
-        assertTrue(schedules.get(1).containsSection(sectionA2));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2}));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionB2}));
     }
 
     @Test
@@ -226,7 +222,7 @@ public class CourseListTest {
         assertTrue(courses.allValidSchedules(2));
         List<Schedule> schedules = courses.getAllValidSchedules();
         assertEquals(2, schedules.size());
-        assertTrue(schedules.get(1).containsSection(sectionA2));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2}));
     }
 
     @Test
@@ -243,8 +239,10 @@ public class CourseListTest {
         assertTrue(courses.allValidSchedules(2));
         List<Schedule> schedules = courses.getAllValidSchedules();
         assertEquals(2, schedules.size());
-        assertTrue(schedules.get(0).containsSection(sectionB2));
-        assertTrue(schedules.get(1).containsSection(sectionA2));
+        assertEquals(2, schedules.get(0).numCourses());
+        assertEquals(2, schedules.get(1).numCourses());
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2}));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionB2}));
     }
 
     @Test
@@ -275,23 +273,13 @@ public class CourseListTest {
         List<Schedule> schedules = courses.getAllValidSchedules();
         assertEquals(3, schedules.size());
 
-        assertEquals(4, schedules.get(0).numCourses());
-        assertTrue(schedules.get(0).containsSection(sectionA1));
-        assertTrue(schedules.get(0).containsSection(sectionB1));
-        assertTrue(schedules.get(0).containsSection(sectionC1));
-        assertTrue(schedules.get(0).containsSection(sectionE2));
+        for (int i = 0; i < 3; i++) {
+            assertEquals(4, schedules.get(i).numCourses());
+        }
 
-        assertEquals(4, schedules.get(1).numCourses());
-        assertTrue(schedules.get(1).containsSection(sectionA1));
-        assertTrue(schedules.get(1).containsSection(sectionB2));
-        assertTrue(schedules.get(1).containsSection(sectionC1));
-        assertTrue(schedules.get(1).containsSection(sectionE1));
-
-        assertEquals(4, schedules.get(2).numCourses());
-        assertTrue(schedules.get(2).containsSection(sectionA2));
-        assertTrue(schedules.get(2).containsSection(sectionB2));
-        assertTrue(schedules.get(2).containsSection(sectionC1));
-        assertTrue(schedules.get(2).containsSection(sectionD1));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA1, sectionB1, sectionC1, sectionE2}));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA1, sectionB2, sectionC1, sectionE1}));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2, sectionB2, sectionC1, sectionD1}));
     }
 
     @Test
@@ -323,16 +311,10 @@ public class CourseListTest {
         assertEquals(2, schedules.size());
 
         assertEquals(4, schedules.get(0).numCourses());
-        assertTrue(schedules.get(0).containsSection(sectionA2));
-        assertTrue(schedules.get(0).containsSection(sectionB2));
-        assertTrue(schedules.get(0).containsSection(sectionC1));
-        assertTrue(schedules.get(0).containsSection(sectionD1));
-
         assertEquals(4, schedules.get(1).numCourses());
-        assertTrue(schedules.get(1).containsSection(sectionA2));
-        assertTrue(schedules.get(1).containsSection(sectionC1));
-        assertTrue(schedules.get(1).containsSection(sectionD1));
-        assertTrue(schedules.get(1).containsSection(sectionE2));
+
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2, sectionB2, sectionC1, sectionD1}));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2, sectionC1, sectionD1, sectionE2}));
     }
 
     @Test
@@ -398,5 +380,41 @@ public class CourseListTest {
         }
         course.addSection(section);
         return section;
+    }
+
+    private boolean containsScheduleWithCourses(List<Schedule> schedules, Course[] courses) {
+        for (Schedule schedule : schedules) {
+            if (scheduleContainsCourses(schedule, courses)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean scheduleContainsCourses(Schedule schedule, Course[] courses) {
+        for (Course course : courses) {
+            if (!schedule.containsCourse(course)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean containsScheduleWithSections(List<Schedule> schedules, Section[] sections) {
+        for (Schedule schedule : schedules) {
+            if (scheduleContainsSections(schedule, sections)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean scheduleContainsSections(Schedule schedule, Section[] sections) {
+        for (Section section : sections) {
+            if (!schedule.containsSection(section)) {
+                return false;
+            }
+        }
+        return true;
     }
 }
