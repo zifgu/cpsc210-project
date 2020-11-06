@@ -1,7 +1,6 @@
 package ui;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 
 import java.awt.*;
@@ -10,7 +9,6 @@ import java.time.DayOfWeek;
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 
 public class ScheduleUI {
-    @SuppressWarnings("checkstyle:MethodLength")
     public static void main(String[] args) {
         ScheduleUI ui = new ScheduleUI();
         JPanel listPanel = ui.createListPanel();
