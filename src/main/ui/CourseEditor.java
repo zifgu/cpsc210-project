@@ -35,7 +35,7 @@ public class CourseEditor {
 
         JFrame frame = new JFrame("My frame");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(900, 700));
+        frame.setPreferredSize(new Dimension(900, 750));
         frame.setResizable(false);
         frame.setContentPane(mainPanel);
         frame.pack();

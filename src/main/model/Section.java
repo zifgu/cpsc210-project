@@ -28,6 +28,10 @@ public class Section implements Writable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Course getCourse() {
         return course;
     }
@@ -81,6 +85,10 @@ public class Section implements Writable {
     @Override
     // EFFECTS: returns a string displaying section info in a printable form
     public String toString() {
+        return course.getName() + " " + name;
+    }
+
+    public String scheduleRepresentation() {
         String result = course.getName() + " " + name + ": ";
         HashMap<String, List<DayOfWeek>> sectionGroups = new HashMap<>();
         for (Timeslot t : times) {

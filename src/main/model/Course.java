@@ -29,6 +29,10 @@ public class Course implements Writable {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public boolean getRequired() {
         return required;
     }
