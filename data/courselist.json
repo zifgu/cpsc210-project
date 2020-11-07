@@ -1,21 +1,55 @@
-{"courses": [{
-    "name": "cpsc110",
-    "required": true,
-    "sections": [{
-        "times": [
+{"courses": [
+    {
+        "name": "math100",
+        "required": true,
+        "sections": [{
+            "times": [],
+            "name": "101"
+        }]
+    },
+    {
+        "name": "cpsc210",
+        "required": true,
+        "sections": [
             {
-                "start": "14:00",
-                "term": 1,
-                "end": "15:30",
-                "day": "TUESDAY"
+                "times": [{
+                    "start": "12:00",
+                    "term": 1,
+                    "end": "13:00",
+                    "day": "MONDAY"
+                }],
+                "name": "101"
             },
             {
-                "start": "14:00",
-                "term": 1,
-                "end": "15:30",
-                "day": "THURSDAY"
+                "times": [
+                    {
+                        "start": "13:00",
+                        "term": 2,
+                        "end": "14:00",
+                        "day": "WEDNESDAY"
+                    },
+                    {
+                        "start": "13:00",
+                        "term": 2,
+                        "end": "14:00",
+                        "day": "FRIDAY"
+                    }
+                ],
+                "name": "201"
             }
-        ],
-        "name": "101"
-    }]
-}]}
+        ]
+    },
+    {
+        "name": "cpsc121",
+        "required": true,
+        "sections": [{
+            "times": [{
+                "start": "12:30",
+                "term": 1,
+                "end": "14:00",
+                "day": "THURSDAY"
+            }],
+            "name": "001"
+        }]
+    }
+]}

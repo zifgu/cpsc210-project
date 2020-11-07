@@ -4,6 +4,8 @@ import model.Course;
 import model.CourseList;
 import model.Section;
 import model.Timeslot;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -12,6 +14,8 @@ import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
@@ -24,9 +28,9 @@ public class CourseListPanel {
     // TODO: class level comments
     private CourseList courseList;
     private JPanel mainPanel;
-    private DefaultListModel courses = new DefaultListModel();
-    private DefaultListModel sections = new DefaultListModel();
-    private DefaultListModel timeslots = new DefaultListModel();
+    private DefaultListModel<Course> courses = new DefaultListModel<>();
+    private DefaultListModel<Section> sections = new DefaultListModel<>();
+    private DefaultListModel<Timeslot> timeslots = new DefaultListModel<>();
     private Course selectedCourse;
     private Section selectedSection;
     private Timeslot selectedTimeslot;
@@ -46,10 +50,12 @@ public class CourseListPanel {
         editPanel.add(cp.getCoursePanel());
         editPanel.add(sp.getSectionPanel());
         editPanel.add(tp.getTimeslotPanel());
+        SaveLoadPanel slp = new SaveLoadPanel();
         mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
         mainPanel.add(listPanel);
         mainPanel.add(editPanel);
+        mainPanel.add(slp.getSaveLoadPanel());
     }
 
     // EFFECTS: returns the JPanel that displays the entire course list
@@ -105,7 +111,30 @@ public class CourseListPanel {
         return buttonPanel;
     }
 
-    // TODO: try modifying selection handlers to not use names
+    private void clearCoursesAndLoad() {
+        courses.clear();
+        sections.clear();
+        timeslots.clear();
+        for (Course c : courseList.getCourses()) {
+            courses.addElement(c);
+        }
+    }
+
+    private void clearSectionsAndLoad(Course c) {
+        sections.clear();
+        timeslots.clear();
+        for (Section s : c.getSections()) {
+            sections.addElement(s);
+        }
+    }
+
+    private void clearTimeslotsAndLoad(Section s) {
+        timeslots.clear();
+        for (Timeslot t : s.getTimeslots()) {
+            timeslots.addElement(t);
+        }
+    }
+
     private class CourseSelectHandler implements ListSelectionListener {
 
         @Override
@@ -113,15 +142,12 @@ public class CourseListPanel {
             if (!e.getValueIsAdjusting()) {
                 // TODO: for debugging
                 System.out.println("Course selected");
-                sections.clear();
-                timeslots.clear();
-
                 JList list = (JList) e.getSource();
-                selectedCourse = (Course) courses.getElementAt(list.getSelectedIndex());
+                int index = list.getSelectedIndex();
 
-                // TODO: for debugging
-                for (Section s : selectedCourse.getSections()) {
-                    sections.addElement(s);
+                if (index >= 0) {
+                    selectedCourse = courses.getElementAt(index);
+                    clearSectionsAndLoad(selectedCourse);
                 }
             }
         }
@@ -136,16 +162,12 @@ public class CourseListPanel {
                 System.out.println("Section selected");
                 JList list = (JList) e.getSource();
                 int index = list.getSelectedIndex();
-                timeslots.clear();
 
                 if (index >= 0) {
-                    selectedSection = (Section) sections.getElementAt(index);
+                    selectedSection = sections.getElementAt(index);
                     // TODO: for debugging
                     System.out.println(selectedSection);
-
-                    for (Timeslot t : selectedSection.getTimeslots()) {
-                        timeslots.addElement(t);
-                    }
+                    clearTimeslotsAndLoad(selectedSection);
                 }
             }
         }
@@ -161,7 +183,7 @@ public class CourseListPanel {
                 JList list = (JList) e.getSource();
                 int index = list.getSelectedIndex();
                 if (index >= 0) {
-                    selectedTimeslot = (Timeslot) timeslots.getElementAt(index);
+                    selectedTimeslot = timeslots.getElementAt(index);
                     // TODO: for debugging
                     System.out.println(selectedTimeslot);
                 }
@@ -385,6 +407,63 @@ public class CourseListPanel {
         // EFFECTS: returns the JPanel with the menu that allows you to add timeslots
         JPanel getTimeslotPanel() {
             return timeslotPanel;
+        }
+    }
+
+    private class SaveLoadPanel implements ActionListener {
+        // TODO: class level comment and invariants
+        private JsonReader reader;
+        private JsonWriter writer;
+        private JPanel saveLoadPanel;
+        private JLabel feedback;
+        private static final String FILE_NAME = "./data/courselist.json";
+
+        // TODO: specification
+        public SaveLoadPanel() {
+            reader = new JsonReader(FILE_NAME);
+            writer = new JsonWriter(FILE_NAME);
+            createSaveLoadPanel();
+        }
+
+        private void createSaveLoadPanel() {
+            saveLoadPanel = new JPanel();
+            saveLoadPanel.setBorder(BorderFactory.createTitledBorder("Save/load courses"));
+            JButton save = new JButton("Save");
+            JButton load = new JButton("Load");
+            save.addActionListener(this);
+            save.setActionCommand("Save");
+            load.addActionListener(this);
+            load.setActionCommand("Load");
+            saveLoadPanel.add(save);
+            saveLoadPanel.add(load);
+            feedback = new JLabel("");
+            saveLoadPanel.add(feedback);
+        }
+
+        public JPanel getSaveLoadPanel() {
+            return saveLoadPanel;
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (e.getActionCommand().equals("Save")) {
+                try {
+                    writer.open();
+                    writer.writeCourseList(courseList);
+                    writer.close();
+                    feedback.setText("Successfully saved course list.");
+                } catch (FileNotFoundException fileNotFoundException) {
+                    feedback.setText("Sorry, there was a problem saving.");
+                }
+            } else if (e.getActionCommand().equals("Load")) {
+                try {
+                    courseList = reader.read();
+                    clearCoursesAndLoad();
+                    feedback.setText("Successfully loaded course list.");
+                } catch (IOException ioException) {
+                    feedback.setText("Sorry, there was a problem loading.");
+                }
+            }
         }
     }
 }

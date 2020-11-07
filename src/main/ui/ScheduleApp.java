@@ -13,7 +13,6 @@ import java.time.format.DateTimeParseException;
 import java.util.*;
 
 public class ScheduleApp {
-    // TODO: what's the invalid command after getting input?
     private CourseList courseList;
     private Scanner input;
     private JsonReader reader;
