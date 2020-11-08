@@ -15,6 +15,8 @@ class ScheduleCalculator {
     private int numRequired;
     private int numElectives;
 
+    private int passNo;
+
     // EFFECTS: constructs ScheduleCalculator with courses sorted into required/electives, no schedules
     //          and given value of numCourses
     ScheduleCalculator(int n, Set<Course> courses) {
@@ -36,13 +38,17 @@ class ScheduleCalculator {
             }
         }
         numRequired = required.size();
+        System.out.println(numRequired + " required");
         numElectives = electives.size();
+        System.out.println(numElectives + " electives");
     }
 
     // MODIFIES: this
     // EFFECT: returns list of all valid schedules with numCourses courses
     List<Schedule> allValidSchedules() {
         if (required.size() + electives.size() < numCourses) {
+            return new ArrayList<>();
+        } else if (required.size() > numCourses) {
             return new ArrayList<>();
         } else {
             Schedule s = new Schedule();
@@ -58,6 +64,9 @@ class ScheduleCalculator {
     // Link https://www.geeksforgeeks.org/printing-solutions-n-queen-problem/
     private boolean fillRequired(Schedule currentSchedule, int courseIndex) {
         boolean possible = false;
+        passNo++;
+        System.out.println("Pass #" + passNo + ": " + currentSchedule.numCourses());
+        System.out.println(currentSchedule);
         if (currentSchedule.numCourses() == numRequired) {
             possible = fillElectives(currentSchedule, courseIndex);
         } else {

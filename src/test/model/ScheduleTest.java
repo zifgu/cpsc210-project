@@ -269,6 +269,25 @@ public class ScheduleTest {
     }
 
     @Test
+    public void testRemoveSectionDifferentObject() {
+        Section otherSection = new Section("001", testCourse);
+        testSchedule.fillSection(otherSection);
+        assertTrue(testSchedule.containsSection(testSection));
+        testSchedule.removeSection(testSection);
+        assertEquals(0, testSchedule.numSections());
+    }
+
+    @Test
+    public void testRemoveSectionDifferentCourse() {
+        Course otherCourse = new Course("Other", false);
+        Section otherSection = new Section("001", otherCourse);
+        testSchedule.fillSection(otherSection);
+        assertFalse(testSchedule.containsSection(testSection));
+        testSchedule.removeSection(testSection);
+        assertEquals(1, testSchedule.numSections());
+    }
+
+    @Test
     public void testToString() {
         Course otherCourse = new Course("B", true);
         Section otherSection = new Section("102", otherCourse);
@@ -277,9 +296,6 @@ public class ScheduleTest {
         testSchedule.fillSection(otherSection);
         testSchedule.fillSection(testSection);
 
-        String s1 = "B 102: Term 1 12:00-13:00 M\t";
-        String s2 = "A 001: Term 1 13:00-14:00 MWF\t";
-
-        assertEquals(s1 + "\n" + s2 + "\n", testSchedule.toString());
+        assertEquals(otherSection.toString() + "\n" + testSection.toString() + "\n", testSchedule.toString());
     }
 }

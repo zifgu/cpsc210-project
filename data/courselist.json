@@ -1,55 +1,237 @@
 {"courses": [
     {
-        "name": "math100",
-        "required": true,
-        "sections": [{
-            "times": [],
-            "name": "101"
-        }]
-    },
-    {
-        "name": "cpsc210",
+        "name": "A",
         "required": true,
         "sections": [
             {
-                "times": [{
-                    "start": "12:00",
-                    "term": 1,
-                    "end": "13:00",
-                    "day": "MONDAY"
-                }],
-                "name": "101"
+                "times": [
+                    {
+                        "start": "09:00",
+                        "term": 1,
+                        "end": "10:00",
+                        "day": "MONDAY"
+                    },
+                    {
+                        "start": "09:00",
+                        "term": 1,
+                        "end": "10:00",
+                        "day": "FRIDAY"
+                    },
+                    {
+                        "start": "09:00",
+                        "term": 1,
+                        "end": "10:00",
+                        "day": "WEDNESDAY"
+                    }
+                ],
+                "name": "1"
+            },
+            {
+                "times": [
+                    {
+                        "start": "12:00",
+                        "term": 1,
+                        "end": "13:00",
+                        "day": "WEDNESDAY"
+                    },
+                    {
+                        "start": "12:00",
+                        "term": 1,
+                        "end": "13:00",
+                        "day": "FRIDAY"
+                    },
+                    {
+                        "start": "12:00",
+                        "term": 1,
+                        "end": "13:00",
+                        "day": "MONDAY"
+                    }
+                ],
+                "name": "2"
+            }
+        ]
+    },
+    {
+        "name": "B",
+        "required": true,
+        "sections": [
+            {
+                "times": [
+                    {
+                        "start": "12:00",
+                        "term": 1,
+                        "end": "13:00",
+                        "day": "WEDNESDAY"
+                    },
+                    {
+                        "start": "12:00",
+                        "term": 1,
+                        "end": "13:00",
+                        "day": "FRIDAY"
+                    },
+                    {
+                        "start": "12:00",
+                        "term": 1,
+                        "end": "13:00",
+                        "day": "MONDAY"
+                    }
+                ],
+                "name": "1"
             },
             {
                 "times": [
                     {
                         "start": "13:00",
-                        "term": 2,
+                        "term": 1,
                         "end": "14:00",
-                        "day": "WEDNESDAY"
+                        "day": "FRIDAY"
                     },
                     {
                         "start": "13:00",
-                        "term": 2,
+                        "term": 1,
                         "end": "14:00",
-                        "day": "FRIDAY"
+                        "day": "MONDAY"
+                    },
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
+                        "day": "WEDNESDAY"
                     }
                 ],
-                "name": "201"
+                "name": "2"
             }
         ]
     },
     {
-        "name": "cpsc121",
+        "name": "C",
         "required": true,
+        "sections": [
+            {
+                "times": [
+                    {
+                        "start": "10:00",
+                        "term": 1,
+                        "end": "11:00",
+                        "day": "WEDNESDAY"
+                    },
+                    {
+                        "start": "10:00",
+                        "term": 1,
+                        "end": "11:00",
+                        "day": "FRIDAY"
+                    },
+                    {
+                        "start": "10:00",
+                        "term": 1,
+                        "end": "11:00",
+                        "day": "MONDAY"
+                    }
+                ],
+                "name": "1"
+            },
+            {
+                "times": [
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
+                        "day": "FRIDAY"
+                    },
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
+                        "day": "MONDAY"
+                    },
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
+                        "day": "WEDNESDAY"
+                    }
+                ],
+                "name": "2"
+            }
+        ]
+    },
+    {
+        "name": "D",
+        "required": false,
         "sections": [{
-            "times": [{
-                "start": "12:30",
-                "term": 1,
-                "end": "14:00",
-                "day": "THURSDAY"
-            }],
-            "name": "001"
+            "times": [
+                {
+                    "start": "09:00",
+                    "term": 1,
+                    "end": "10:00",
+                    "day": "MONDAY"
+                },
+                {
+                    "start": "09:00",
+                    "term": 1,
+                    "end": "10:00",
+                    "day": "FRIDAY"
+                },
+                {
+                    "start": "09:00",
+                    "term": 1,
+                    "end": "10:00",
+                    "day": "WEDNESDAY"
+                }
+            ],
+            "name": "1"
         }]
+    },
+    {
+        "name": "E",
+        "required": false,
+        "sections": [
+            {
+                "times": [
+                    {
+                        "start": "12:00",
+                        "term": 1,
+                        "end": "13:00",
+                        "day": "WEDNESDAY"
+                    },
+                    {
+                        "start": "12:00",
+                        "term": 1,
+                        "end": "13:00",
+                        "day": "FRIDAY"
+                    },
+                    {
+                        "start": "12:00",
+                        "term": 1,
+                        "end": "13:00",
+                        "day": "MONDAY"
+                    }
+                ],
+                "name": "1"
+            },
+            {
+                "times": [
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
+                        "day": "FRIDAY"
+                    },
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
+                        "day": "MONDAY"
+                    },
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
+                        "day": "WEDNESDAY"
+                    }
+                ],
+                "name": "2"
+            }
+        ]
     }
 ]}

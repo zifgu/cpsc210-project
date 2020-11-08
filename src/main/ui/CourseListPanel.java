@@ -1,9 +1,6 @@
 package ui;
 
-import model.Course;
-import model.CourseList;
-import model.Section;
-import model.Timeslot;
+import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -19,6 +16,8 @@ import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
+import java.util.*;
+import java.util.List;
 
 import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
 
@@ -27,7 +26,7 @@ public class CourseListPanel {
     // TODO: invariants - selected section is always a section of selected course?
     // TODO: class level comments
     private CourseList courseList;
-    private JPanel mainPanel;
+    private JTabbedPane mainPanel;
     private DefaultListModel<Course> courses = new DefaultListModel<>();
     private DefaultListModel<Section> sections = new DefaultListModel<>();
     private DefaultListModel<Timeslot> timeslots = new DefaultListModel<>();
@@ -50,16 +49,23 @@ public class CourseListPanel {
         editPanel.add(cp.getCoursePanel());
         editPanel.add(sp.getSectionPanel());
         editPanel.add(tp.getTimeslotPanel());
+        JPanel coursePanel = new JPanel();
+        coursePanel.setLayout(new BoxLayout(coursePanel, BoxLayout.PAGE_AXIS));
         SaveLoadPanel slp = new SaveLoadPanel();
-        mainPanel = new JPanel();
-        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.PAGE_AXIS));
-        mainPanel.add(listPanel);
-        mainPanel.add(editPanel);
-        mainPanel.add(slp.getSaveLoadPanel());
+
+        coursePanel.add(listPanel);
+        coursePanel.add(editPanel);
+        coursePanel.add(slp.getSaveLoadPanel());
+
+        CalculatorPanel calcPanel = new CalculatorPanel();
+
+        mainPanel = new JTabbedPane();
+        mainPanel.addTab("Course list", coursePanel);
+        mainPanel.addTab("Schedule", calcPanel.getCalcPanel());
     }
 
     // EFFECTS: returns the JPanel that displays the entire course list
-    public JPanel getMainPanel() {
+    public JTabbedPane getMainPanel() {
         return mainPanel;
     }
 
@@ -463,6 +469,121 @@ public class CourseListPanel {
                 } catch (IOException ioException) {
                     feedback.setText("Sorry, there was a problem loading.");
                 }
+            }
+        }
+    }
+
+    private class CalculatorPanel implements ActionListener {
+        private JPanel calcPanel;
+        private JTextField scheduleSizeField;
+        private JTextArea displayedSchedule;
+        private JButton nextButton;
+        private JButton prevButton;
+        private JLabel feedback;
+        private java.util.List<Schedule> selection = new ArrayList<>();
+        private int currentIndex;
+        private int listLength;
+
+        public CalculatorPanel() {
+            createMainPanel();
+        }
+
+        @SuppressWarnings("checkstyle:MethodLength")
+        private void createMainPanel() {
+            calcPanel = new JPanel();
+            calcPanel.setLayout(new BoxLayout(calcPanel, BoxLayout.PAGE_AXIS));
+            calcPanel.setBorder(BorderFactory.createTitledBorder("Calculate schedules"));
+
+            // TODO: this doesn't update
+//        JLabel info = new JLabel("Your course list contains " + courseList.numCourses() + " courses.");
+//        mainPanel.add(info);
+
+            scheduleSizeField = new JTextField();
+            scheduleSizeField.setMaximumSize(new Dimension(100, 30));
+            JLabel scheduleSizeFieldLabel = new JLabel("Enter the number of courses to calculate:");
+            calcPanel.add(scheduleSizeFieldLabel);
+            calcPanel.add(scheduleSizeField);
+
+            JButton calculateButton = new JButton("Calculate");
+            calculateButton.setActionCommand("Calculate");
+            calculateButton.addActionListener(this);
+            calcPanel.add(calculateButton);
+
+            feedback = new JLabel("");
+            calcPanel.add(feedback);
+
+            displayedSchedule = new JTextArea(100, 100);
+            displayedSchedule.setEditable(false);
+            displayedSchedule.setLineWrap(true);
+            calcPanel.add(displayedSchedule);
+
+            prevButton = new JButton("Previous");
+            prevButton.setActionCommand("Previous");
+            prevButton.addActionListener(this);
+            nextButton = new JButton("Next");
+            nextButton.setActionCommand("Next");
+            nextButton.addActionListener(this);
+            calcPanel.add(prevButton);
+            calcPanel.add(nextButton);
+        }
+
+        private JPanel getCalcPanel() {
+            return calcPanel;
+        }
+
+        @Override
+        // TODO: add refresh function
+        // TODO: fix code duplication
+        // TODO: check size of calculated schedules
+        public void actionPerformed(ActionEvent e) {
+            switch (e.getActionCommand()) {
+                case "Calculate":
+                    calculateAndDisplaySchedules();
+                    break;
+                case "Previous":
+                    // TODO: check if there are no schedules
+                    // TODO: disable/enable buttons, maybe change a label
+                    System.out.println("Previous button pressed: current index is " + currentIndex);
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                    }
+                    displayedSchedule.setText(selection.get(currentIndex).toString());
+                    break;
+                case "Next":
+                    // TODO: check if there are no schedules
+                    // TODO: disable/enable buttons, maybe change a label
+                    System.out.println("Next button pressed: current index is " + currentIndex);
+                    if (currentIndex < listLength - 1) {
+                        currentIndex++;
+                    }
+                    displayedSchedule.setText(selection.get(currentIndex).toString());
+                    break;
+            }
+        }
+
+        private void calculateAndDisplaySchedules() {
+            try {
+                selection.clear();
+                int size = Integer.parseInt(scheduleSizeField.getText());
+                System.out.println(size);
+                boolean success = courseList.allValidSchedules(size);
+                if (success) {
+                    List<Schedule> schedules = courseList.getAllValidSchedules();
+                    feedback.setText("Successfully calculated " + schedules.size() + " schedules.");
+                    listLength = Math.min(10, schedules.size());
+                    if (schedules.size() > 10) {
+                        Collections.shuffle(schedules);
+                    }
+                    for (int i = 0; i < listLength; i++) {
+                        selection.add(schedules.get(i));
+                    }
+                    currentIndex = 0;
+                    displayedSchedule.setText(selection.get(currentIndex).toString());
+                } else {
+                    feedback.setText("No schedules possible.");
+                }
+            } catch (NumberFormatException nfe) {
+                // do nothing (???)
             }
         }
     }

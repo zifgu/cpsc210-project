@@ -136,12 +136,13 @@ public class Section implements Writable {
             return false;
         }
         Section section = (Section) o;
-        return Objects.equals(name, section.name);
+        return Objects.equals(name, section.name)
+                && Objects.equals(course, section.course);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name);
+        return Objects.hash(name, course);
     }
 
     private String getAbbreviation(DayOfWeek day) {

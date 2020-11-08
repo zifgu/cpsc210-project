@@ -246,22 +246,68 @@ public class CourseListTest {
     }
 
     @Test
+    public void testAllValidSchedulesOneElective() {
+        courseA = new Course("A", true);
+        Section sectionA1 = addSectionMWF(courseA, "A1", 1, LocalTime.of(14, 0), 2);
+        Section sectionA2 = addSectionMWF(courseA, "A2", 2, LocalTime.of(14, 0), 2);
+
+        courseB = new Course("B", true);
+        Section sectionB1 = addSectionMWF(courseB, "B1", 1, LocalTime.of(15, 0), 2);
+
+        Course courseC = new Course("C", false);
+        Section sectionC1 = addSectionMWF(courseC, "C1", 1, LocalTime.of(9, 0), 2);
+
+        courses.addCourse(courseA);
+        courses.addCourse(courseB);
+        courses.addCourse(courseC);
+
+        assertTrue(courses.allValidSchedules(3));
+        List<Schedule> schedules = courses.getAllValidSchedules();
+        assertEquals(2, schedules.size());
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA1, sectionB1, sectionC1}));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2, sectionB1, sectionC1}));
+    }
+
+    @Test
+    public void testAllValidSchedulesBothRequired() {
+        courseA = new Course("A", true);
+        Section sectionA1 = addSectionMWF(courseA, "A1", 1, LocalTime.of(14, 0), 2);
+        Section sectionA2 = addSectionMWF(courseA, "A2", 2, LocalTime.of(14, 0), 2);
+
+        courseB = new Course("B", true);
+        Section sectionB1 = addSectionMWF(courseB, "B1", 1, LocalTime.of(15, 0), 2);
+
+        Course courseC = new Course("C", false);
+        Section sectionC1 = addSectionMWF(courseC, "C1", 1, LocalTime.of(9, 0), 2);
+
+        courses.addCourse(courseA);
+        courses.addCourse(courseB);
+        courses.addCourse(courseC);
+
+        assertTrue(courses.allValidSchedules(2));
+        List<Schedule> schedules = courses.getAllValidSchedules();
+        assertEquals(2, schedules.size());
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA1, sectionB1}));
+        assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2, sectionB1}));
+    }
+
+    @Test
     public void testAllValidSchedules() {
         courseA = new Course("A", true);
         courseB = new Course("B", true);
-        Course courseC = new Course("C", false);
+        Course courseC = new Course("C", true);
         Course courseD = new Course("D", false);
         Course courseE = new Course("E", false);
 
-        Section sectionA1 = addSectionMWF(courseA, "A1", 1, LocalTime.of(9, 0), 2);
-        Section sectionA2 = addSectionMWF(courseA, "A2", 1, LocalTime.of(12, 0), 2);
-        Section sectionB1 = addSectionMWF(courseB, "B1", 1, LocalTime.of(12, 0), 2);
-        Section sectionB2 = addSectionMWF(courseB, "B2", 1, LocalTime.of(13, 0), 2);
-        Section sectionC1 = addSectionMWF(courseC, "C1", 1, LocalTime.of(10, 0), 2);
-        Section sectionC2 = addSectionMWF(courseC, "C2", 1, LocalTime.of(13, 0), 2);
-        Section sectionD1 = addSectionMWF(courseD, "D1", 1, LocalTime.of(9, 0), 2);
-        Section sectionE1 = addSectionMWF(courseE, "E1", 1, LocalTime.of(12, 0), 2);
-        Section sectionE2 = addSectionMWF(courseE, "E2", 1, LocalTime.of(13, 0), 2);
+        Section sectionA1 = addSectionMWF(courseA, "1", 1, LocalTime.of(9, 0), 2);
+        Section sectionA2 = addSectionMWF(courseA, "2", 1, LocalTime.of(12, 0), 2);
+        Section sectionB1 = addSectionMWF(courseB, "1", 1, LocalTime.of(12, 0), 2);
+        Section sectionB2 = addSectionMWF(courseB, "2", 1, LocalTime.of(13, 0), 2);
+        Section sectionC1 = addSectionMWF(courseC, "1", 1, LocalTime.of(10, 0), 2);
+        Section sectionC2 = addSectionMWF(courseC, "2", 1, LocalTime.of(13, 0), 2);
+        Section sectionD1 = addSectionMWF(courseD, "1", 1, LocalTime.of(9, 0), 2);
+        Section sectionE1 = addSectionMWF(courseE, "1", 1, LocalTime.of(12, 0), 2);
+        Section sectionE2 = addSectionMWF(courseE, "2", 1, LocalTime.of(13, 0), 2);
 
         courses.addCourse(courseA);
         courses.addCourse(courseB);
