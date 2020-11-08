@@ -184,7 +184,7 @@ public class ScheduleApp {
             throw new InvalidSyntaxException();
         }
         String name = command.get(2);
-        if (courseList.deleteCourse(name)) {
+        if (courseList.deleteCourse(new Course(name, false))) {
             System.out.println("Successfully deleted course " + name + ".");
         } else {
             System.out.println("Unsuccessful delete: course not found.");
@@ -260,7 +260,7 @@ public class ScheduleApp {
             throw new InvalidSyntaxException();
         }
         String name = command.get(1);
-        if (c.deleteSection(name)) {
+        if (c.deleteSection(new Section(name, c))) {
             System.out.println("Successfully deleted section " + name + " from course " + c + ".");
         } else {
             System.out.println("Unsuccessful delete: section not found.");

@@ -63,9 +63,9 @@ public class Course implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: returns false if no section with given name exists, otherwise removes the section and returns true
-    public boolean deleteSection(String sectionName) {
-        return sections.remove(new Section(sectionName, this));
+    // EFFECTS: returns false if this course does not contain s, otherwise removes s and returns true
+    public boolean deleteSection(Section s) {
+        return sections.remove(s);
     }
 
     // EFFECTS: returns a string displaying course info in printable form

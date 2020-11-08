@@ -82,7 +82,7 @@ class CourseTest {
 
     @Test
     public void testDeleteSectionEmpty() {
-        assertFalse(testCourse.deleteSection("101"));
+        assertFalse(testCourse.deleteSection(new Section("101", testCourse)));
     }
 
     @Test
@@ -90,7 +90,7 @@ class CourseTest {
         Section testSection = new Section("101", testCourse);
 
         testCourse.addSection(testSection);
-        assertFalse(testCourse.deleteSection("001"));
+        assertFalse(testCourse.deleteSection(new Section("001", testCourse)));
     }
 
     @Test
@@ -98,7 +98,7 @@ class CourseTest {
         Section testSection = new Section("101", testCourse);
 
         testCourse.addSection(testSection);
-        assertTrue(testCourse.deleteSection("101"));
+        assertTrue(testCourse.deleteSection(testSection));
     }
 
     @Test

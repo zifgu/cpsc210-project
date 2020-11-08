@@ -56,10 +56,10 @@ public class CourseList implements Writable {
     }
 
     // MODIFIES: this
-    // EFFECTS: if this course list contains a course with given name, removes it and returns true
+    // EFFECTS: if this course list contains the given course, removes it and returns true
     //          otherwise returns false
-    public boolean deleteCourse(String name) {
-        return courses.remove(new Course(name, false));
+    public boolean deleteCourse(Course c) {
+        return courses.remove(c);
     }
 
     // REQUIRES: numCourses > 0

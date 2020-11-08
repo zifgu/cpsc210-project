@@ -221,28 +221,33 @@ public class SectionTest {
     }
 
     @Test
-    public void testToStringSameDay() {
-        testSection.addTimeslot(testTime);
-        testSection.addTimeslot(new Timeslot(1, DayOfWeek.WEDNESDAY, twelve, one, testSection));
-        assertEquals("A 001: Term 1 12:00-13:00 MW\t", testSection.toString());
+    public void testToString() {
+        assertEquals("A 001", testSection.toString());
     }
 
     @Test
-    public void testToStringDifferentDay() {
+    public void testScheduleRepresentationSameDay() {
+        testSection.addTimeslot(testTime);
+        testSection.addTimeslot(new Timeslot(1, DayOfWeek.WEDNESDAY, twelve, one, testSection));
+        assertEquals("A 001: Term 1 12:00-13:00 MW\t", testSection.scheduleRepresentation());
+    }
+
+    @Test
+    public void testScheduleRepresentationDifferentDay() {
         testSection.addTimeslot(testTime);
         testSection.addTimeslot(new Timeslot(1, DayOfWeek.WEDNESDAY, twelve, one, testSection));
         testSection.addTimeslot(new Timeslot(1, DayOfWeek.MONDAY, one, LocalTime.parse("14:00"), testSection));
-        String result = testSection.toString();
+        String result = testSection.scheduleRepresentation();
         boolean res1 = result.equals("A 001: Term 1 13:00-14:00 M\tTerm 1 12:00-13:00 MW\t");
         boolean res2 = result.equals("A 001: Term 1 12:00-13:00 MW\tTerm 1 13:00-14:00 M\t");
         assertTrue(res1 || res2);
     }
 
     @Test
-    public void testToStringDifferentTerm() {
+    public void testScheduleRepresentationDifferentTerm() {
         testSection.addTimeslot(testTime);
         testSection.addTimeslot(new Timeslot(2, DayOfWeek.WEDNESDAY, twelve, one, testSection));
-        String result = testSection.toString();
+        String result = testSection.scheduleRepresentation();
         boolean res1 = result.equals("A 001: Term 2 12:00-13:00 W\tTerm 1 12:00-13:00 M\t");
         boolean res2 = result.equals("A 001: Term 1 12:00-13:00 M\tTerm 2 12:00-13:00 W\t");
         assertTrue(res1 || res2);

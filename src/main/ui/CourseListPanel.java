@@ -9,8 +9,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -72,9 +71,13 @@ public class CourseListPanel {
     // EFFECTS: creates a JPanel containing 3 lists
     private JPanel createCourseListPanel() {
         JPanel panel = new JPanel();
-        JScrollPane coursesList = createScrollingList(courses, "Courses", new CourseSelectHandler());
-        JScrollPane sectionsList = createScrollingList(sections, "Sections", new SectionSelectHandler());
-        JScrollPane timeslotsList = createScrollingList(timeslots, "Times", new TimeslotSelectHandler());
+        CourseSelectHandler courseHandler = new CourseSelectHandler();
+        SectionSelectHandler sectionHandler = new SectionSelectHandler();
+        TimeslotSelectHandler timeslotHandler = new TimeslotSelectHandler();
+        JScrollPane coursesList = createScrollingList(courses, "Courses", courseHandler, courseHandler);
+        JScrollPane sectionsList = createScrollingList(sections, "Sections", sectionHandler, sectionHandler);
+        JScrollPane timeslotsList = createScrollingList(timeslots, "Times", timeslotHandler, timeslotHandler);
+
         panel.setLayout(new BoxLayout(panel, BoxLayout.LINE_AXIS));
         panel.add(coursesList);
         panel.add(sectionsList);
@@ -84,15 +87,21 @@ public class CourseListPanel {
 
     // EFFECTS: creates a single scroll pane with a list attached to listModel
     // TODO: break this up into multiple methods
-    private JScrollPane createScrollingList(DefaultListModel listModel, String title, ListSelectionListener l) {
-        JList list = new JList(listModel);
+    private JScrollPane createScrollingList(DefaultListModel lm, String t, ListSelectionListener l, ActionListener al) {
+        JList list = new JList(lm);
         list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         list.addListSelectionListener(l);
+        list.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                createPopupMenu(e, list, al);
+            }
+        });
 
         JScrollPane scrollPane = new JScrollPane(list);
         scrollPane.setVerticalScrollBarPolicy(VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setPreferredSize(new Dimension(300, 300));
-        TitledBorder border = BorderFactory.createTitledBorder(title);
+        TitledBorder border = BorderFactory.createTitledBorder(t);
         scrollPane.setBorder(border);
 
         return scrollPane;
@@ -115,6 +124,16 @@ public class CourseListPanel {
         buttonPanel.add(save);
         buttonPanel.add(add);
         return buttonPanel;
+    }
+
+    private void createPopupMenu(MouseEvent e, Component invoker, ActionListener actionListener) {
+        if (e.isPopupTrigger()) {
+            JPopupMenu popupMenu = new JPopupMenu();
+            JMenuItem deleteOption = new JMenuItem("Delete");
+            deleteOption.addActionListener(actionListener);
+            popupMenu.add(deleteOption);
+            popupMenu.show(invoker, e.getX(), e.getY());
+        }
     }
 
     private void clearCoursesAndLoad() {
@@ -141,7 +160,7 @@ public class CourseListPanel {
         }
     }
 
-    private class CourseSelectHandler implements ListSelectionListener {
+    private class CourseSelectHandler implements ListSelectionListener, ActionListener {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -157,9 +176,16 @@ public class CourseListPanel {
                 }
             }
         }
+
+        @Override
+        // TODO: repetition of code, also decide whether to use update method or manually delete?
+        public void actionPerformed(ActionEvent e) {
+            courseList.deleteCourse(selectedCourse);
+            clearCoursesAndLoad();
+        }
     }
 
-    private class SectionSelectHandler implements ListSelectionListener {
+    private class SectionSelectHandler implements ListSelectionListener, ActionListener {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -177,9 +203,16 @@ public class CourseListPanel {
                 }
             }
         }
+
+        @Override
+        // TODO: repetition of code, also decide whether to use update method or manually delete?
+        public void actionPerformed(ActionEvent e) {
+            selectedCourse.deleteSection(selectedSection);
+            clearSectionsAndLoad(selectedCourse);
+        }
     }
 
-    private class TimeslotSelectHandler implements ListSelectionListener {
+    private class TimeslotSelectHandler implements ListSelectionListener, ActionListener {
 
         @Override
         public void valueChanged(ListSelectionEvent e) {
@@ -194,6 +227,13 @@ public class CourseListPanel {
                     System.out.println(selectedTimeslot);
                 }
             }
+        }
+
+        @Override
+        // TODO: repetition of code, also decide whether to use update method or manually delete?
+        public void actionPerformed(ActionEvent e) {
+            selectedSection.deleteTimeslot(selectedTimeslot);
+            clearTimeslotsAndLoad(selectedSection);
         }
     }
 

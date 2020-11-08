@@ -57,14 +57,14 @@ public class CourseListTest {
 
     @Test
     public void testDeleteCourseEmpty() {
-        assertFalse(courses.deleteCourse("A"));
+        assertFalse(courses.deleteCourse(courseA));
         assertEquals(0, courses.numCourses());
     }
 
     @Test
     public void testDeleteCourseDifferent() {
         courses.addCourse(courseA);
-        assertFalse(courses.deleteCourse("B"));
+        assertFalse(courses.deleteCourse(new Course("B", false)));
         assertEquals(1, courses.numCourses());
         assertTrue(courses.containsCourse("A"));
     }
@@ -72,7 +72,7 @@ public class CourseListTest {
     @Test
     public void testDeleteCourse() {
         courses.addCourse(courseA);
-        assertTrue(courses.deleteCourse("A"));
+        assertTrue(courses.deleteCourse(courseA));
         assertEquals(0, courses.numCourses());
     }
 
@@ -80,7 +80,7 @@ public class CourseListTest {
     public void testDeleteCourseOne() {
         courses.addCourse(courseA);
         courses.addCourse(courseB);
-        assertTrue(courses.deleteCourse("B"));
+        assertTrue(courses.deleteCourse(courseB));
         assertEquals(1, courses.numCourses());
         assertTrue(courses.containsCourse("A"));
     }
