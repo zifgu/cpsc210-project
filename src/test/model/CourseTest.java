@@ -25,6 +25,12 @@ class CourseTest {
     }
 
     @Test
+    public void testSetName() {
+        testCourse.setName("B");
+        assertEquals("B", testCourse.getName());
+    }
+
+    @Test
     public void testContainsSectionWithNameTrue() {
         Section testSection = new Section("101", testCourse);
         testCourse.addSection(testSection);
@@ -131,6 +137,27 @@ class CourseTest {
 
         assertEquals("A (elective)", testCourse.toString());
         assertEquals("B (required)", courseB.toString());
+    }
+
+    @Test
+    public void testEquals() {
+        Course course1 = new Course("A", true);
+        Course course2 = new Course("B", false);
+        Course course3 = new Course("A", false);
+        Section s = new Section("001", course3);
+        course3.addSection(s);
+
+        assertEquals(testCourse, course1);
+        assertEquals(testCourse, course3);
+        assertNotEquals(testCourse, course2);
+        assertNotEquals(testCourse, null);
+        assertNotEquals(testCourse, s);
+    }
+
+    @Test
+    public void testHashCode() {
+        Course course1 = new Course("A", true);
+        assertEquals(testCourse.hashCode(), course1.hashCode());
     }
 
     @Test

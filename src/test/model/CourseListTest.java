@@ -196,6 +196,19 @@ public class CourseListTest {
     }
 
     @Test
+    public void testAllValidSchedulesTooManyRequired() {
+        courseA = makeCourseWithSection("A", true, 1, DayOfWeek.MONDAY, LocalTime.of(14,0), 2);
+        courseB = makeCourseWithSection("B", true, 1, DayOfWeek.MONDAY, LocalTime.of(14, 30), 3);
+
+        courses.addCourse(courseA);
+        courses.addCourse(courseB);
+
+        assertFalse(courses.allValidSchedules(1));
+        List<Schedule> schedules = courses.getAllValidSchedules();
+        assertEquals(0, schedules.size());
+    }
+
+    @Test
     public void testAllValidSchedulesMultipleSections() {
         courseA = makeCourseWithSection("A", true, 1, DayOfWeek.MONDAY, LocalTime.of(14,0), 2);
         courseB = makeCourseWithSection("B", true, 1, DayOfWeek.MONDAY, LocalTime.of(14, 30), 3);

@@ -158,6 +158,12 @@ public class TimeslotTest {
     }
 
     @Test
+    public void testEqualsNullOrDifferentClass() {
+        assertNotEquals(testTime, null);
+        assertNotEquals(testTime, testSection);
+    }
+
+    @Test
     public void testGetDurationOneHour() {
         assertEquals(2, testTime.getDuration());
     }
@@ -181,4 +187,5 @@ public class TimeslotTest {
         assertEquals(LocalTime.parse("13:00"), json.get("start"));
         assertEquals(LocalTime.parse("14:00"), json.get("end"));
     }
+
 }

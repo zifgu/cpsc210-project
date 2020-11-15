@@ -34,6 +34,12 @@ public class SectionTest {
     }
 
     @Test
+    public void testSetName() {
+        testSection.setName("002");
+        assertEquals("002", testSection.getName());
+    }
+
+    @Test
     public void testNumTimeslotsEmpty() {
         assertEquals(0, testSection.numTimeslots());
     }
@@ -254,6 +260,17 @@ public class SectionTest {
     }
 
     @Test
+    public void testScheduleRepresentationDaysOfWeek() {
+        for (int i = 1; i <= 7; i++) {
+            DayOfWeek day = DayOfWeek.of(i);
+            Timeslot t = new Timeslot(1, day, twelve, one, testSection);
+            testSection.addTimeslot(t);
+            assertEquals("A 001: Term 1 12:00-13:00 " + testSection.getAbbreviation(day) + "\t", testSection.scheduleRepresentation());
+            testSection.deleteTimeslot(t);
+        }
+    }
+
+    @Test
     public void testToJsonEmptyTimes() {
         JSONObject json = testSection.toJson();
         assertEquals("001", json.get("name"));
@@ -274,5 +291,24 @@ public class SectionTest {
         assertEquals(DayOfWeek.MONDAY, time.get("day"));
         assertEquals(LocalTime.parse("12:00"), time.get("start"));
         assertEquals(LocalTime.parse("13:00"), time.get("end"));
+    }
+
+    @Test
+    public void testEquals() {
+        Section section1 = new Section("001", testCourse);
+        Section section2 = new Section("002", testCourse);
+        Section section3 = new Section("001", new Course("B", true));
+
+        assertEquals(testSection, section1);
+        assertNotEquals(testSection, section2);
+        assertNotEquals(testSection, section3);
+        assertNotEquals(testSection, null);
+        assertNotEquals(testSection, testTime);
+    }
+
+    @Test
+    public void testHashCode() {
+        Section section1 = new Section("001", testCourse);
+        assertEquals(testSection.hashCode(), section1.hashCode());
     }
 }

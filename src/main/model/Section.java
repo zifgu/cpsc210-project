@@ -101,9 +101,9 @@ public class Section implements Writable {
                 sectionGroups.put(termAndTime, days);
             }
         }
-        for (String s : sectionGroups.keySet()) {
-            result += s + " ";
-            List<DayOfWeek> days = sectionGroups.get(s);
+        for (String termAndTime : sectionGroups.keySet()) {
+            result += termAndTime + " ";
+            List<DayOfWeek> days = sectionGroups.get(termAndTime);
             Collections.sort(days);
             for (DayOfWeek day : days) {
                 result += getAbbreviation(day);
@@ -145,7 +145,7 @@ public class Section implements Writable {
         return Objects.hash(name, course);
     }
 
-    private String getAbbreviation(DayOfWeek day) {
+    String getAbbreviation(DayOfWeek day) {
         switch (day) {
             case MONDAY:
                 return "M";

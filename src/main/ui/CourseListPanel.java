@@ -143,6 +143,9 @@ public class CourseListPanel {
         for (Course c : courseList.getCourses()) {
             courses.addElement(c);
         }
+        selectedCourse = null;
+        selectedSection = null;
+        selectedTimeslot = null;
     }
 
     private void clearSectionsAndLoad(Course c) {
@@ -151,6 +154,8 @@ public class CourseListPanel {
         for (Section s : c.getSections()) {
             sections.addElement(s);
         }
+        selectedSection = null;
+        selectedTimeslot = null;
     }
 
     private void clearTimeslotsAndLoad(Section s) {
@@ -158,6 +163,7 @@ public class CourseListPanel {
         for (Timeslot t : s.getTimeslots()) {
             timeslots.addElement(t);
         }
+        selectedTimeslot = null;
     }
 
     private class CourseSelectHandler implements ListSelectionListener, ActionListener {
@@ -325,21 +331,22 @@ public class CourseListPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO: fix bug where saving a section in a course with no sections/no sections selected just saves to the
-            // TODO: previously selected section, in a different course
-            // TODO: fix null pointer exception when trying to add with no selected course
-            feedback.setText("");
-            if (e.getActionCommand().equals("Save")) {
-                selectedSection.setName(sectionNameField.getText());
-            } else if (e.getActionCommand().equals("Add")) {
-                Section newSection = new Section(sectionNameField.getText(), selectedCourse);
-                boolean success = selectedCourse.addSection(newSection);
-                if (success) {
-                    feedback.setText("Successfully added section.");
-                    sections.addElement(newSection);
-                } else {
-                    feedback.setText("Sorry, could not add section.");
+            if (selectedCourse != null) {
+                feedback.setText("");
+                if (e.getActionCommand().equals("Save")) {
+                    selectedSection.setName(sectionNameField.getText());
+                } else if (e.getActionCommand().equals("Add")) {
+                    Section newSection = new Section(sectionNameField.getText(), selectedCourse);
+                    boolean success = selectedCourse.addSection(newSection);
+                    if (success) {
+                        feedback.setText("Successfully added section.");
+                        sections.addElement(newSection);
+                    } else {
+                        feedback.setText("Sorry, could not add section.");
+                    }
                 }
+            } else {
+                feedback.setText("No course selected.");
             }
         }
 
@@ -415,38 +422,39 @@ public class CourseListPanel {
         @SuppressWarnings("checkstyle:MethodLength")
         @Override
         // TODO: method is too long
-        // TODO: fix bug where added a timeslot in a section with no times/no sections selected just adds times to the
-        // TODO: previously selected section
-        // TODO: fix null pointer exception when trying to add with no selected section
         public void actionPerformed(ActionEvent e) {
             feedback.setText("");
-            if (e.getActionCommand().equals("Add")) {
-                int successCount = 0;
-                for (int i = 0; i < 7; i++) {
-                    int term;
-                    try {
-                        term = Integer.parseInt(termField.getText());
-                    } catch (NumberFormatException nfe) {
-                        continue;
-                    }
-                    if (dayCheckBoxes[i].isSelected()) {
-                        LocalTime start;
-                        LocalTime end;
+            if (selectedSection != null) {
+                if (e.getActionCommand().equals("Add")) {
+                    int successCount = 0;
+                    for (int i = 0; i < 7; i++) {
+                        int term;
                         try {
-                            start = LocalTime.parse(startTimeField.getText());
-                            end = LocalTime.parse(endTimeField.getText());
-                        } catch (DateTimeParseException dtpe) {
+                            term = Integer.parseInt(termField.getText());
+                        } catch (NumberFormatException nfe) {
                             continue;
                         }
-                        Timeslot t = new Timeslot(term, DayOfWeek.of(i + 1), start, end, selectedSection);
-                        boolean success = selectedSection.addTimeslot(t);
-                        if (success) {
-                            successCount++;
-                            timeslots.addElement(t);
+                        if (dayCheckBoxes[i].isSelected()) {
+                            LocalTime start;
+                            LocalTime end;
+                            try {
+                                start = LocalTime.parse(startTimeField.getText());
+                                end = LocalTime.parse(endTimeField.getText());
+                            } catch (DateTimeParseException dtpe) {
+                                continue;
+                            }
+                            Timeslot t = new Timeslot(term, DayOfWeek.of(i + 1), start, end, selectedSection);
+                            boolean success = selectedSection.addTimeslot(t);
+                            if (success) {
+                                successCount++;
+                                timeslots.addElement(t);
+                            }
                         }
                     }
+                    feedback.setText("Added " + successCount + " timeslots.");
                 }
-                feedback.setText("Added " + successCount + " timeslots");
+            } else {
+                feedback.setText("No section selected.");
             }
         }
 
