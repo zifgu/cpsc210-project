@@ -31,20 +31,6 @@ class CourseTest {
     }
 
     @Test
-    public void testContainsSectionWithNameTrue() {
-        Section testSection = new Section("101", testCourse);
-        testCourse.addSection(testSection);
-        assertTrue(testCourse.containsSectionWithName("101"));
-    }
-
-    @Test
-    public void testContainsSectionWithNameFalse() {
-        Section testSection = new Section("101", testCourse);
-        testCourse.addSection(testSection);
-        assertFalse(testCourse.containsSectionWithName("001"));
-    }
-
-    @Test
     public void testNumSectionsNone() {
         assertEquals(0, testCourse.numSections());
     }
@@ -84,6 +70,58 @@ class CourseTest {
         assertFalse(testCourse.addSection(otherSection));
         assertEquals(1, testCourse.numSections());
         assertTrue(testCourse.containsSectionWithName("101"));
+    }
+
+    @Test
+    public void testContainsSectionWithNameTrue() {
+        Section testSection = new Section("101", testCourse);
+        testCourse.addSection(testSection);
+        assertTrue(testCourse.containsSectionWithName("101"));
+    }
+
+    @Test
+    public void testContainsSectionWithNameFalse() {
+        Section testSection = new Section("101", testCourse);
+        testCourse.addSection(testSection);
+        assertTrue(testCourse.containsSectionWithName("101"));
+    }
+
+    @Test
+    public void testChangeSectionNameSuccess() {
+        Section testSection = new Section("101", testCourse);
+        testCourse.addSection(testSection);
+
+        assertTrue(testCourse.changeSectionName(testSection, "102"));
+        assertEquals("102", testSection.getName());
+        assertTrue(testCourse.getSections().contains(testSection));
+    }
+
+    @Test
+    public void testChangeSectionNameDuplicateName() {
+        Section testSection = new Section("101", testCourse);
+        Section otherSection = new Section("102", testCourse);
+        testCourse.addSection(testSection);
+        testCourse.addSection(otherSection);
+
+        assertFalse(testCourse.changeSectionName(testSection, "102"));
+        assertEquals("101", testSection.getName());
+        assertTrue(testCourse.getSections().contains(testSection));
+    }
+
+    @Test
+    public void testChangeSectionNameChangedToDuplicateName() {
+        Section testSection = new Section("101", testCourse);
+        Section otherSection = new Section("102", testCourse);
+        testCourse.addSection(testSection);
+        testCourse.addSection(otherSection);
+
+        assertTrue(testCourse.changeSectionName(testSection, "103"));
+        assertFalse(testCourse.changeSectionName(otherSection, "103"));
+
+        assertEquals("103", testSection.getName());
+        assertEquals("102", otherSection.getName());
+        assertTrue(testCourse.getSections().contains(testSection));
+        assertTrue(testCourse.getSections().contains(otherSection));
     }
 
     @Test

@@ -5,11 +5,14 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import persistence.JsonReader;
 import ui.ScheduleApp;
 
+import java.io.IOException;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,6 +56,53 @@ public class CourseListTest {
         assertFalse(courses.addCourse(courseARepeat));
         assertEquals(1, courses.numCourses());
         assertTrue(courses.containsCourseWithName("A"));
+    }
+
+    @Test
+    public void testContainsCourseWithName() {
+        courses.addCourse(courseA);
+        assertTrue(courses.containsCourseWithName("A"));
+        assertFalse(courses.containsCourseWithName("B"));
+    }
+
+    @Test
+    public void testContainsCourseWithNameAfterChange() {
+        courses.addCourse(courseA);
+        assertTrue(courses.containsCourseWithName("A"));
+
+        courses.changeCourseName(courseA, "B");
+        assertTrue(courses.containsCourseWithName("B"));
+        assertFalse(courses.containsCourseWithName("A"));
+    }
+
+    @Test
+    public void testChangeCourseName() {
+        courses.addCourse(courseA);
+
+        assertTrue(courses.changeCourseName(courseA, "C"));
+        assertEquals("C", courseA.getName());
+        assertTrue(courses.getCourses().contains(courseA));
+    }
+
+    @Test
+    public void testChangeCourseNameDuplicateName() {
+        courses.addCourse(courseA);
+        courses.addCourse(courseB);
+        assertFalse(courses.changeCourseName(courseA, "B"));
+        assertEquals("A", courseA.getName());
+        assertTrue(courses.getCourses().contains(courseA));
+    }
+
+    @Test
+    public void testChangeCourseNameChangedToDuplicateName() {
+        courses.addCourse(courseA);
+        courses.addCourse(courseB);
+        assertTrue(courses.changeCourseName(courseA, "C"));
+        assertFalse(courses.changeCourseName(courseB, "C"));
+        assertEquals("C", courseA.getName());
+        assertEquals("B", courseB.getName());
+        assertTrue(courses.getCourses().contains(courseA));
+        assertTrue(courses.getCourses().contains(courseB));
     }
 
     @Test
