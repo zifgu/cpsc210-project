@@ -44,8 +44,13 @@ public class CourseList implements Writable {
     }
 
     // EFFECTS: returns true if this CourseList contains a course with the given name
-    public boolean containsCourse(String name) {
-        return courses.contains(new Course(name, false));
+    public boolean containsCourseWithName(String name) {
+        for (Course c : courses) {
+            if (c.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // MODIFIES: this

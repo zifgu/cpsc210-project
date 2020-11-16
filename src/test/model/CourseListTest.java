@@ -34,7 +34,7 @@ public class CourseListTest {
     public void testAddCourseEmpty() {
         assertTrue(courses.addCourse(courseA));
         assertEquals(1, courses.numCourses());
-        assertTrue(courses.containsCourse("A"));
+        assertTrue(courses.containsCourseWithName("A"));
     }
 
     @Test
@@ -42,7 +42,7 @@ public class CourseListTest {
         courses.addCourse(courseA);
         assertFalse(courses.addCourse(courseA));
         assertEquals(1, courses.numCourses());
-        assertTrue(courses.containsCourse("A"));
+        assertTrue(courses.containsCourseWithName("A"));
     }
 
     @Test
@@ -52,7 +52,7 @@ public class CourseListTest {
         courses.addCourse(courseA);
         assertFalse(courses.addCourse(courseARepeat));
         assertEquals(1, courses.numCourses());
-        assertTrue(courses.containsCourse("A"));
+        assertTrue(courses.containsCourseWithName("A"));
     }
 
     @Test
@@ -66,7 +66,7 @@ public class CourseListTest {
         courses.addCourse(courseA);
         assertFalse(courses.deleteCourse(new Course("B", false)));
         assertEquals(1, courses.numCourses());
-        assertTrue(courses.containsCourse("A"));
+        assertTrue(courses.containsCourseWithName("A"));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class CourseListTest {
         courses.addCourse(courseB);
         assertTrue(courses.deleteCourse(courseB));
         assertEquals(1, courses.numCourses());
-        assertTrue(courses.containsCourse("A"));
+        assertTrue(courses.containsCourseWithName("A"));
     }
 
     @Test

@@ -9,10 +9,10 @@ public class CourseEditor {
     @SuppressWarnings("checkstyle:MethodLength")
     public static void main(String[] args) {
         CourseList courseList = new CourseList();
-        CourseListPanel courses = new CourseListPanel(courseList);
+        CourseEditorPanel courses = new CourseEditorPanel(courseList);
         JTabbedPane mainPanel = courses.getMainPanel();
 
-        JFrame frame = new JFrame("My frame");
+        JFrame frame = new JFrame("Schedule calculator app");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setPreferredSize(new Dimension(900, 750));
         frame.setResizable(false);

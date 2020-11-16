@@ -47,7 +47,12 @@ public class Course implements Writable {
 
     // EFFECTS: returns true if the course contains a section with the given name
     public boolean containsSectionWithName(String name) {
-        return sections.contains(new Section(name, this));
+        for (Section s : sections) {
+            if (s.getName().equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // EFFECTS: returns the number of sections for this course
