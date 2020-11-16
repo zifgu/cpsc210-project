@@ -4,6 +4,7 @@ import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+import javax.sound.sampled.*;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -13,6 +14,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.DayOfWeek;
@@ -122,7 +124,6 @@ public class CourseEditor {
     // EFFECTS: creates a panel containing a "Save" button and an "Add" button
     private JPanel createButtonPanel(ActionListener listener) {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setBorder(BorderFactory.createEtchedBorder());
         buttonPanel.setMaximumSize(new Dimension(300, 100));
 
         createButtonAndCommand(buttonPanel, "Save", listener);
@@ -332,32 +333,33 @@ public class CourseEditor {
 
     // MODIFIES: feedback
     // EFFECTS: makes feedback display a message that the save succeeded
-    private void showSavingSuccessMessage(JLabel feedback) {
-        feedback.setText("Successfully saved.");
+    private void showSuccessMessage(JLabel feedback, String action) {
+        feedback.setText("Successfully " + action + ".");
+        playSuccessSound();
     }
 
     // MODIFIES: feedback
     // EFFECTS: makes feedback display a message that the save failed
-    private void showSavingErrorMessage(JLabel feedback) {
-        feedback.setText("Sorry, could not save.");
-    }
-
-    // MODIFIES: feedback
-    // EFFECTS: makes feedback display a message that the add succeeded
-    private void showAddingSuccessMessage(JLabel feedback) {
-        feedback.setText("Successfully added.");
-    }
-
-    // MODIFIES: feedback
-    // EFFECTS: makes feedback display a message that the add failed
-    private void showAddingErrorMessage(JLabel feedback) {
-        feedback.setText("Sorry, could not add.");
+    private void showFailMessage(JLabel feedback, String action) {
+        feedback.setText("Sorry, could not " + action + ".");
+        playFailSound();
     }
 
     // MODIFIES: feedback
     // EFFECTS: makes feedback display a message that no item of type type is selected
     private void showSelectionErrorMessage(JLabel feedback, String type) {
         feedback.setText("No " + type + " selected.");
+        playFailSound();
+    }
+
+    private void playSuccessSound() {
+        SoundPlayer player = new SoundPlayer(true);
+        player.play();
+    }
+
+    private void playFailSound() {
+        SoundPlayer player = new SoundPlayer(false);
+        player.play();
     }
 
     /*
@@ -469,9 +471,9 @@ public class CourseEditor {
                 if (nameChanged || requiredChanged) {
                     courseList.changeCourseName(selectedCourse, name);
                     selectedCourse.setRequired(courseRequiredField.isSelected());
-                    showSavingSuccessMessage(feedback);
+                    showSuccessMessage(feedback, "saved");
                 } else {
-                    showSavingErrorMessage(feedback);
+                    showFailMessage(feedback, "save");
                 }
             }
         }
@@ -484,9 +486,9 @@ public class CourseEditor {
             boolean success = courseList.addCourse(newCourse);
             if (success) {
                 courses.addElement(newCourse);
-                showAddingSuccessMessage(feedback);
+                showSuccessMessage(feedback, "added");
             } else {
-                showAddingErrorMessage(feedback);
+                showFailMessage(feedback, "add");
             }
         }
     }
@@ -524,9 +526,9 @@ public class CourseEditor {
             String name = sectionNameField.getText();
             if (selectedSection != null) {
                 if (selectedCourse.changeSectionName(selectedSection, name)) {
-                    showSavingSuccessMessage(feedback);
+                    showSuccessMessage(feedback, "saved");
                 } else {
-                    showSavingErrorMessage(feedback);
+                    showFailMessage(feedback, "save");
                 }
             }
         }
@@ -539,9 +541,9 @@ public class CourseEditor {
             boolean success = selectedCourse.addSection(newSection);
             if (success) {
                 sections.addElement(newSection);
-                showAddingSuccessMessage(feedback);
+                showSuccessMessage(feedback, "added");
             } else {
-                showAddingErrorMessage(feedback);
+                showFailMessage(feedback, "add");
             }
         }
     }
@@ -589,7 +591,7 @@ public class CourseEditor {
                         }
                     }
                 }
-                feedback.setText("Added " + successCount + " timeslots.");
+                showSuccessMessage(feedback, "added " + successCount + " timeslots.");
             } else {
                 showSelectionErrorMessage(feedback, "section");
             }
@@ -655,9 +657,9 @@ public class CourseEditor {
                 writer.open();
                 writer.writeCourseList(courseList);
                 writer.close();
-                feedback.setText("Successfully saved course list.");
+                showSuccessMessage(feedback, "saved course list");
             } catch (FileNotFoundException fileNotFoundException) {
-                feedback.setText("Sorry, there was a problem saving.");
+                showFailMessage(feedback, "save course list");
             }
         }
 
@@ -667,9 +669,9 @@ public class CourseEditor {
             try {
                 courseList = reader.read();
                 clearCoursesAndLoad();
-                feedback.setText("Successfully loaded course list.");
+                showSuccessMessage(feedback, "loaded course list");
             } catch (IOException ioException) {
-                feedback.setText("Sorry, there was a problem loading.");
+                showFailMessage(feedback, "load course list");
             }
         }
     }
@@ -749,7 +751,7 @@ public class CourseEditor {
             if (success) {
                 fillSelection(10);
             } else {
-                feedback.setText("No schedules possible.");
+                showFailMessage(feedback, "calculate schedules");
             }
         }
 
@@ -760,7 +762,8 @@ public class CourseEditor {
         private void fillSelection(int selectionSize) {
             selection.clear();
             List<Schedule> schedules = courseList.getAllValidSchedules();
-            feedback.setText("Calculated " + schedules.size() + " schedules.");
+
+            showSuccessMessage(feedback, "calculated " + schedules.size() + " schedules");
 
             int listLength = Math.min(selectionSize, schedules.size());
             if (schedules.size() > selectionSize) {
@@ -771,6 +774,47 @@ public class CourseEditor {
             }
             currentIndex = 0;
             setScheduleAreaText();
+        }
+    }
+
+    /*
+        Class that plays 2 different sounds
+     */
+    private class SoundPlayer {
+        Clip clip;
+        AudioInputStream audioInputStream;
+        private final File failSound = new File("./data/fail.wav");
+        private final File successSound = new File("./data/success.wav");
+
+        // EFFECTS: if success is true, constructs a sound player that plays a success sound
+        //          otherwise constructs a sound player that plays a failure sound
+        private SoundPlayer(boolean success) {
+            try {
+                if (success) {
+                    audioInputStream = AudioSystem.getAudioInputStream(successSound);
+                } else {
+                    audioInputStream = AudioSystem.getAudioInputStream(failSound);
+                }
+                clip = AudioSystem.getClip();
+                clip.open(audioInputStream);
+                clip.addLineListener(event -> {
+                    if (event.getType() == LineEvent.Type.STOP) {
+                        clip.close();
+                        try {
+                            audioInputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+            } catch (UnsupportedAudioFileException | LineUnavailableException | IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // EFFECTS
+        private void play() {
+            clip.start();
         }
     }
 }
