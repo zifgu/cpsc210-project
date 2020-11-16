@@ -30,9 +30,7 @@ import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
     GUI for the schedule application
 */
 public class CourseEditor {
-    // TODO: figure out specifications for all of this
     // TODO: invariants - selected section is always a section of selected course?
-    // TODO: class level comments
     private CourseList courseList;
     private JTabbedPane mainPanel;
     private DefaultListModel<Course> courses = new DefaultListModel<>();
@@ -148,19 +146,19 @@ public class CourseEditor {
         JPanel coursePanel = createTitledPanel("Add/edit courses");
         coursePanel.setPreferredSize(new Dimension(300, 300));
 
-        JTextField courseNameField = new JTextField(10);
-        courseNameField.setMaximumSize(new Dimension(200, 30));
-        JLabel courseNameFieldLabel = new JLabel("Course name: ");
-        courseNameFieldLabel.setLabelFor(courseNameField);
-        JCheckBox courseRequiredField = new JCheckBox("Is required?");
-        JLabel feedback = new JLabel();
-        coursePanel.add(courseNameFieldLabel);
-        coursePanel.add(courseNameField);
-        coursePanel.add(courseRequiredField);
+        JTextField name = new JTextField(10);
+        name.setMaximumSize(new Dimension(200, 30));
+        JLabel nameLabel = createCenterAlignedLabel("Course name:");
+        JCheckBox required = new JCheckBox("Is required?");
+        required.setAlignmentX(Component.CENTER_ALIGNMENT);
+        JLabel feedback = createCenterAlignedLabel("");
+        coursePanel.add(nameLabel);
+        coursePanel.add(name);
+        coursePanel.add(required);
         coursePanel.add(Box.createVerticalGlue());
         coursePanel.add(feedback);
 
-        CourseEditListener listener = new CourseEditListener(courseNameField, courseRequiredField, feedback);
+        CourseEditListener listener = new CourseEditListener(name, required, feedback);
         coursePanel.add(createButtonPanel(listener));
         return coursePanel;
     }
@@ -170,17 +168,16 @@ public class CourseEditor {
     private JPanel createSectionEditPanel() {
         JPanel sectionPanel = createTitledPanel("Add/edit sections");
         sectionPanel.setPreferredSize(new Dimension(300, 300));
-        JTextField sectionNameField = new JTextField(10);
-        sectionNameField.setMaximumSize(new Dimension(200, 30));
-        JLabel sectionNameFieldLabel = new JLabel("Section name: ");
-        sectionNameFieldLabel.setLabelFor(sectionNameField);
-        JLabel feedback = new JLabel();
-        sectionPanel.add(sectionNameFieldLabel);
-        sectionPanel.add(sectionNameField);
+        JTextField name = new JTextField(10);
+        name.setMaximumSize(new Dimension(200, 30));
+        JLabel nameLabel = createCenterAlignedLabel("Section name:");
+        JLabel feedback = createCenterAlignedLabel("");
+        sectionPanel.add(nameLabel);
+        sectionPanel.add(name);
         sectionPanel.add(Box.createVerticalGlue());
         sectionPanel.add(feedback);
 
-        SectionEditListener listener = new SectionEditListener(sectionNameField, feedback);
+        SectionEditListener listener = new SectionEditListener(name, feedback);
         sectionPanel.add(createButtonPanel(listener));
         return sectionPanel;
     }
@@ -190,7 +187,7 @@ public class CourseEditor {
     private JPanel createTimeslotEditPanel() {
         JPanel timeslotPanel = createTitledPanel("Add timeslots");
         timeslotPanel.setPreferredSize(new Dimension(300, 300));
-        JLabel feedback = new JLabel("");
+        JLabel feedback = createCenterAlignedLabel("");
         TimeslotEditListener listener = new TimeslotEditListener(feedback);
 
         timeslotPanel.add(createTimeslotTextFields(listener));
@@ -220,23 +217,23 @@ public class CourseEditor {
         JPanel panel = new JPanel();
         panel.setLayout(new GridLayout(3, 2));
 
-        JTextField termField = new JTextField(5);
-        JLabel termFieldLabel = new JLabel("Term:");
-        panel.add(termFieldLabel);
-        panel.add(termField);
-        listener.setTermField(termField);
+        JTextField term = new JTextField(5);
+        JLabel termLabel = new JLabel("Term:");
+        panel.add(termLabel);
+        panel.add(term);
+        listener.setTermField(term);
 
-        JFormattedTextField startTimeField = new JFormattedTextField();
-        JLabel startTimeFieldLabel = new JLabel("Start time:");
-        panel.add(startTimeFieldLabel);
-        panel.add(startTimeField);
-        listener.setStartTimeField(startTimeField);
+        JTextField startTime = new JTextField();
+        JLabel startTimeLabel = new JLabel("Start time:");
+        panel.add(startTimeLabel);
+        panel.add(startTime);
+        listener.setStartTimeField(startTime);
 
-        JFormattedTextField endTimeField = new JFormattedTextField();
-        JLabel endTimeFieldLabel = new JLabel("End time:");
-        panel.add(endTimeFieldLabel);
-        panel.add(endTimeField);
-        listener.setEndTimeField(endTimeField);
+        JTextField endTime = new JTextField();
+        JLabel endTimeLabel = new JLabel("End time:");
+        panel.add(endTimeLabel);
+        panel.add(endTime);
+        listener.setEndTimeField(endTime);
 
         return panel;
     }
@@ -245,7 +242,7 @@ public class CourseEditor {
     private JPanel createSaveLoadPanel() {
         JPanel saveLoadPanel = new JPanel();
         saveLoadPanel.setBorder(BorderFactory.createTitledBorder("Save/load courses"));
-        JLabel feedback = new JLabel("");
+        JLabel feedback = createCenterAlignedLabel("");
         saveLoadPanel.add(feedback);
         SaveLoadListener listener = new SaveLoadListener(feedback);
 
@@ -258,15 +255,15 @@ public class CourseEditor {
     private JPanel createCalculationPanel() {
         JPanel calcPanel = createTitledPanel("Calculate schedules");
 
-        JTextField scheduleSizeField = new JTextField();
-        scheduleSizeField.setMaximumSize(new Dimension(100, 30));
-        JLabel scheduleSizeFieldLabel = new JLabel("Number of courses in the schedule:");
-        JLabel feedback = new JLabel("");
+        JTextField scheduleSize = new JTextField();
+        scheduleSize.setMaximumSize(new Dimension(100, 30));
+        JLabel scheduleSizeLabel = createCenterAlignedLabel("Number of courses in the schedule: ");
+        JLabel feedback = createCenterAlignedLabel("");
         JTextArea displayedSchedule = new JTextArea(10, 10);
-        CalculationListener listener = new CalculationListener(scheduleSizeField, displayedSchedule, feedback);
+        CalculationListener listener = new CalculationListener(scheduleSize, displayedSchedule, feedback);
 
-        calcPanel.add(scheduleSizeFieldLabel);
-        calcPanel.add(scheduleSizeField);
+        calcPanel.add(scheduleSizeLabel);
+        calcPanel.add(scheduleSize);
         createButtonAndCommand(calcPanel, "Calculate", listener);
         calcPanel.add(feedback);
         calcPanel.add(displayedSchedule);
@@ -283,6 +280,7 @@ public class CourseEditor {
     private void createButtonAndCommand(JPanel panel, String command, ActionListener listener) {
         JButton button = new JButton(command);
         button.setActionCommand(command);
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.addActionListener(listener);
         panel.add(button);
     }
@@ -293,6 +291,12 @@ public class CourseEditor {
         calcPanel.setLayout(new BoxLayout(calcPanel, BoxLayout.PAGE_AXIS));
         calcPanel.setBorder(BorderFactory.createTitledBorder(s));
         return calcPanel;
+    }
+
+    private JLabel createCenterAlignedLabel(String text) {
+        JLabel feedback = new JLabel(text);
+        feedback.setAlignmentX(Component.CENTER_ALIGNMENT);
+        return feedback;
     }
 
     // MODIFIES: this
@@ -352,11 +356,13 @@ public class CourseEditor {
         playFailSound();
     }
 
+    // EFFECTS: plays a "success" sound
     private void playSuccessSound() {
         SoundPlayer player = new SoundPlayer(true);
         player.play();
     }
 
+    // EFFECTS: plays a "fail" sound
     private void playFailSound() {
         SoundPlayer player = new SoundPlayer(false);
         player.play();
@@ -554,8 +560,8 @@ public class CourseEditor {
     private class TimeslotEditListener implements ActionListener {
         private JLabel feedback;
         private JTextField termField;
-        private JFormattedTextField startTimeField;
-        private JFormattedTextField endTimeField;
+        private JTextField startTimeField;
+        private JTextField endTimeField;
         private JCheckBox[] dayCheckBoxes = new JCheckBox[7];
 
         // EFFECTS: creates an ActionListener with access to the given label
@@ -568,11 +574,11 @@ public class CourseEditor {
             this.termField = termField;
         }
 
-        public void setStartTimeField(JFormattedTextField startTimeField) {
+        public void setStartTimeField(JTextField startTimeField) {
             this.startTimeField = startTimeField;
         }
 
-        public void setEndTimeField(JFormattedTextField endTimeField) {
+        public void setEndTimeField(JTextField endTimeField) {
             this.endTimeField = endTimeField;
         }
 
@@ -694,8 +700,6 @@ public class CourseEditor {
         }
 
         @Override
-        // TODO: add refresh function
-        // TODO: check size of calculated schedules
         public void actionPerformed(ActionEvent e) {
             switch (e.getActionCommand()) {
                 case "Calculate":
@@ -713,7 +717,6 @@ public class CourseEditor {
         // MODIFIES: this
         // EFFECTS: moves the display to the previous schedule if it exists, otherwise does nothing
         private void goToPrevious() {
-            // TODO: check if there are no schedules
             if (currentIndex > 0) {
                 currentIndex--;
             }
@@ -723,7 +726,6 @@ public class CourseEditor {
         // MODIFIES: this
         // EFFECTS: moves the display to the next schedule if it exists, otherwise does nothing
         private void goToNext() {
-            // TODO: check if there are no schedules
             if (currentIndex < selection.size() - 1) {
                 currentIndex++;
             }
