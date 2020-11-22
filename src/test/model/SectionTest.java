@@ -31,6 +31,9 @@ public class SectionTest {
     public void testConstructor() {
         assertEquals("001", testSection.getName());
         assertEquals(testCourse, testSection.getCourse());
+
+        Section emptyName = new Section("", testCourse);
+        assertEquals("New Section", emptyName.getName());
     }
 
     @Test

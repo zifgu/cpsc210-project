@@ -18,8 +18,13 @@ public class Course implements Writable {
     private Set<Section> sections;
 
     // EFFECTS: constructs new Course with given name and required/not required status, and no sections
+    //          if course name is empty, names the course "New Course"
     public Course(String name, boolean required) {
-        this.name = name;
+        if (name.equals("")) {
+            this.name = "New Course";
+        } else {
+            this.name = name;
+        }
         this.required = required;
         sections = new HashSet<>();
     }

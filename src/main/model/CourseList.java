@@ -1,10 +1,10 @@
 package model;
 
+import exceptions.ScheduleSizeException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -14,12 +14,10 @@ import java.util.Set;
 */
 public class CourseList implements Writable {
     private Set<Course> courses;
-    private List<Schedule> schedules;
 
     // EFFECTS: constructs a new course list with no courses and no possible schedules
     public CourseList() {
         courses = new HashSet<>();
-        schedules = new ArrayList<>();
     }
 
     // getters
@@ -74,22 +72,20 @@ public class CourseList implements Writable {
         return courses.remove(c);
     }
 
-    // REQUIRES: numCourses > 0
     // MODIFIES: this
-    // EFFECTS: adds to this CourseList all valid Schedules that can be generated from the current courses
-    //          returns true if at least 1 schedule is possible, otherwise returns false
-    //          A schedule is valid if there are no time conflicts and it has numCourses courses total, including
+    // EFFECTS: if numCourses <= 0, course list contains fewer than numCourses courses, or number of required courses
+    //          < desired size of schedule, throws ScheduleSizeException
+    //          otherwise, returns all valid Schedules that can be generated from the current courses
+    //
+    // NOTE:    A schedule is valid if there are no time conflicts and it has numCourses courses total, including
     //          all required courses
-    public boolean allValidSchedules(int numCourses) {
+    public List<Schedule> allValidSchedules(int numCourses) throws ScheduleSizeException {
+        List<Schedule> schedules;
+        if (numCourses <= 0 || numCourses > courses.size() || numCourses < courses.size() - numElectives()) {
+            throw new ScheduleSizeException();
+        }
         ScheduleCalculator sc = new ScheduleCalculator(numCourses, courses);
-        schedules = sc.allValidSchedules();
-        return !schedules.isEmpty();
-    }
-
-    // REQUIRES: allValidSchedules is called before calling this method
-    // EFFECTS: returns the list of all valid Schedules that can be generated from the current courses
-    public List<Schedule> getAllValidSchedules() {
-        return schedules;
+        return sc.allValidSchedules();
     }
 
     // EFFECTS: returns a course with the given name in this course list if it exists, otherwise returns null

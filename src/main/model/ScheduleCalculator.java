@@ -42,15 +42,9 @@ class ScheduleCalculator {
     // MODIFIES: this
     // EFFECT: returns list of all valid schedules with numCourses courses
     List<Schedule> allValidSchedules() {
-        if (required.size() + electives.size() < numCourses) {
-            return new ArrayList<>();
-        } else if (required.size() > numCourses) {
-            return new ArrayList<>();
-        } else {
-            Schedule s = new Schedule();
-            fillRequired(s, 0);
-            return schedules;
-        }
+        Schedule s = new Schedule();
+        fillRequired(s, 0);
+        return schedules;
     }
 
     // REQUIRES: number of required courses < desired size of schedule
@@ -102,43 +96,6 @@ class ScheduleCalculator {
         }
         return possible;
     }
-
-    /*
-    // ORIGINAL METHOD - method length was more than 31 lines
-    // REQUIRES: there are enough courses to fill the schedule
-    // MODIFIES: this
-    // EFFECTS: recursively fills schedule with a section from each required course and sections from enough elective
-    //          courses to have numCourses in total; adds successful schedules to list of schedules
-    private boolean fillCourses(Schedule currentSchedule, int courseIndex) {
-        boolean possible = false;
-        if (currentSchedule.numCourses() == numCourses) {
-            addToListOfSchedules(currentSchedule);
-            possible = true;
-        } else if (courseIndex < required.size()) {
-            Course c = required.get(courseIndex);
-            for (Section s : c.getSections()) {
-                if (!currentSchedule.fillSection(s)) {
-                    continue;
-                }
-                possible = fillCourses(currentSchedule, courseIndex + 1) || possible;
-                currentSchedule.removeSection(s);
-            }
-        } else if (courseIndex < required.size() + electives.size()) {
-            Course c = electives.get(courseIndex - required.size());
-            for (Section s : c.getSections()) {
-                if (!currentSchedule.fillSection(s)) {
-                    continue;
-                }
-                possible = fillCourses(currentSchedule, courseIndex + 1) || possible;
-                currentSchedule.removeSection(s);
-            }
-            if (enoughElectives(currentSchedule, courseIndex)) {
-                possible = fillCourses(currentSchedule, courseIndex + 1) || possible;
-            }
-        }
-        return possible;
-    }
-     */
 
     // REQUIRES: index > 0
     // EFFECTS: returns true if number of remaining electives is enough to produce a schedule with numCourses courses

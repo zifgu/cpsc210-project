@@ -25,3 +25,12 @@ browse the returned options and select the ones they prefer.
 + As a user, I want to be able to save courses, sections, and times to a file (I will not be able to save schedules)
 + As a user, I want to be able to load my previous course list from a file when I open the application
 + As a user, I want to be prompted to save my data before quitting
+
+## Phase 4: Task 2
+The CourseList class has a robust design, since each method specifies a behaviour for all possible inputs.
+In particular, the allValidSchedules method used to require that the size of the schedule is positive. I have redesigned
+this method so that it throws a ScheduleSizeException when the given schedule size is unfit for calculating schedules,
+which includes 3 cases:
++ It is negative or zero
++ It exceeds the number of courses available to fill the schedule
++ It is smaller than the number of required courses, meaning you can never include every required course

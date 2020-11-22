@@ -16,9 +16,14 @@ public class Section implements Writable {
     private Set<Timeslot> times;
 
     // REQUIRES: the new section has a different name from any other section in the same course
-    // EFFECTS: constructs a new section of given course with given name and no timeslots
+    // EFFECTS: otherwise constructs a new section of given course with given name and no timeslots
+    //          if section name is empty, names the section "New Section"
     public Section(String name, Course course) {
-        this.name = name;
+        if (name.equals("")) {
+            this.name = "New Section";
+        } else {
+            this.name = name;
+        }
         this.course = course;
         this.times = new HashSet<>();
     }

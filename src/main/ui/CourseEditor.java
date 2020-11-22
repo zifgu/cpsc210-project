@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.ScheduleSizeException;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -749,10 +750,11 @@ public class CourseEditor {
             } catch (NumberFormatException nfe) {
                 // do nothing
             }
-            boolean success = courseList.allValidSchedules(size);
-            if (success) {
-                fillSelection(10);
-            } else {
+            List<Schedule> schedules = null;
+            try {
+                schedules = courseList.allValidSchedules(size);
+                fillSelection(10, schedules);
+            } catch (ScheduleSizeException e) {
                 showFailMessage(feedback, "calculate schedules");
             }
         }
@@ -761,9 +763,8 @@ public class CourseEditor {
         // EFFECTS: clears previous schedules, and
         //          if the number of schedules < selectionSize, loads all schedules into selection
         //          otherwise, randomly selects selectionSize schedules and loads them into selection
-        private void fillSelection(int selectionSize) {
+        private void fillSelection(int selectionSize, List<Schedule> schedules) {
             selection.clear();
-            List<Schedule> schedules = courseList.getAllValidSchedules();
 
             showSuccessMessage(feedback, "calculated " + schedules.size() + " schedules");
 

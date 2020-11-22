@@ -1,6 +1,7 @@
 package model;
 
 import exceptions.InvalidSyntaxException;
+import exceptions.ScheduleSizeException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
@@ -175,8 +176,24 @@ public class CourseListTest {
 
     @Test
     public void testAllValidSchedulesEmpty() {
-        assertFalse(courses.allValidSchedules(3));
-        assertEquals(0, courses.getAllValidSchedules().size());
+        int numSchedules;
+        try {
+            numSchedules = courses.allValidSchedules(3).size();
+            fail("ScheduleSizeException not thrown");
+        } catch (ScheduleSizeException e) {
+            // expected
+        }
+    }
+
+    @Test
+    public void testAllValidSchedulesZeroCoursesRequested() {
+        int numSchedules;
+        try {
+            numSchedules = courses.allValidSchedules(0).size();
+            fail("ScheduleSizeException not thrown");
+        } catch (ScheduleSizeException e) {
+            // expected
+        }
     }
 
     @Test
@@ -188,8 +205,12 @@ public class CourseListTest {
         courseB.addSection(sectionB1);
         courses.addCourse(courseB);
 
-        assertTrue(courses.allValidSchedules(1));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(1);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(1, schedules.size());
         assertTrue(schedules.get(0).containsSection(sectionB1));
     }
@@ -204,8 +225,12 @@ public class CourseListTest {
         courses.addCourse(courseA);
         courses.addCourse(courseB);
 
-        assertTrue(courses.allValidSchedules(2));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(2);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(2, schedules.size());
         assertEquals(2, schedules.get(0).numCourses());
         assertEquals(2, schedules.get(1).numCourses());
@@ -225,8 +250,12 @@ public class CourseListTest {
         courses.addCourse(courseA);
         courses.addCourse(courseB);
 
-        assertTrue(courses.allValidSchedules(2));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(2);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(2, schedules.size());
         assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2}));
         assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionB2}));
@@ -240,8 +269,12 @@ public class CourseListTest {
         courses.addCourse(courseA);
         courses.addCourse(courseB);
 
-        assertFalse(courses.allValidSchedules(2));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(2);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(0, schedules.size());
     }
 
@@ -253,9 +286,12 @@ public class CourseListTest {
         courses.addCourse(courseA);
         courses.addCourse(courseB);
 
-        assertFalse(courses.allValidSchedules(1));
-        List<Schedule> schedules = courses.getAllValidSchedules();
-        assertEquals(0, schedules.size());
+        try {
+            List<Schedule> schedules = courses.allValidSchedules(1);
+            fail("ScheduleSizeException not thrown");
+        } catch (ScheduleSizeException e) {
+            // expected
+        }
     }
 
     @Test
@@ -267,8 +303,12 @@ public class CourseListTest {
         courses.addCourse(courseA);
         courses.addCourse(courseB);
 
-        assertTrue(courses.allValidSchedules(2));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(2);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(1, schedules.size());
         assertTrue(schedules.get(0).containsSection(sectionA2));
     }
@@ -282,8 +322,12 @@ public class CourseListTest {
         courses.addCourse(courseA);
         courses.addCourse(courseB);
 
-        assertTrue(courses.allValidSchedules(2));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(2);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(2, schedules.size());
         assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2}));
     }
@@ -299,8 +343,12 @@ public class CourseListTest {
         courses.addCourse(courseA);
         courses.addCourse(courseB);
 
-        assertTrue(courses.allValidSchedules(2));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(2);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(2, schedules.size());
         assertEquals(2, schedules.get(0).numCourses());
         assertEquals(2, schedules.get(1).numCourses());
@@ -324,8 +372,12 @@ public class CourseListTest {
         courses.addCourse(courseB);
         courses.addCourse(courseC);
 
-        assertTrue(courses.allValidSchedules(3));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(3);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(2, schedules.size());
         assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA1, sectionB1, sectionC1}));
         assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2, sectionB1, sectionC1}));
@@ -347,8 +399,12 @@ public class CourseListTest {
         courses.addCourse(courseB);
         courses.addCourse(courseC);
 
-        assertTrue(courses.allValidSchedules(2));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(2);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(2, schedules.size());
         assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA1, sectionB1}));
         assertTrue(containsScheduleWithSections(schedules, new Section[]{sectionA2, sectionB1}));
@@ -378,8 +434,12 @@ public class CourseListTest {
         courses.addCourse(courseD);
         courses.addCourse(courseE);
 
-        assertTrue(courses.allValidSchedules(4));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(4);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(3, schedules.size());
 
         for (int i = 0; i < 3; i++) {
@@ -415,8 +475,12 @@ public class CourseListTest {
         courses.addCourse(courseD);
         courses.addCourse(courseE);
 
-        assertTrue(courses.allValidSchedules(4));
-        List<Schedule> schedules = courses.getAllValidSchedules();
+        List<Schedule> schedules = null;
+        try {
+            schedules = courses.allValidSchedules(4);
+        } catch (ScheduleSizeException e) {
+            fail("Unexpected ScheduleSizeException");
+        }
         assertEquals(2, schedules.size());
 
         assertEquals(4, schedules.get(0).numCourses());

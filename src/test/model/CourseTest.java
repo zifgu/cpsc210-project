@@ -22,6 +22,9 @@ class CourseTest {
     public void testConstructor() {
         assertEquals("A", testCourse.getName());
         assertFalse(testCourse.getRequired());
+
+        Course emptyName = new Course("", true);
+        assertEquals("New Course", emptyName.getName());
     }
 
     @Test

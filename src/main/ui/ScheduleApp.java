@@ -1,6 +1,7 @@
 package ui;
 
 import exceptions.InvalidSyntaxException;
+import exceptions.ScheduleSizeException;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -79,7 +80,7 @@ public class ScheduleApp {
                 break;
             case "calculate": calculateSchedules(command);
                 break;
-            case "display": display(command);
+            case "display": displayCourses();
                 break;
             case "help": showHowToUse();
                 break;
@@ -310,31 +311,19 @@ public class ScheduleApp {
     // REQUIRES: first string in command is "calculate"
     // MODIFIES: this
     // EFFECTS: courseList now contains all valid schedules that can be made from the courses it currently contains
-    private void calculateSchedules(ArrayList<String> command) {
+    private void calculateSchedules(ArrayList<String> command) throws InvalidSyntaxException {
         int numCourses = Integer.parseInt(command.get(1));
-        if (courseList.allValidSchedules(numCourses)) {
+        try {
+            List<Schedule> schedules = courseList.allValidSchedules(numCourses);
+            displaySchedules(schedules);
             System.out.println("Successfully calculated schedules.");
-        } else {
+        } catch (ScheduleSizeException e) {
             System.out.println("Unsuccessful calculation: no schedules possible.");
         }
     }
 
-    // REQUIRES: command begins with "display"
-    // EFFECTS: prints out either the current course list or a batch of schedules in the course list
-    private void display(ArrayList<String> command) throws InvalidSyntaxException {
-        String commandKey = command.get(1);
-        if (commandKey.equals("courses")) {
-            displayCourses();
-        } else if (commandKey.equals("schedules")) {
-            displaySchedules();
-        } else {
-            throw new InvalidSyntaxException();
-        }
-    }
-
     // EFFECTS: prints all valid schedules that can be made from the current course list to console
-    private void displaySchedules() throws InvalidSyntaxException {
-        List<Schedule> allSchedules = courseList.getAllValidSchedules();
+    private void displaySchedules(List<Schedule> allSchedules) throws InvalidSyntaxException {
         System.out.println("Retrieved " + allSchedules.size() + " possible schedules.");
         System.out.println("How many schedules would you like to see? Enter a number or \"all\" to show all.");
 
