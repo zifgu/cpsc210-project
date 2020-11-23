@@ -17,7 +17,7 @@ public class Timeslot implements Writable {
     private LocalTime startTime;
     private LocalTime endTime;
 
-    // REQUIRES: times have the format XX:00 or XX:30 (24 hour clock), and startTime is before endTime
+    // REQUIRES: startTime is before endTime
     // EFFECTS: constructs a new timeslot in the section with the given term, day of week, start time, and end time
     //          in 30-minute intervals
     public Timeslot(int term, DayOfWeek day, LocalTime startTime, LocalTime endTime, Section section) {
@@ -82,7 +82,7 @@ public class Timeslot implements Writable {
         return duration;
     }
 
-    // EFFECTS: returns a string displaying timeslot info in printable form
+    @Override
     public String toString() {
         return "Term " + term + " " + dayOfWeek + " " + startTime + "-" + endTime;
     }

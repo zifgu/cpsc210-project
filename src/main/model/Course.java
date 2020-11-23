@@ -85,7 +85,7 @@ public class Course implements Writable {
         return sections.remove(s);
     }
 
-    // EFFECTS: returns a string displaying course info in printable form
+    @Override
     public String toString() {
         if (required) {
             return name + " (required)";

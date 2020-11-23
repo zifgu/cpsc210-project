@@ -88,7 +88,6 @@ public class Section implements Writable {
     }
 
     @Override
-    // EFFECTS: returns a string displaying section info in a printable form
     public String toString() {
         return course.getName() + " " + name;
     }

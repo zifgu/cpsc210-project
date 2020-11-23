@@ -31,7 +31,6 @@ import static javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS;
     GUI for the schedule application
 */
 public class CourseEditor {
-    // TODO: invariants - selected section is always a section of selected course?
     private CourseList courseList;
     private JTabbedPane mainPanel;
     private DefaultListModel<Course> courses = new DefaultListModel<>();

@@ -33,4 +33,19 @@ this method so that it throws a ScheduleSizeException when the given schedule si
 which includes 3 cases:
 + It is negative or zero
 + It exceeds the number of courses available to fill the schedule
-+ It is smaller than the number of required courses, meaning you can never include every required course
++ It is smaller than the number of required courses, meaning not all required courses will be included
+
+## Phase 4: Task 3
+Future design improvements:
++ Remove the schedule calculation method from CourseList entirely, which would improve cohesion by a small
+amount. I would instead concentrate this functionality inside the ScheduleCalculator class, and make it able to
+operate on any CourseList object.
++ Remove the bidirectional associations between Course and Section, and between Section and Timeslot, since the core
+mechanism of the application does not seem to require a Section to access its associated Course or a Timeslot to access
+its associated Section. Currently, this creates unnecessary coupling that makes both classes more difficult to maintain.
++ Make some inner classes in CourseEditor their own separate classes: the panel for saving and loading,
+the panel for calculating, and the class for playing sound. The present length of the CourseEditor class and the
+clustering of all functionality in one large class makes it difficult to read and change. Furthermore, the fields for
+the selected course, section, and timeslot are only used in some parts of the course editor.
+    + To accomplish this, I would need to solve the difficulty where all the inner classes require access to the
+courseList field in CourseEditor.
