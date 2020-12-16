@@ -80,7 +80,6 @@ public class CourseList implements Writable {
     // NOTE:    A schedule is valid if there are no time conflicts and it has numCourses courses total, including
     //          all required courses
     public List<Schedule> allValidSchedules(int numCourses) throws ScheduleSizeException {
-        List<Schedule> schedules;
         if (numCourses <= 0 || numCourses > courses.size() || numCourses < courses.size() - numElectives()) {
             throw new ScheduleSizeException();
         }

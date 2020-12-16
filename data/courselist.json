@@ -9,13 +9,13 @@
                         "start": "09:00",
                         "term": 1,
                         "end": "10:00",
-                        "day": "MONDAY"
+                        "day": "FRIDAY"
                     },
                     {
                         "start": "09:00",
                         "term": 1,
                         "end": "10:00",
-                        "day": "FRIDAY"
+                        "day": "MONDAY"
                     },
                     {
                         "start": "09:00",
@@ -38,13 +38,13 @@
                         "start": "12:00",
                         "term": 1,
                         "end": "13:00",
-                        "day": "FRIDAY"
+                        "day": "MONDAY"
                     },
                     {
                         "start": "12:00",
                         "term": 1,
                         "end": "13:00",
-                        "day": "MONDAY"
+                        "day": "FRIDAY"
                     }
                 ],
                 "name": "2"
@@ -58,48 +58,48 @@
             {
                 "times": [
                     {
-                        "start": "12:00",
+                        "start": "13:00",
                         "term": 1,
-                        "end": "13:00",
+                        "end": "14:00",
+                        "day": "MONDAY"
+                    },
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
                         "day": "WEDNESDAY"
                     },
                     {
-                        "start": "12:00",
+                        "start": "13:00",
                         "term": 1,
-                        "end": "13:00",
+                        "end": "14:00",
                         "day": "FRIDAY"
-                    },
-                    {
-                        "start": "12:00",
-                        "term": 1,
-                        "end": "13:00",
-                        "day": "MONDAY"
                     }
                 ],
-                "name": "1"
+                "name": "2"
             },
             {
                 "times": [
                     {
-                        "start": "13:00",
+                        "start": "12:00",
                         "term": 1,
-                        "end": "14:00",
-                        "day": "FRIDAY"
+                        "end": "13:00",
+                        "day": "WEDNESDAY"
                     },
                     {
-                        "start": "13:00",
+                        "start": "12:00",
                         "term": 1,
-                        "end": "14:00",
+                        "end": "13:00",
                         "day": "MONDAY"
                     },
                     {
-                        "start": "13:00",
+                        "start": "12:00",
                         "term": 1,
-                        "end": "14:00",
-                        "day": "WEDNESDAY"
+                        "end": "13:00",
+                        "day": "FRIDAY"
                     }
                 ],
-                "name": "2"
+                "name": "1"
             }
         ]
     },
@@ -110,16 +110,39 @@
             {
                 "times": [
                     {
-                        "start": "10:00",
+                        "start": "13:00",
                         "term": 1,
-                        "end": "11:00",
+                        "end": "14:00",
+                        "day": "MONDAY"
+                    },
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
                         "day": "WEDNESDAY"
                     },
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
+                        "day": "FRIDAY"
+                    }
+                ],
+                "name": "2"
+            },
+            {
+                "times": [
                     {
                         "start": "10:00",
                         "term": 1,
                         "end": "11:00",
                         "day": "FRIDAY"
+                    },
+                    {
+                        "start": "10:00",
+                        "term": 1,
+                        "end": "11:00",
+                        "day": "WEDNESDAY"
                     },
                     {
                         "start": "10:00",
@@ -129,29 +152,6 @@
                     }
                 ],
                 "name": "1"
-            },
-            {
-                "times": [
-                    {
-                        "start": "13:00",
-                        "term": 1,
-                        "end": "14:00",
-                        "day": "FRIDAY"
-                    },
-                    {
-                        "start": "13:00",
-                        "term": 1,
-                        "end": "14:00",
-                        "day": "MONDAY"
-                    },
-                    {
-                        "start": "13:00",
-                        "term": 1,
-                        "end": "14:00",
-                        "day": "WEDNESDAY"
-                    }
-                ],
-                "name": "2"
             }
         ]
     },
@@ -164,13 +164,13 @@
                     "start": "09:00",
                     "term": 1,
                     "end": "10:00",
-                    "day": "MONDAY"
+                    "day": "FRIDAY"
                 },
                 {
                     "start": "09:00",
                     "term": 1,
                     "end": "10:00",
-                    "day": "FRIDAY"
+                    "day": "MONDAY"
                 },
                 {
                     "start": "09:00",
@@ -189,49 +189,76 @@
             {
                 "times": [
                     {
-                        "start": "12:00",
+                        "start": "13:00",
                         "term": 1,
-                        "end": "13:00",
+                        "end": "14:00",
+                        "day": "MONDAY"
+                    },
+                    {
+                        "start": "13:00",
+                        "term": 1,
+                        "end": "14:00",
                         "day": "WEDNESDAY"
                     },
                     {
-                        "start": "12:00",
+                        "start": "13:00",
                         "term": 1,
-                        "end": "13:00",
+                        "end": "14:00",
                         "day": "FRIDAY"
-                    },
-                    {
-                        "start": "12:00",
-                        "term": 1,
-                        "end": "13:00",
-                        "day": "MONDAY"
                     }
                 ],
-                "name": "1"
+                "name": "2"
             },
             {
                 "times": [
                     {
-                        "start": "13:00",
+                        "start": "12:00",
                         "term": 1,
-                        "end": "14:00",
-                        "day": "FRIDAY"
+                        "end": "13:00",
+                        "day": "WEDNESDAY"
                     },
                     {
-                        "start": "13:00",
+                        "start": "12:00",
                         "term": 1,
-                        "end": "14:00",
+                        "end": "13:00",
                         "day": "MONDAY"
                     },
                     {
-                        "start": "13:00",
+                        "start": "12:00",
                         "term": 1,
-                        "end": "14:00",
-                        "day": "WEDNESDAY"
+                        "end": "13:00",
+                        "day": "FRIDAY"
                     }
                 ],
-                "name": "2"
+                "name": "1"
             }
         ]
+    },
+    {
+        "name": "F",
+        "required": true,
+        "sections": [{
+            "times": [
+                {
+                    "start": "09:00",
+                    "term": 1,
+                    "end": "10:00",
+                    "day": "FRIDAY"
+                },
+                {
+                    "start": "09:00",
+                    "term": 1,
+                    "end": "10:00",
+                    "day": "MONDAY"
+                },
+                {
+                    "start": "09:00",
+                    "term": 1,
+                    "end": "10:00",
+                    "day": "WEDNESDAY"
+                }
+            ],
+            "name": "1"
+        }]
     }
 ]}
