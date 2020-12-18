@@ -159,6 +159,7 @@ public class CourseEditor {
         coursePanel.add(feedback);
 
         CourseEditListener listener = new CourseEditListener(name, required, feedback);
+        createButtonAndCommand(coursePanel, "Add from SSC", listener);
         coursePanel.add(createButtonPanel(listener));
         return coursePanel;
     }
@@ -458,11 +459,16 @@ public class CourseEditor {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            // TODO: try to make the save update immediately
-            if (e.getActionCommand().equals("Save")) {
-                updateSelectedCourse();
-            } else if (e.getActionCommand().equals("Add")) {
-                addNewCourse();
+            switch (e.getActionCommand()) {
+                case "Save":
+                    updateSelectedCourse();
+                    break;
+                case "Add":
+                    addNewCourse();
+                    break;
+                case "Add from SSC":
+                    addCourseFromSSC();
+                    break;
             }
         }
 
@@ -489,13 +495,50 @@ public class CourseEditor {
         //          if doing so would not create duplicate courses, and shows feedback
         private void addNewCourse() {
             Course newCourse = new Course(courseNameField.getText(), courseRequiredField.isSelected());
-            boolean success = courseList.addCourse(newCourse);
+            addToList(newCourse);
+        }
+
+        // MODIFIES: this
+        // EFFECTS: gets section info about courseNameField from the UBC website, tries to add it to the course list,
+        //          and shows feedback
+        private void addCourseFromSSC() {
+            String name = courseNameField.getText().trim();
+            String dept = "";
+            String number = "";
+            if (isUbcFormattedCourse(name)) {
+                for (int i = 3; i < name.length(); i++) {
+                    if (Character.isDigit(name.charAt(i))) {
+                        dept = name.substring(0, i);
+                        number = name.substring(i);
+                        break;
+                    }
+                }
+
+                Course newCourse = new Course(dept, number, courseRequiredField.isSelected());
+                if (newCourse.numSections() > 0) {
+                    addToList(newCourse);
+                    return;
+                }
+            }
+            showFailMessage(feedback, "add");
+        }
+
+        // MODIFIES: this
+        // EFFECTS: adds c to courseList and displays feedback
+        private void addToList(Course c) {
+            boolean success = courseList.addCourse(c);
             if (success) {
-                courses.addElement(newCourse);
+                courses.addElement(c);
                 showSuccessMessage(feedback, "added");
             } else {
                 showFailMessage(feedback, "add");
             }
+        }
+
+        // EFFECTS: returns true if the course is named like a UBC course
+        //          examples: CPSC110, phys 131, wrds 150a, ASL100
+        private boolean isUbcFormattedCourse(String courseName) {
+            return courseName.matches("[a-zA-Z]{3,4} ?\\d{3}[a-zA-Z]?");
         }
     }
 

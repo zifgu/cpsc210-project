@@ -5,7 +5,7 @@ import model.*;
 public class TestCourseAdding {
     public static void main(String[] args) {
         CourseList courseList = new CourseList();
-        boolean result = courseList.addCourseFromSSC("CPSC", "210", true);
+        boolean result = courseList.addCourse(new Course("PHYS", "131", true));
         System.out.println(result);
 
         if (result) {

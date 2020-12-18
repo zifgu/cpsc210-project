@@ -2,8 +2,12 @@ package model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import persistence.JsonReader;
 import persistence.Writable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -12,6 +16,8 @@ import java.util.Set;
     Represents a course with name, status (required vs elective), and sections
 */
 public class Course implements Writable {
+    private static final String TEMP_COURSE_FILE = "./data/temp_course.json";
+
     private String name;
     private boolean required;
     private Set<Section> sections;
@@ -26,6 +32,29 @@ public class Course implements Writable {
         }
         this.required = required;
         sections = new HashSet<>();
+    }
+
+    public Course(String department, String number, boolean required) {
+        this.required = required;
+        try {
+            Process p = Runtime.getRuntime().exec("/Users/markgu/Documents/GitHub/ubc-scraper/.venv/bin/python"
+                    + " /Users/markgu/Documents/GitHub/ubc-scraper/course_scraper.py "
+                    + department + " " + number);
+
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+            if (stdInput.readLine() != null || stdError.readLine() != null) {
+                name = department + number;
+                sections = new HashSet<>();
+            } else {
+                JsonReader reader = new JsonReader(TEMP_COURSE_FILE);
+                Course c = reader.readCourseResult();
+                this.name = c.name;
+                this.sections = c.sections;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     // getters and setters
