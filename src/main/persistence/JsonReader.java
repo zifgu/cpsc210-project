@@ -37,6 +37,12 @@ public class JsonReader {
         return readCourseList(jsonObject);
     }
 
+    public Course readCourseResult() throws IOException {
+        String content = readFile(source);
+        JSONObject jsonObject = new JSONObject(content);
+        return readCourse(jsonObject);
+    }
+
     // EFFECTS: reads source file as string and returns it
     // code copied from the method of the same name from JsonSerializationDemo
     private String readFile(String source) throws IOException {

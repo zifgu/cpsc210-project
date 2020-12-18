@@ -3,8 +3,12 @@ package model;
 import exceptions.ScheduleSizeException;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import persistence.JsonReader;
 import persistence.Writable;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -95,6 +99,39 @@ public class CourseList implements Writable {
             }
         }
         return null;
+    }
+
+    // TODO: finish
+    public boolean addCourseFromSSC(String department, String number, boolean required) {
+        try {
+            String s;
+            Process p = Runtime.getRuntime().exec("/Users/markgu/Documents/GitHub/ubc-scraper/.venv/bin/python"
+                    + " /Users/markgu/Documents/GitHub/ubc-scraper/course_scraper.py "
+                    + department + " " + number);
+            BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+            BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+            // read the output from the command
+            System.out.println("Here is the standard output of the command:\n");
+            while ((s = stdInput.readLine()) != null) {
+                System.out.println(s);
+            }
+
+            // read any errors from the attempted command
+            System.out.println("Here is the standard error of the command (if any):\n");
+            while ((s = stdError.readLine()) != null) {
+                System.out.println(s);
+            }
+            JsonReader reader = new JsonReader("./data/temp_course.json");
+            Course c = reader.readCourseResult();
+            c.setRequired(required);
+
+            return addCourse(c);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     @Override
