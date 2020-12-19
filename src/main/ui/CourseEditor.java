@@ -306,7 +306,7 @@ public class CourseEditor {
         courses.clear();
         sections.clear();
         timeslots.clear();
-        for (Course c : courseList.getCourses()) {
+        for (Course c : courseList) {
             courses.addElement(c);
         }
         selectedCourse = null;
@@ -319,7 +319,7 @@ public class CourseEditor {
     private void clearSectionsAndLoad(Course c) {
         sections.clear();
         timeslots.clear();
-        for (Section s : c.getSections()) {
+        for (Section s : c) {
             sections.addElement(s);
         }
         selectedSection = null;
@@ -330,7 +330,7 @@ public class CourseEditor {
     // EFFECTS: refreshes the list of timeslots and unselects the selected timeslot
     private void clearTimeslotsAndLoad(Section s) {
         timeslots.clear();
-        for (Timeslot t : s.getTimeslots()) {
+        for (Timeslot t : s) {
             timeslots.addElement(t);
         }
         selectedTimeslot = null;
@@ -449,12 +449,14 @@ public class CourseEditor {
         private JTextField courseNameField;
         private JCheckBox courseRequiredField;
         private JLabel feedback;
+        private String path;
 
         // EFFECTS: constructs an ActionListener with access to the given text field, checkbox, and label
         private CourseEditListener(JTextField name, JCheckBox required, JLabel feedback) {
             courseNameField = name;
             courseRequiredField = required;
             this.feedback = feedback;
+            this.path = "";
         }
 
         @Override
@@ -514,7 +516,8 @@ public class CourseEditor {
                     }
                 }
 
-                Course newCourse = new Course(dept, number, courseRequiredField.isSelected());
+                path = JOptionPane.showInputDialog(mainPanel, "Enter your Python path, or use this value:", path);
+                Course newCourse = new Course(dept, number, courseRequiredField.isSelected(), path);
                 if (newCourse.numSections() > 0) {
                     addToList(newCourse);
                     return;

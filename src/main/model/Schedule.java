@@ -1,14 +1,14 @@
 package model;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 
 /*
     Represents a course schedule, i.e. a collection of sections from courses
 */
-public class Schedule {
+public class Schedule implements Iterable<Section> {
     private List<Section> sections;
 
     // EFFECTS: constructs a schedule with no sections
@@ -46,7 +46,7 @@ public class Schedule {
     public int totalTime() {
         int time = 0;
         for (Section sec : sections) {
-            for (Timeslot t : sec.getTimeslots()) {
+            for (Timeslot t : sec) {
                 time += t.getDuration();
             }
         }
@@ -119,5 +119,10 @@ public class Schedule {
             result = result.concat(s + "\n");
         }
         return result;
+    }
+
+    @Override
+    public Iterator<Section> iterator() {
+        return sections.iterator();
     }
 }

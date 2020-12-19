@@ -343,7 +343,7 @@ public class ScheduleApp {
 
     // EFFECTS: prints to console all courses currently in courseList
     private void displayCourses() {
-        for (Course c : courseList.getCourses()) {
+        for (Course c : courseList) {
             System.out.println(c);
         }
     }

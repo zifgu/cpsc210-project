@@ -1,0 +1,40 @@
+{
+    "name": "ENGL111",
+    "required": false,
+    "sections": [
+        {
+            "name": "001",
+            "times": [
+                {
+                    "start": "14:00",
+                    "end": "15:00",
+                    "term": 1,
+                    "day": "MONDAY"
+                },
+                {
+                    "start": "14:00",
+                    "end": "15:00",
+                    "term": 1,
+                    "day": "WEDNESDAY"
+                }
+            ]
+        },
+        {
+            "name": "002",
+            "times": [
+                {
+                    "start": "10:00",
+                    "end": "11:00",
+                    "term": 2,
+                    "day": "MONDAY"
+                },
+                {
+                    "start": "10:00",
+                    "end": "11:00",
+                    "term": 2,
+                    "day": "WEDNESDAY"
+                }
+            ]
+        }
+    ]
+}

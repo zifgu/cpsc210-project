@@ -1,19 +1,36 @@
 {
-    "name": "CPSC110",
+    "name": "CPSC121",
     "required": false,
     "sections": [
         {
             "name": "101",
             "times": [
                 {
-                    "start": "12:30",
-                    "end": "14:00",
+                    "start": "17:00",
+                    "end": "18:30",
                     "term": 1,
                     "day": "TUESDAY"
                 },
                 {
-                    "start": "12:30",
-                    "end": "14:00",
+                    "start": "17:00",
+                    "end": "18:30",
+                    "term": 1,
+                    "day": "THURSDAY"
+                }
+            ]
+        },
+        {
+            "name": "102",
+            "times": [
+                {
+                    "start": "15:30",
+                    "end": "17:00",
+                    "term": 1,
+                    "day": "TUESDAY"
+                },
+                {
+                    "start": "15:30",
+                    "end": "17:00",
                     "term": 1,
                     "day": "THURSDAY"
                 }
@@ -23,31 +40,14 @@
             "name": "103",
             "times": [
                 {
-                    "start": "17:00",
-                    "end": "18:30",
+                    "start": "09:30",
+                    "end": "11:00",
                     "term": 1,
                     "day": "TUESDAY"
                 },
                 {
-                    "start": "17:00",
-                    "end": "18:30",
-                    "term": 1,
-                    "day": "THURSDAY"
-                }
-            ]
-        },
-        {
-            "name": "104",
-            "times": [
-                {
-                    "start": "15:30",
-                    "end": "17:00",
-                    "term": 1,
-                    "day": "TUESDAY"
-                },
-                {
-                    "start": "15:30",
-                    "end": "17:00",
+                    "start": "09:30",
+                    "end": "11:00",
                     "term": 1,
                     "day": "THURSDAY"
                 }
@@ -57,20 +57,20 @@
             "name": "201",
             "times": [
                 {
-                    "start": "15:00",
-                    "end": "16:00",
+                    "start": "10:00",
+                    "end": "11:00",
                     "term": 2,
                     "day": "MONDAY"
                 },
                 {
-                    "start": "15:00",
-                    "end": "16:00",
+                    "start": "10:00",
+                    "end": "11:00",
                     "term": 2,
                     "day": "WEDNESDAY"
                 },
                 {
-                    "start": "15:00",
-                    "end": "16:00",
+                    "start": "10:00",
+                    "end": "11:00",
                     "term": 2,
                     "day": "FRIDAY"
                 }
@@ -80,20 +80,20 @@
             "name": "202",
             "times": [
                 {
-                    "start": "09:00",
-                    "end": "10:00",
+                    "start": "13:00",
+                    "end": "14:00",
                     "term": 2,
                     "day": "MONDAY"
                 },
                 {
-                    "start": "09:00",
-                    "end": "10:00",
+                    "start": "13:00",
+                    "end": "14:00",
                     "term": 2,
                     "day": "WEDNESDAY"
                 },
                 {
-                    "start": "09:00",
-                    "end": "10:00",
+                    "start": "13:00",
+                    "end": "14:00",
                     "term": 2,
                     "day": "FRIDAY"
                 }
@@ -103,37 +103,43 @@
             "name": "203",
             "times": [
                 {
-                    "start": "09:30",
-                    "end": "11:00",
-                    "term": 2,
-                    "day": "TUESDAY"
-                },
-                {
-                    "start": "09:30",
-                    "end": "11:00",
-                    "term": 2,
-                    "day": "THURSDAY"
-                }
-            ]
-        },
-        {
-            "name": "V01",
-            "times": [
-                {
-                    "start": "11:00",
-                    "end": "12:00",
+                    "start": "16:00",
+                    "end": "17:00",
                     "term": 2,
                     "day": "MONDAY"
                 },
                 {
-                    "start": "11:00",
-                    "end": "12:00",
+                    "start": "16:00",
+                    "end": "17:00",
                     "term": 2,
                     "day": "WEDNESDAY"
                 },
                 {
-                    "start": "11:00",
-                    "end": "12:00",
+                    "start": "16:00",
+                    "end": "17:00",
+                    "term": 2,
+                    "day": "FRIDAY"
+                }
+            ]
+        },
+        {
+            "name": "204",
+            "times": [
+                {
+                    "start": "14:00",
+                    "end": "15:00",
+                    "term": 2,
+                    "day": "MONDAY"
+                },
+                {
+                    "start": "14:00",
+                    "end": "15:00",
+                    "term": 2,
+                    "day": "WEDNESDAY"
+                },
+                {
+                    "start": "14:00",
+                    "end": "15:00",
                     "term": 2,
                     "day": "FRIDAY"
                 }

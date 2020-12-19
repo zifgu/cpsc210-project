@@ -9,13 +9,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
 /*
     Represents a course with name, status (required vs elective), and sections
 */
-public class Course implements Writable {
+public class Course implements Writable, Iterable<Section> {
     private static final String TEMP_COURSE_FILE = "./data/temp_course.json";
 
     private String name;
@@ -34,11 +35,10 @@ public class Course implements Writable {
         sections = new HashSet<>();
     }
 
-    public Course(String department, String number, boolean required) {
+    public Course(String department, String number, boolean required, String path) {
         this.required = required;
         try {
-            Process p = Runtime.getRuntime().exec("/Users/markgu/Documents/GitHub/ubc-scraper/.venv/bin/python"
-                    + " /Users/markgu/Documents/GitHub/ubc-scraper/course_scraper.py "
+            Process p = Runtime.getRuntime().exec(path + " ./data/course_scraper.py "
                     + department + " " + number);
 
             BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
@@ -162,5 +162,10 @@ public class Course implements Writable {
     @Override
     public int hashCode() {
         return Objects.hash(name);
+    }
+
+    @Override
+    public Iterator<Section> iterator() {
+        return sections.iterator();
     }
 }

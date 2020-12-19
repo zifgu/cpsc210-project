@@ -10,13 +10,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 /*
     Represents a list of courses inputted by the user
 */
-public class CourseList implements Writable {
+public class CourseList implements Writable, Iterable<Course> {
     private Set<Course> courses;
 
     // EFFECTS: constructs a new course list with no courses and no possible schedules
@@ -115,4 +116,8 @@ public class CourseList implements Writable {
         return json;
     }
 
+    @Override
+    public Iterator<Course> iterator() {
+        return courses.iterator();
+    }
 }

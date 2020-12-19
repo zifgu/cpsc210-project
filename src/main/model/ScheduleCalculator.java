@@ -58,7 +58,7 @@ class ScheduleCalculator {
             possible = fillElectives(currentSchedule, courseIndex);
         } else {
             Course c = required.get(courseIndex);
-            for (Section s : c.getSections()) {
+            for (Section s : c) {
                 if (!currentSchedule.fillSection(s)) {
                     continue;
                 }
@@ -82,7 +82,7 @@ class ScheduleCalculator {
         } else {
             Course c = electives.get(courseIndex - required.size());
             // try adding a section from this course to the schedule
-            for (Section s : c.getSections()) {
+            for (Section s : c) {
                 if (!currentSchedule.fillSection(s)) {
                     continue;
                 }
@@ -108,7 +108,7 @@ class ScheduleCalculator {
     // EFFECTS: copies the current schedule into a new schedule and adds it to the list of all possible schedules
     private void addToListOfSchedules(Schedule filledSchedule) {
         Schedule newSchedule = new Schedule();
-        for (Section sec : filledSchedule.getSections()) {
+        for (Section sec : filledSchedule) {
             newSchedule.fillSection(sec);
         }
         schedules.add(newSchedule);

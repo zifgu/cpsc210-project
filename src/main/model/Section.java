@@ -10,7 +10,7 @@ import java.util.*;
 /*
     Represents a section of a course with associated times
 */
-public class Section implements Writable {
+public class Section implements Writable, Iterable<Timeslot> {
     private String name;
     private Course course;
     private Set<Timeslot> times;
@@ -78,7 +78,7 @@ public class Section implements Writable {
     // EFFECTS: returns true if the timeslots of this section conflict with the timeslots of other
     public boolean overlaps(Section other) {
         for (Timeslot t1 : times) {
-            for (Timeslot t2 : other.getTimeslots()) {
+            for (Timeslot t2 : other) {
                 if (t1.overlaps(t2)) {
                     return true;
                 }
@@ -166,5 +166,10 @@ public class Section implements Writable {
             default:
                 return "Su";
         }
+    }
+
+    @Override
+    public Iterator<Timeslot> iterator() {
+        return times.iterator();
     }
 }

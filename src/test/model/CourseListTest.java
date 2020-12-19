@@ -31,7 +31,7 @@ public class CourseListTest {
 
     @Test
     public void testConstructor() {
-        assertTrue(courses.getCourses().isEmpty());
+        assertEquals(0, courses.numCourses());
     }
 
     @Test
